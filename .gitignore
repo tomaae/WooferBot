@@ -1,0 +1,9 @@
+/to-do.txt
+/settings.json
+/settings.bak
+/images/*
+!/images/__place_images.txt
+/mascots/tomaae/
+!/mascots/__place_mascots.txt
+/python*
+/lib/__pycache__/
