@@ -3,7 +3,8 @@ WooferBot is fully customizable interactive mascot designed to be used as Browse
 
 All interactions are done on screen, bot does not write anything in chat.
 
-Announcements, Support and Development updates available on discord: https://discord.gg/vpprtdE  
+Announcements, Support and Development updates available on [Discord](https://discord.gg/vpprtdE)  
+Installation and configuration instruction available on [Wiki](https://github.com/tomaae/WooferBot/wiki)  
 
 ### Features
 - Twitch notifications
