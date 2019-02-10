@@ -203,6 +203,8 @@ class Twitch:
 			"msg-param-recipient-display-name": "", # (Sent only on subgift, anonsubgift) The display name of the subscription gift recipient.
 			"msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
 			"msg-param-months": "", # (Sent only on sub, resub, subgift, anonsubgift) The number of consecutive months the user has subscribed for, in a resub notice.
+			"msg-param-cumulative-months": "", #(Sent only on sub, resub) The total number of months the user has subscribed. This is the same as msg-param-months but sent for different types of user notices.
+			"msg-param-streak-months": "", #(Sent only on sub, resub) The number of consecutive months the user has subscribed. This is 0 if msg-param-should-share-streak is 0.
 			"msg-param-ritual-name": "", # (Sent only on ritual) The name of the ritual this notice is for. Valid value: new_chatter.
 			"login": "",
 			"emotes": "", # <emote ID>:<first index>-<last index>,<another first index>-<another last index>/<another emote ID>:<first index>-<last index>...

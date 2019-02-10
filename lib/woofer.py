@@ -291,7 +291,7 @@ class Woofer:
 		self.woofer_addtoqueue({
 			"message"    : random.SystemRandom().choice(self.settings.Messages['resub']),
 			"sender"     : jsonData['display-name'],
-			"months"     : jsonData['msg-param-months'],
+			"months"     : jsonData['msg-param-cumulative-months'],
 			"customtag"  : jsonData['custom-tag'],
 			"mascot"     : self.mascotImagesFile('resub'),
 			"mascotmouth": self.mascotImagesMouthHeight('resub'),
