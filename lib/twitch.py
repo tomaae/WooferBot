@@ -86,12 +86,13 @@ class Twitch:
 		for line in data:
 			line = line.strip()
 			line = line.split(" ")
-			print(line)
 								
 			if len(line) >= 1:
 				if line[0] == 'PING':
 					self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
 					continue
+					
+				print(line)
 
 				jsonData = self.fill_tags()
 				#
