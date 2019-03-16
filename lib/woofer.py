@@ -46,6 +46,10 @@ class Woofer:
 		self.unlurkingUsers = []
 		self.hostingUsers   = []
 		self.shoutoutUsers  = []
+		
+		for message in self.settings.ScheduledMessages:
+			currentEpoch = int(time.time())
+			message['LastShown'] = currentEpoch
 		threading.Timer(300, self.woofer_timer).start()
 		return
 		
@@ -157,6 +161,7 @@ class Woofer:
 		for message in self.settings.ScheduledMessages:
 			if message['Enabled'] == 0:
 				continue
+			
 			currentEpoch = int(time.time())
 			if (currentEpoch - message['LastShown']) >= (message['Timer'] * 60):
 				message['LastShown'] = currentEpoch
@@ -220,7 +225,7 @@ class Woofer:
 			return
 		
 		# Reset to default after X seconds
-		threading.Timer(jsonData['time'], default_woofer, args=(queue_id,)).start()
+		threading.Timer(jsonData['time'] / 1000, default_woofer, args=(queue_id,)).start()
 		return
 
 	#---------------------------
@@ -613,8 +618,8 @@ class Woofer:
 	def mascotImagesTime(self, action):
 		if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Image'] in self.settings.mascotImages:
 			return self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]['Time']
-				
-		return 5
+		
+		return self.settings.mascotImages[self.settings.PoseMapping['DEFAULT']['Image']]['Time']
 		
 	#---------------------------
 	#   mascotAudioFile
