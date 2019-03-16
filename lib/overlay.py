@@ -52,9 +52,32 @@ class Overlay:
 		self.loopThread.start()
 		return
 		
+	def Stop(self):
+		self.loop.stop()
+		return
+		
 	def Send(self, event, jsonData, init = 0):
 		if self.sendQueue:
 			return 1
+			
+		if 'mascot' in jsonData:
+			if os.path.exists(jsonData["mascot"]):
+				jsonData["mascot"] = "file:///" + jsonData["mascot"]
+			else:
+				jsonData["mascot"] = ""
+				
+		if 'audio' in jsonData:
+			if os.path.exists(jsonData["audio"]):
+				jsonData["audio"] = "file:///" + jsonData["audio"]
+			else:
+				jsonData["audio"] = ""
+			
+		if 'image' in jsonData:
+			if os.path.exists(jsonData["image"]):
+				jsonData["image"] = "file:///" + jsonData["image"]
+			else:
+				jsonData["image"] = ""
+
 		jsonDataRaw = {
 			"event": event,
 			"data": json.dumps(jsonData)
@@ -72,12 +95,10 @@ class Overlay:
 			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
 			if not os.path.exists(mascotIdleImage):
 				mascotIdleImage = ""
-			
 			if 'Idle' in self.settings.PoseMapping and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
 				tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
 				if os.path.exists(tmp):
 					mascotIdleImage = tmp
-				
 			jsonData = {
 				"mascot": mascotIdleImage
 			}
