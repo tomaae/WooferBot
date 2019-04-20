@@ -225,7 +225,7 @@ class Twitch:
 		for tag in tags:
 			tag = tag.split("=")
 			#"@badges": "", # Comma-separated list of chat badges and the version of each badge (each in the format <badge>/<version>. Valid badge values: admin, bits, broadcaster, global_mod, moderator, subscriber, staff, turbo.
-			if tag[0] == '@badges':
+			if tag[0] == 'badges':
 				badges = tag[1].split(",")
 				for badge in badges:
 					badge = badge.split("/")
