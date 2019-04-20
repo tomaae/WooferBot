@@ -76,7 +76,8 @@ class Overlay:
 			if os.path.exists(jsonData["image"]):
 				jsonData["image"] = "file:///" + jsonData["image"]
 			else:
-				jsonData["image"] = ""
+				if jsonData["image"].find('https://') != 0:
+					jsonData["image"] = ""
 
 		jsonDataRaw = {
 			"event": event,
