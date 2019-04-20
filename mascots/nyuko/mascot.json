@@ -1,0 +1,35 @@
+{
+	"mascotImages": {
+		"Idle": {
+			"Image": "idle.png"
+		},
+		"Wave": {
+			"Image": "wave.png",
+			"MouthHeight": 110,
+			"Time": 5000
+		},
+		"Happy": {
+			"Image": "happy.png",
+			"MouthHeight": 110,
+			"Time": 7000
+		},
+		"Snack": {
+			"Image": "excited.png",
+			"MouthHeight": 110,
+			"Time": 7000
+		}
+	},
+	"mascotAudio": {
+		"Wave": {
+			"Audio": "hiiii.mp3",
+			"Volume": 0.2
+		},
+		"Happy": {
+			"Audio": "yaaaaayyyy.mp3",
+			"Volume": 0.2
+		}
+	},
+	"mascotStyles": {
+		"MascotMaxWidth": 130
+	}
+}
