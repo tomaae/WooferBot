@@ -176,6 +176,12 @@ class Twitch:
 						jsonData['custom-tag'] = 'anonsubgift'
 						self.woofer.ProcessJson(jsonData)
 						continue
+						
+					# MASS GIFTSUB
+					if jsonData['msg-id'] == 'submysterygift':
+						jsonData['custom-tag'] = 'submysterygift'
+						#self.woofer.ProcessJson(jsonData)
+						continue
 					
 					# RITUAL NEW CHATTER
 					if jsonData['msg-id'] == 'ritual' and jsonData['msg-param-ritual-name'] == 'new_chatter':
