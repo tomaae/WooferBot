@@ -404,7 +404,6 @@ class Woofer:
 		self.greetedUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
-		
 			"message"    : random.SystemRandom().choice(self.settings.Messages['greet']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],

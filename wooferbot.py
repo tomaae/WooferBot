@@ -31,12 +31,13 @@ from settings import Settings
 from overlay import Overlay
 from woofer import Woofer
 from twitch import Twitch
+from cli import Cli
 
 #---------------------------
 #   Main
 #---------------------------
 
-print('WooferBot  Copyright (C) 2018  Tomaae')
+print('WooferBot  Copyright (C) 2019  Tomaae')
 print('This program comes with ABSOLUTELY NO WARRANTY.')
 print('This is free software, and you are welcome to redistribute it')
 print('under certain conditions.')
@@ -57,8 +58,10 @@ woofer = Woofer(settings=settings, overlay=overlay)
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
 
-print("Started...")
-while True:
-	input("")
+# Start CLI
+cli = Cli(settings=settings, woofer=woofer)
+cli.Start()
 
+# Cleanup and exit
+overlay.Stop()
 exit(0)
