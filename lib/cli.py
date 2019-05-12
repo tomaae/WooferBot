@@ -51,7 +51,23 @@ class Cli:
 				print(" 9 - Sub")
 				print("10 - Resub")
 				print("11 - Giftsub")
-				
+
+			#
+			# Start
+			#
+			if cmd == "0":
+				self.woofer.woofer_addtoqueue({
+						"message"    : self.settings.Commands['!start']['Message'],
+						"sender"     : "testname",
+						"customtag"  : "follow",
+						"mascot"     : self.woofer.mascotImagesFile('!start'),
+						"mascotmouth": self.woofer.mascotImagesMouthHeight('!start'),
+						"time"       : self.woofer.mascotImagesTime('!start'),
+						"audio"      : self.woofer.mascotAudioFile('!start'),
+						"volume"     : self.woofer.mascotAudioVolume('!start'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('!start')
+					})
+
 			#
 			# Follow
 			#
@@ -64,7 +80,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('follow'),
 						"time"       : self.woofer.mascotImagesTime('follow'),
 						"audio"      : self.woofer.mascotAudioFile('follow'),
-						"volume"     : self.woofer.mascotAudioVolume('follow')
+						"volume"     : self.woofer.mascotAudioVolume('follow'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('follow')
 					})
 					
 			#
@@ -79,7 +96,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('greet'),
 						"time"       : self.woofer.mascotImagesTime('greet'),
 						"audio"      : self.woofer.mascotAudioFile('greet'),
-						"volume"     : self.woofer.mascotAudioVolume('greet')
+						"volume"     : self.woofer.mascotAudioVolume('greet'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('greet')
 					})
 					
 			#
@@ -96,7 +114,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('shoutout'),
 						"time"       : self.woofer.mascotImagesTime('shoutout'),
 						"audio"      : self.woofer.mascotAudioFile('shoutout'),
-						"volume"     : self.woofer.mascotAudioVolume('shoutout')
+						"volume"     : self.woofer.mascotAudioVolume('shoutout'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('shoutout')
 					})
 					
 			#
@@ -111,7 +130,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('lurk'),
 						"time"       : self.woofer.mascotImagesTime('lurk'),
 						"audio"      : self.woofer.mascotAudioFile('lurk'),
-						"volume"     : self.woofer.mascotAudioVolume('lurk')
+						"volume"     : self.woofer.mascotAudioVolume('lurk'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('lurk')
 					})
 					
 			#
@@ -127,7 +147,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('bits'),
 						"time"       : self.woofer.mascotImagesTime('bits'),
 						"audio"      : self.woofer.mascotAudioFile('bits'),
-						"volume"     : self.woofer.mascotAudioVolume('bits')
+						"volume"     : self.woofer.mascotAudioVolume('bits'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('bits')
 					})
 					
 			#
@@ -142,7 +163,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('new_chatter'),
 						"time"       : self.woofer.mascotImagesTime('new_chatter'),
 						"audio"      : self.woofer.mascotAudioFile('new_chatter'),
-						"volume"     : self.woofer.mascotAudioVolume('new_chatter')
+						"volume"     : self.woofer.mascotAudioVolume('new_chatter'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('new_chatter')
 					})
 					
 			#
@@ -157,7 +179,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('raid'),
 						"time"       : self.woofer.mascotImagesTime('raid'),
 						"audio"      : self.woofer.mascotAudioFile('raid'),
-						"volume"     : self.woofer.mascotAudioVolume('raid')
+						"volume"     : self.woofer.mascotAudioVolume('raid'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('raid')
 					})
 					
 			#
@@ -172,7 +195,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('host'),
 						"time"       : self.woofer.mascotImagesTime('host'),
 						"audio"      : self.woofer.mascotAudioFile('host'),
-						"volume"     : self.woofer.mascotAudioVolume('host')
+						"volume"     : self.woofer.mascotAudioVolume('host'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('host')
 					})
 					
 			#
@@ -187,7 +211,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('sub'),
 						"time"       : self.woofer.mascotImagesTime('sub'),
 						"audio"      : self.woofer.mascotAudioFile('sub'),
-						"volume"     : self.woofer.mascotAudioVolume('sub')
+						"volume"     : self.woofer.mascotAudioVolume('sub'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('sub')
 					})
 					
 			#
@@ -203,7 +228,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('resub'),
 						"time"       : self.woofer.mascotImagesTime('resub'),
 						"audio"      : self.woofer.mascotAudioFile('resub'),
-						"volume"     : self.woofer.mascotAudioVolume('resub')
+						"volume"     : self.woofer.mascotAudioVolume('resub'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('resub')
 					})
 					
 			#
@@ -219,7 +245,8 @@ class Cli:
 						"mascotmouth": self.woofer.mascotImagesMouthHeight('giftsub'),
 						"time"       : self.woofer.mascotImagesTime('giftsub'),
 						"audio"      : self.woofer.mascotAudioFile('giftsub'),
-						"volume"     : self.woofer.mascotAudioVolume('giftsub')
+						"volume"     : self.woofer.mascotAudioVolume('giftsub'),
+						"nanoleaf"   : self.woofer.mascotNanoleafScene('giftsub')
 					})
 				
 			
