@@ -94,6 +94,10 @@ class Settings:
 		self.ScheduledMessages = []
 		self.Commands          = {}
 		
+		self.NanoleafEnabled   = False
+		self.NanoleafIP        = ""
+		self.NanoleafToken     = ""
+		
 		try:
 			with codecs.open(self.pathRoot + "settings.json", encoding="utf-8-sig", mode="r") as f:
 				data = json.load(f, encoding="utf-8")

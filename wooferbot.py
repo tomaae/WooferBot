@@ -32,6 +32,7 @@ from overlay import Overlay
 from woofer import Woofer
 from twitch import Twitch
 from cli import Cli
+from nanoleaf import Nanoleaf
 
 #---------------------------
 #   Main
@@ -45,6 +46,10 @@ print('')
 
 # Initialize settings
 settings = Settings(pathRoot=pathRoot)
+
+# Initialize nanoleaf
+nanoleaf = Nanoleaf(settings=settings)
+
 settings.Save()
 
 # Initialize overlay
@@ -52,7 +57,7 @@ overlay = Overlay(settings=settings)
 overlay.Start()
 
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)

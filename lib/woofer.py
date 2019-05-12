@@ -33,9 +33,10 @@ import os
 #   Woofer logic
 #---------------------------
 class Woofer:
-	def __init__(self, settings, overlay):
+	def __init__(self, settings, overlay, nanoleaf):
 		self.settings       = settings
 		self.overlay        = overlay
+		self.nanoleaf       = nanoleaf
 		
 		self.queue          = []
 		self.greetedUsers   = []
@@ -85,7 +86,7 @@ class Woofer:
 		#
 		if jsonData['custom-tag'] == 'message':
 			# alerts from streamlabs chatbot
-			if jsonData['sender'] == self.settings.TwitchChannel + "bot":
+			if jsonData['sender'] == self.settings.TwitchChannel + "bot" or jsonData['sender'] == "streamlabs" or jsonData['sender'] == "streamelements":
 				# follow
 				if jsonData['message'].find(self.settings.FollowMessage) > 0 and self.settings.Enabled["follow"]:
 					line = jsonData['message'].split(" ")
@@ -174,7 +175,8 @@ class Woofer:
 					"mascotmouth": self.mascotImagesMouthHeight(message['Name']),
 					"time"       : self.mascotImagesTime(message['Name']),
 					"audio"      : self.mascotAudioFile(message['Name']),
-					"volume"     : self.mascotAudioVolume(message['Name'])
+					"volume"     : self.mascotAudioVolume(message['Name']),
+					"nanoleaf"	 : self.mascotNanoleafScene(message['Name'])
 				})
 
 			
@@ -205,6 +207,10 @@ class Woofer:
 			threading.Timer(1, self.woofer_queue, args=(queue_id, jsonData)).start()
 			return
 		
+		# nanoleaf
+		if 'nanoleaf' in jsonData and jsonData['nanoleaf'] != "":
+			self.nanoleaf.Scene(jsonData['nanoleaf'])
+		
 		# default_woofer
 		def default_woofer(queue_id):
 			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
@@ -220,6 +226,7 @@ class Woofer:
 				"mascot": mascotIdleImage,
 			}
 			self.overlay.Send("EVENT_WOOFERBOT", jsonData)
+			self.nanoleaf.Off()
 			if self.queue:
 				self.queue.remove(queue_id)
 			return
@@ -251,7 +258,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('new_chatter'),
 			"time"       : self.mascotImagesTime('new_chatter'),
 			"audio"      : self.mascotAudioFile('new_chatter'),
-			"volume"     : self.mascotAudioVolume('new_chatter')
+			"volume"     : self.mascotAudioVolume('new_chatter'),
+			"nanoleaf"	 : self.mascotNanoleafScene('new_chatter')
 		})
 		return
 
@@ -267,7 +275,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('follow'),
 			"time"       : self.mascotImagesTime('follow'),
 			"audio"      : self.mascotAudioFile('follow'),
-			"volume"     : self.mascotAudioVolume('follow')
+			"volume"     : self.mascotAudioVolume('follow'),
+			"nanoleaf"	 : self.mascotNanoleafScene('follow')
 		})
 		return
 
@@ -284,7 +293,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('sub'),
 			"time"       : self.mascotImagesTime('sub'),
 			"audio"      : self.mascotAudioFile('sub'),
-			"volume"     : self.mascotAudioVolume('sub')
+			"volume"     : self.mascotAudioVolume('sub'),
+			"nanoleaf"	 : self.mascotNanoleafScene('sub')
 		})
 		return
 		
@@ -302,7 +312,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('resub'),
 			"time"       : self.mascotImagesTime('resub'),
 			"audio"      : self.mascotAudioFile('resub'),
-			"volume"     : self.mascotAudioVolume('resub')
+			"volume"     : self.mascotAudioVolume('resub'),
+			"nanoleaf"	 : self.mascotNanoleafScene('resub')
 		})
 		return
 		
@@ -323,7 +334,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('giftsub'),
 			"time"       : self.mascotImagesTime('giftsub'),
 			"audio"      : self.mascotAudioFile('giftsub'),
-			"volume"     : self.mascotAudioVolume('giftsub')
+			"volume"     : self.mascotAudioVolume('giftsub'),
+			"nanoleaf"	 : self.mascotNanoleafScene('giftsub')
 		})
 		return
 	
@@ -341,7 +353,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('bits'),
 			"time"       : self.mascotImagesTime('bits'),
 			"audio"      : self.mascotAudioFile('bits'),
-			"volume"     : self.mascotAudioVolume('bits')
+			"volume"     : self.mascotAudioVolume('bits'),
+			"nanoleaf"	 : self.mascotNanoleafScene('bits')
 		})
 		return
 	
@@ -365,7 +378,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('raid'),
 			"time"       : self.mascotImagesTime('raid'),
 			"audio"      : self.mascotAudioFile('raid'),
-			"volume"     : self.mascotAudioVolume('raid')
+			"volume"     : self.mascotAudioVolume('raid'),
+			"nanoleaf"	 : self.mascotNanoleafScene('raid')
 		})
 		return
 		
@@ -388,7 +402,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('host'),
 			"time"       : self.mascotImagesTime('host'),
 			"audio"      : self.mascotAudioFile('host'),
-			"volume"     : self.mascotAudioVolume('host')
+			"volume"     : self.mascotAudioVolume('host'),
+			"nanoleaf"	 : self.mascotNanoleafScene('host')
 		})
 		return
 
@@ -411,7 +426,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('greet'),
 			"time"       : self.mascotImagesTime('greet'),
 			"audio"      : self.mascotAudioFile('greet'),
-			"volume"     : self.mascotAudioVolume('greet')
+			"volume"     : self.mascotAudioVolume('greet'),
+			"nanoleaf"	 : self.mascotNanoleafScene('greet')
 		})
 		return
 		
@@ -445,7 +461,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight(jsonData['command']),
 			"time"       : self.mascotImagesTime(jsonData['command']),
 			"audio"      : self.mascotAudioFile(jsonData['command']),
-			"volume"     : self.mascotAudioVolume(jsonData['command'])
+			"volume"     : self.mascotAudioVolume(jsonData['command']),
+			"nanoleaf"	 : self.mascotNanoleafScene(jsonData['command'])
 		})
 		return
 		
@@ -469,7 +486,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('lurk'),
 			"time"       : self.mascotImagesTime('lurk'),
 			"audio"      : self.mascotAudioFile('lurk'),
-			"volume"     : self.mascotAudioVolume('lurk')
+			"volume"     : self.mascotAudioVolume('lurk'),
+			"nanoleaf"	 : self.mascotNanoleafScene('lurk')
 		})
 		return
 		
@@ -497,7 +515,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('unlurk'),
 			"time"       : self.mascotImagesTime('unlurk'),
 			"audio"      : self.mascotAudioFile('unlurk'),
-			"volume"     : self.mascotAudioVolume('unlurk')
+			"volume"     : self.mascotAudioVolume('unlurk'),
+			"nanoleaf"	 : self.mascotNanoleafScene('unlurk')
 		})
 		return
 		
@@ -542,7 +561,8 @@ class Woofer:
 			"mascotmouth": self.mascotImagesMouthHeight('shoutout'),
 			"time"       : self.mascotImagesTime('shoutout'),
 			"audio"      : self.mascotAudioFile('shoutout'),
-			"volume"     : self.mascotAudioVolume('shoutout')
+			"volume"     : self.mascotAudioVolume('shoutout'),
+			"nanoleaf"	 : self.mascotNanoleafScene('shoutout')
 		})
 		return
 		
@@ -639,3 +659,15 @@ class Woofer:
 			return self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Volume']
 				
 		return self.settings.GlobalVolume
+		
+	#---------------------------
+	#   mascotNanoleafScene
+	#---------------------------
+	def mascotNanoleafScene(self, action):
+		if action in self.settings.PoseMapping and 'Nanoleaf' in self.settings.PoseMapping[action]:
+			return self.settings.PoseMapping[action]['Nanoleaf']
+		
+		if 'Nanoleaf' in self.settings.PoseMapping['DEFAULT']:
+			return self.settings.PoseMapping['DEFAULT']['Nanoleaf']
+			
+		return ""
