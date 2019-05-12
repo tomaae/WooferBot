@@ -41,6 +41,9 @@ class Overlay:
 		self.loopThread   = None
 		self.settings     = settings
 
+	#---------------------------
+	#   Start
+	#---------------------------
 	def Start(self):
 		print("Starting overlay server...")
 		self.serverSocket = websockets.serve(self.Connection, self.bindIP, self.bindPort)
@@ -52,10 +55,16 @@ class Overlay:
 		self.loopThread.start()
 		return
 		
+	#---------------------------
+	#   Stop
+	#---------------------------
 	def Stop(self):
 		self.loop.stop()
 		return
 		
+	#---------------------------
+	#   Send
+	#---------------------------
 	def Send(self, event, jsonData, init = 0):
 		if self.sendQueue:
 			return 1
@@ -137,6 +146,9 @@ class Overlay:
 			await asyncio.sleep(0.5)
 		return
 		
+	#---------------------------
+	#   get_styles
+	#---------------------------
 	def get_styles(self):
 		css = {}
 		
