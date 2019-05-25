@@ -56,8 +56,8 @@ class Twitch:
 			self.con.connect((self.host, self.port))
 			self.con.send(bytes('PASS %s\r\n'  % self.settings.TwitchOAUTH,         self.chrset)) # www.twitchapps.com/tmi/ will help to retrieve the required authkey
 			self.con.send(bytes('NICK %s\r\n'  % self.settings.TwitchChannel,       self.chrset))
-			self.con.send(bytes('JOIN #%s\r\n' % self.settings.TwitchChannel, self.chrset))
-			self.con.send(bytes('CAP REQ :twitch.tv/tags twitch.tv/commands\r\n',  self.chrset))
+			self.con.send(bytes('JOIN #%s\r\n' % self.settings.TwitchChannel,       self.chrset))
+			self.con.send(bytes('CAP REQ :twitch.tv/tags twitch.tv/commands\r\n',   self.chrset))
 		except:
 			print("Unable to connect to Twitch...")
 			return 1
@@ -103,7 +103,7 @@ class Twitch:
 					jsonData['message'] = self.get_message(line)
 					
 					# HOST
-					if jsonData['message'] == self.settings.HostMessage:
+					if jsonData['message'].find(self.settings.HostMessage) == 0:
 						jsonData['custom-tag'] = 'host'
 						self.woofer.ProcessJson(jsonData)
 						continue

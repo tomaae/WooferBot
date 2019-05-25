@@ -167,16 +167,11 @@ class Woofer:
 			if (currentEpoch - message['LastShown']) >= (message['Timer'] * 60):
 				message['LastShown'] = currentEpoch
 				self.woofer_addtoqueue({
-					"message"    : message['Message'],
+					"message"    : random.SystemRandom().choice(message['Message']),
 					"image"      : self.settings.pathRoot + "\\images\\" + message['Image'],
 					"sender"     : "",
 					"customtag"  : "ScheduledMessage",
-					"mascot"     : self.mascotImagesFile(message['Name']),
-					"mascotmouth": self.mascotImagesMouthHeight(message['Name']),
-					"time"       : self.mascotImagesTime(message['Name']),
-					"audio"      : self.mascotAudioFile(message['Name']),
-					"volume"     : self.mascotAudioVolume(message['Name']),
-					"nanoleaf"	 : self.mascotNanoleafScene(message['Name'])
+					"id"         : message['Name']
 				})
 
 			
@@ -240,6 +235,14 @@ class Woofer:
 	#---------------------------
 	def woofer_addtoqueue(self,jsonResponse):
 		print("{0}: {1}".format(jsonResponse['customtag'], jsonResponse['sender']))
+		
+		jsonResponse["mascot"]      = self.mascotImagesFile(jsonResponse["id"])
+		jsonResponse["mascotmouth"] = self.mascotImagesMouthHeight(jsonResponse["id"])
+		jsonResponse["time"]        = self.mascotImagesTime(jsonResponse["id"])
+		jsonResponse["audio"]       = self.mascotAudioFile(jsonResponse["id"])
+		jsonResponse["volume"]      = self.mascotAudioVolume(jsonResponse["id"])
+		jsonResponse["nanoleaf"]	  = self.mascotNanoleafScene(jsonResponse["id"])
+		
 		# add to queue and wait for slot
 		queue_id = uuid.uuid4()
 		self.queue.append(queue_id)
@@ -254,12 +257,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['new_chatter']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('new_chatter'),
-			"mascotmouth": self.mascotImagesMouthHeight('new_chatter'),
-			"time"       : self.mascotImagesTime('new_chatter'),
-			"audio"      : self.mascotAudioFile('new_chatter'),
-			"volume"     : self.mascotAudioVolume('new_chatter'),
-			"nanoleaf"	 : self.mascotNanoleafScene('new_chatter')
+			"id"         : 'new_chatter'
 		})
 		return
 
@@ -271,12 +269,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['follow']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('follow'),
-			"mascotmouth": self.mascotImagesMouthHeight('follow'),
-			"time"       : self.mascotImagesTime('follow'),
-			"audio"      : self.mascotAudioFile('follow'),
-			"volume"     : self.mascotAudioVolume('follow'),
-			"nanoleaf"	 : self.mascotNanoleafScene('follow')
+			"id"         : 'follow'
 		})
 		return
 
@@ -289,12 +282,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['sub']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('sub'),
-			"mascotmouth": self.mascotImagesMouthHeight('sub'),
-			"time"       : self.mascotImagesTime('sub'),
-			"audio"      : self.mascotAudioFile('sub'),
-			"volume"     : self.mascotAudioVolume('sub'),
-			"nanoleaf"	 : self.mascotNanoleafScene('sub')
+			"id"         : 'sub'
 		})
 		return
 		
@@ -308,12 +296,7 @@ class Woofer:
 			"sender"     : jsonData['display-name'],
 			"months"     : jsonData['msg-param-cumulative-months'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('resub'),
-			"mascotmouth": self.mascotImagesMouthHeight('resub'),
-			"time"       : self.mascotImagesTime('resub'),
-			"audio"      : self.mascotAudioFile('resub'),
-			"volume"     : self.mascotAudioVolume('resub'),
-			"nanoleaf"	 : self.mascotNanoleafScene('resub')
+			"id"         : 'resub'
 		})
 		return
 		
@@ -330,12 +313,7 @@ class Woofer:
 			"sender"     : jsonData['display-name'],
 			"recipient"  : jsonData['msg-param-recipient-display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('giftsub'),
-			"mascotmouth": self.mascotImagesMouthHeight('giftsub'),
-			"time"       : self.mascotImagesTime('giftsub'),
-			"audio"      : self.mascotAudioFile('giftsub'),
-			"volume"     : self.mascotAudioVolume('giftsub'),
-			"nanoleaf"	 : self.mascotNanoleafScene('giftsub')
+			"id"         : 'giftsub'
 		})
 		return
 	
@@ -349,12 +327,7 @@ class Woofer:
 			"sender"     : jsonData['display-name'],
 			"bits"       : jsonData['bits'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('bits'),
-			"mascotmouth": self.mascotImagesMouthHeight('bits'),
-			"time"       : self.mascotImagesTime('bits'),
-			"audio"      : self.mascotAudioFile('bits'),
-			"volume"     : self.mascotAudioVolume('bits'),
-			"nanoleaf"	 : self.mascotNanoleafScene('bits')
+			"id"         : 'bits'
 		})
 		return
 	
@@ -374,12 +347,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['raid']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('raid'),
-			"mascotmouth": self.mascotImagesMouthHeight('raid'),
-			"time"       : self.mascotImagesTime('raid'),
-			"audio"      : self.mascotAudioFile('raid'),
-			"volume"     : self.mascotAudioVolume('raid'),
-			"nanoleaf"	 : self.mascotNanoleafScene('raid')
+			"id"         : 'raid'
 		})
 		return
 		
@@ -398,12 +366,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['host']),
 			"sender"     : jsonData['sender'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('host'),
-			"mascotmouth": self.mascotImagesMouthHeight('host'),
-			"time"       : self.mascotImagesTime('host'),
-			"audio"      : self.mascotAudioFile('host'),
-			"volume"     : self.mascotAudioVolume('host'),
-			"nanoleaf"	 : self.mascotNanoleafScene('host')
+			"id"         : 'host'
 		})
 		return
 
@@ -422,12 +385,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['greet']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('greet'),
-			"mascotmouth": self.mascotImagesMouthHeight('greet'),
-			"time"       : self.mascotImagesTime('greet'),
-			"audio"      : self.mascotAudioFile('greet'),
-			"volume"     : self.mascotAudioVolume('greet'),
-			"nanoleaf"	 : self.mascotNanoleafScene('greet')
+			"id"         : 'greet'
 		})
 		return
 		
@@ -453,16 +411,11 @@ class Woofer:
 				image = ""
 		
 		self.woofer_addtoqueue({
-			"message"    : self.settings.Commands[jsonData['command']]['Message'],
+			"message"    : random.SystemRandom().choice(self.settings.Commands[jsonData['command']]['Message']),
 			"image"      : image,
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile(jsonData['command']),
-			"mascotmouth": self.mascotImagesMouthHeight(jsonData['command']),
-			"time"       : self.mascotImagesTime(jsonData['command']),
-			"audio"      : self.mascotAudioFile(jsonData['command']),
-			"volume"     : self.mascotAudioVolume(jsonData['command']),
-			"nanoleaf"	 : self.mascotNanoleafScene(jsonData['command'])
+			"id"         : 'command'
 		})
 		return
 		
@@ -482,12 +435,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['lurk']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('lurk'),
-			"mascotmouth": self.mascotImagesMouthHeight('lurk'),
-			"time"       : self.mascotImagesTime('lurk'),
-			"audio"      : self.mascotAudioFile('lurk'),
-			"volume"     : self.mascotAudioVolume('lurk'),
-			"nanoleaf"	 : self.mascotNanoleafScene('lurk')
+			"id"         : 'lurk'
 		})
 		return
 		
@@ -511,12 +459,7 @@ class Woofer:
 			"message"    : random.SystemRandom().choice(self.settings.Messages['unlurk']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('unlurk'),
-			"mascotmouth": self.mascotImagesMouthHeight('unlurk'),
-			"time"       : self.mascotImagesTime('unlurk'),
-			"audio"      : self.mascotAudioFile('unlurk'),
-			"volume"     : self.mascotAudioVolume('unlurk'),
-			"nanoleaf"	 : self.mascotNanoleafScene('unlurk')
+			"id"         : 'unlurk'
 		})
 		return
 		
@@ -557,12 +500,7 @@ class Woofer:
 			"activity"   : activity,
 			"image"      : jsonResult['logo'],
 			"customtag"  : jsonData['custom-tag'],
-			"mascot"     : self.mascotImagesFile('shoutout'),
-			"mascotmouth": self.mascotImagesMouthHeight('shoutout'),
-			"time"       : self.mascotImagesTime('shoutout'),
-			"audio"      : self.mascotAudioFile('shoutout'),
-			"volume"     : self.mascotAudioVolume('shoutout'),
-			"nanoleaf"	 : self.mascotNanoleafScene('shoutout')
+			"id"         : 'shoutout'
 		})
 		return
 		
@@ -645,11 +583,11 @@ class Woofer:
 	#---------------------------
 	def mascotAudioFile(self, action):
 		if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Audio'] in self.settings.mascotAudio:
-			tmp = self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Audio']
+			tmp = random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Audio'])
 			if os.path.exists(tmp):
 				return tmp
 				
-		return self.settings.mascotAudio[self.settings.PoseMapping['DEFAULT']['Audio']]['Audio']
+		return random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping['DEFAULT']['Audio']]['Audio'])
 		
 	#---------------------------
 	#   mascotAudioVolume

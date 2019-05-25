@@ -23,7 +23,11 @@
 
 import socket
 import requests
+import time
+import select
+import re
 import json
+import msvcrt
 
 #---------------------------
 #   Nanoleaf Handling
@@ -43,23 +47,119 @@ class Nanoleaf:
 			return
 			
 		print("Initializing nanoleaf...")
-		if not self.active:
-			if not self.ip:
-				ip_list = self.Scan()
-			
+		#
+		# IP Not set
+		#
+		if not self.ip or not self.portup(self.ip, 16021):
+			ip_list = []
+			discovery_time = 5
+			while True:
+				ip_list = self.ssdp_discovery(discovery_time)
 				if len(ip_list) == 0:
 					print("Nanoleaf not found")
-					return
+					print("Press C to cancel or any key to scan again")
+					input_char = msvcrt.getch().decode("utf-8").upper()
+					if discovery_time < 20:
+						discovery_time = discovery_time + 5
+					if input_char == 'C':
+						return
+						
+			self.ip = ip_list[0]
+			settings.NanoleafIP = self.ip
+		
+		#
+		# Token not set
+		#
+		result = self.put_request("state", { 'on': { 'value': False } })
+		if self.token == "" or result.status_code == 401:
+			while True:
+				if not self.auth():
+					print("Press C to cancel or any key to try again")
+					input_char = msvcrt.getch().decode("utf-8").upper()
+					if input_char == 'C':
+						return
 			
-				self.ip = ip_list[0]
-				settings.NanoleafIP = self.ip
-			
-		if self.token == "":
-			if not self.Auth():
-				return
 			settings.NanoleafToken = self.token
-			
+		
+		
 		self.active = True
+
+	#---------------------------
+	#   ssdp_discovery
+	#---------------------------
+	def ssdp_discovery(self, discovery_time: float = 5):
+		SSDP_IP = "239.255.255.250"
+		SSDP_PORT = 1900
+		SSDP_MX = 10
+		
+		devices = []
+
+		req = ['M-SEARCH * HTTP/1.1',
+		'HOST: ' + SSDP_IP + ':' + str(SSDP_PORT),
+		'MAN: "ssdp:discover"',
+		'MX: ' + str(SSDP_MX),
+		'ST: ssdp:all']
+		req = '\r\n'.join(req).encode('utf-8')
+
+		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, SSDP_MX)
+		sock.bind((socket.gethostname(), 9090))
+		sock.sendto(req, (SSDP_IP, SSDP_PORT))
+		sock.setblocking(False)
+
+
+		timeout = time.time() + discovery_time
+		print("Starting Nanoleaf discovery.")
+		while time.time() < timeout:
+			try:
+				ready = select.select([sock], [], [], 5)
+				if ready[0]:
+					response = sock.recv(1024).decode("utf-8")
+					if 'nanoleaf' not in response:
+						continue
+
+					ip = ""
+					for line in response.lower().split("\n"):
+						if "location:" in line:
+							ip = re.search( r'[0-9]+(?:\.[0-9]+){3}', line).group()
+
+							if ip not in devices and (self.is_valid_ipv4_address(ip) or self.is_valid_ipv6_address(ip)):
+								devices.append(ip)
+					
+			except socket.error as err:
+				print("Socket error while discovering SSDP devices!")
+				print(err)
+				sock.close()
+				break
+				
+		sock.close()
+		return devices
+
+	#---------------------------
+	#   is_valid_ipv4_address
+	#---------------------------
+	def is_valid_ipv4_address(self, address):
+		try:
+			socket.inet_pton(socket.AF_INET, address)
+		except AttributeError:  # no inet_pton here, sorry
+			try:
+				socket.inet_aton(address)
+			except socket.error:
+				return False
+			return address.count('.') == 3
+		except socket.error:  # not a valid address
+			return False
+		return True
+
+	#---------------------------
+	#   is_valid_ipv6_address
+	#---------------------------
+	def is_valid_ipv6_address(self, address):
+		try:
+			socket.inet_pton(socket.AF_INET6, address)
+		except socket.error:  # not a valid address
+			return False
+		return True
 
 	#---------------------------
 	#   Off
@@ -69,8 +169,8 @@ class Nanoleaf:
 			return
 			
 		data = { 'on': { 'value': False } }
-		self.put_request("state", data)
-		return
+		result = self.put_request("state", data)
+		return result
 		
 	#---------------------------
 	#   Scene
@@ -80,11 +180,11 @@ class Nanoleaf:
 			return
 			
 		data = { 'select': name } 
-		self.put_request("effects", data)
-		return
+		result = self.put_request("effects", data)
+		return result
 		
 	#---------------------------
-	#   Scene
+	#   put_request
 	#---------------------------
 	def put_request(self, endpoint, data: dict):
 		url = "http://" + self.ip + ":16021/api/v1/" + self.token + "/" + endpoint
@@ -93,37 +193,37 @@ class Nanoleaf:
 			result = requests.put(url, data = json.dumps(data), timeout = 1)
 		except requests.exceptions.RequestException as e:
 			print(e)
-			return
+			return result
 		
 		if result.status_code == 204:
-			return
+			return result
 			
 		if result.status_code == 403:
 			print("Error 403, Bad request")
-			return
+			return result
 			
 		if result.status_code == 401:
-			print("Error 401, Not authozed")
-			return
+			print("Error 401, Not authorized")
+			return result
 			
 		if result.status_code == 404:
 			print("Error 404, Resource not found")
-			return
+			return result
 			
 		if result.status_code == 422:
 			print("Error 422, Unprocessible entity")
-			return
+			return result
 			
 		if result.status_code == 500:
 			print("Error 500, Internal error")
-			return
+			return result
 			
-		return
+		return result
 		
 	#---------------------------
-	#   Auth
+	#   auth
 	#---------------------------
-	def Auth(self):
+	def auth(self):
 		print("Auth with nanoleaf...")
 		
 		url = "http://" + self.ip + ":16021/api/v1/new"
@@ -142,25 +242,14 @@ class Nanoleaf:
 		return
 
 	#---------------------------
-	#   Scan
+	#   portup
 	#---------------------------
-	def Scan(self):
-		print("Scanning the network...")
-		
-		ips = []
-		local_ip = socket.gethostbyname(socket.gethostname())
-		local_ip_arr = local_ip.split(".")
-		local_nw = local_ip_arr[0] +  "." + local_ip_arr[1] +  "." + local_ip_arr[2] +  "."		
-		
-		socket.setdefaulttimeout(0.01)
-		
-		for ip_end in range(1, 255):
-			ip = str(local_nw) + str(ip_end)
-			socket_obj = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-			if socket_obj.connect_ex((ip, 16021)) == 0:
-				ips.append(ip)
+	def portup(self, ip, port):
+		#socket.setdefaulttimeout(0.01)
+		socket_obj = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		if socket_obj.connect_ex((ip, port)) == 0:
 			socket_obj.close()
-			
-		return ips
-		
+			return True
+		socket_obj.close()
+		return False
 		

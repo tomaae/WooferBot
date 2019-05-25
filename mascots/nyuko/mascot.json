@@ -21,11 +21,11 @@
 	},
 	"mascotAudio": {
 		"Wave": {
-			"Audio": "hiiii.mp3",
+			"Audio": ["hiiii.mp3"],
 			"Volume": 0.2
 		},
 		"Happy": {
-			"Audio": "yaaaaayyyy.mp3",
+			"Audio": ["yaaaaayyyy.mp3"],
 			"Volume": 0.2
 		}
 	},

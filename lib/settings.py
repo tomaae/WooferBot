@@ -66,7 +66,8 @@ class Settings:
 			self.mascotImages[action]['Image'] = self.pathRoot + "mascots\\" + self.CurrectMascot + "\\images\\" + self.mascotImages[action]['Image']
 			
 		for action in self.mascotAudio:
-			self.mascotAudio[action]['Audio'] = self.pathRoot + "mascots\\" + self.CurrectMascot + "\\audio\\" + self.mascotAudio[action]['Audio']
+			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
+				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrectMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
 		
 		return
 

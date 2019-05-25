@@ -60,12 +60,7 @@ class Cli:
 						"message"    : self.settings.Commands['!start']['Message'],
 						"sender"     : "testname",
 						"customtag"  : "follow",
-						"mascot"     : self.woofer.mascotImagesFile('!start'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('!start'),
-						"time"       : self.woofer.mascotImagesTime('!start'),
-						"audio"      : self.woofer.mascotAudioFile('!start'),
-						"volume"     : self.woofer.mascotAudioVolume('!start'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('!start')
+						"id"         : "!start"
 					})
 
 			#
@@ -76,12 +71,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['follow']),
 						"sender"     : "testname",
 						"customtag"  : "follow",
-						"mascot"     : self.woofer.mascotImagesFile('follow'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('follow'),
-						"time"       : self.woofer.mascotImagesTime('follow'),
-						"audio"      : self.woofer.mascotAudioFile('follow'),
-						"volume"     : self.woofer.mascotAudioVolume('follow'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('follow')
+						"id"         : "follow"
 					})
 					
 			#
@@ -92,12 +82,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['greet']),
 						"sender"     : "testname",
 						"customtag"  : "greet",
-						"mascot"     : self.woofer.mascotImagesFile('greet'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('greet'),
-						"time"       : self.woofer.mascotImagesTime('greet'),
-						"audio"      : self.woofer.mascotAudioFile('greet'),
-						"volume"     : self.woofer.mascotAudioVolume('greet'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('greet')
+						"id"         : "greet"
 					})
 					
 			#
@@ -110,12 +95,7 @@ class Cli:
 						"recipient"  : "testname",
 						"activity"   : "Pong",
 						"customtag"  : "shoutout",
-						"mascot"     : self.woofer.mascotImagesFile('shoutout'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('shoutout'),
-						"time"       : self.woofer.mascotImagesTime('shoutout'),
-						"audio"      : self.woofer.mascotAudioFile('shoutout'),
-						"volume"     : self.woofer.mascotAudioVolume('shoutout'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('shoutout')
+						"id"         : "greet"
 					})
 					
 			#
@@ -126,12 +106,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['lurk']),
 						"sender"     : "testname",
 						"customtag"  : "lurk",
-						"mascot"     : self.woofer.mascotImagesFile('lurk'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('lurk'),
-						"time"       : self.woofer.mascotImagesTime('lurk'),
-						"audio"      : self.woofer.mascotAudioFile('lurk'),
-						"volume"     : self.woofer.mascotAudioVolume('lurk'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('lurk')
+						"id"         : "lurk"
 					})
 					
 			#
@@ -143,12 +118,7 @@ class Cli:
 						"sender"     : "testname",
 						"bits"       : "1000",
 						"customtag"  : "bits",
-						"mascot"     : self.woofer.mascotImagesFile('bits'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('bits'),
-						"time"       : self.woofer.mascotImagesTime('bits'),
-						"audio"      : self.woofer.mascotAudioFile('bits'),
-						"volume"     : self.woofer.mascotAudioVolume('bits'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('bits')
+						"id"         : "bits"
 					})
 					
 			#
@@ -159,12 +129,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['new_chatter']),
 						"sender"     : "testname",
 						"customtag"  : "new_chatter",
-						"mascot"     : self.woofer.mascotImagesFile('new_chatter'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('new_chatter'),
-						"time"       : self.woofer.mascotImagesTime('new_chatter'),
-						"audio"      : self.woofer.mascotAudioFile('new_chatter'),
-						"volume"     : self.woofer.mascotAudioVolume('new_chatter'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('new_chatter')
+						"id"         : "new_chatter"
 					})
 					
 			#
@@ -175,12 +140,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['raid']),
 						"sender"     : "testname",
 						"customtag"  : "raid",
-						"mascot"     : self.woofer.mascotImagesFile('raid'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('raid'),
-						"time"       : self.woofer.mascotImagesTime('raid'),
-						"audio"      : self.woofer.mascotAudioFile('raid'),
-						"volume"     : self.woofer.mascotAudioVolume('raid'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('raid')
+						"id"         : "raid"
 					})
 					
 			#
@@ -191,12 +151,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['host']),
 						"sender"     : "testname",
 						"customtag"  : "host",
-						"mascot"     : self.woofer.mascotImagesFile('host'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('host'),
-						"time"       : self.woofer.mascotImagesTime('host'),
-						"audio"      : self.woofer.mascotAudioFile('host'),
-						"volume"     : self.woofer.mascotAudioVolume('host'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('host')
+						"id"         : "host"
 					})
 					
 			#
@@ -207,12 +162,7 @@ class Cli:
 						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['sub']),
 						"sender"     : "testname",
 						"customtag"  : "sub",
-						"mascot"     : self.woofer.mascotImagesFile('sub'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('sub'),
-						"time"       : self.woofer.mascotImagesTime('sub'),
-						"audio"      : self.woofer.mascotAudioFile('sub'),
-						"volume"     : self.woofer.mascotAudioVolume('sub'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('sub')
+						"id"         : "sub"
 					})
 					
 			#
@@ -224,12 +174,7 @@ class Cli:
 						"sender"     : "testname",
 						"months"     : "3",
 						"customtag"  : "resub",
-						"mascot"     : self.woofer.mascotImagesFile('resub'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('resub'),
-						"time"       : self.woofer.mascotImagesTime('resub'),
-						"audio"      : self.woofer.mascotAudioFile('resub'),
-						"volume"     : self.woofer.mascotAudioVolume('resub'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('resub')
+						"id"         : "resub"
 					})
 					
 			#
@@ -241,12 +186,7 @@ class Cli:
 						"sender"     : "testname",
 						"recipient"  : "testname",
 						"customtag"  : "giftsub",
-						"mascot"     : self.woofer.mascotImagesFile('giftsub'),
-						"mascotmouth": self.woofer.mascotImagesMouthHeight('giftsub'),
-						"time"       : self.woofer.mascotImagesTime('giftsub'),
-						"audio"      : self.woofer.mascotAudioFile('giftsub'),
-						"volume"     : self.woofer.mascotAudioVolume('giftsub'),
-						"nanoleaf"   : self.woofer.mascotNanoleafScene('giftsub')
+						"id"         : "giftsub"
 					})
 				
 			
