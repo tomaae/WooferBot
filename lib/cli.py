@@ -57,8 +57,8 @@ class Cli:
 			#
 			if cmd == "0":
 				self.woofer.woofer_addtoqueue({
-						"message"    : self.settings.Commands['!start']['Message'],
-						"sender"     : "testname",
+						"message"    : "{Sender}",
+						"sender"     : self.settings.Commands['!start']['Message'],
 						"customtag"  : "follow",
 						"id"         : "!start"
 					})
@@ -95,7 +95,7 @@ class Cli:
 						"recipient"  : "testname",
 						"activity"   : "Pong",
 						"customtag"  : "shoutout",
-						"id"         : "greet"
+						"id"         : "shoutout"
 					})
 					
 			#

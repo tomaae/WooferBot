@@ -234,7 +234,10 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
           	htmlobj += `<div class="msg">` + data.message + `</div>`;
           	htmlobj += `</div>`;
           }
-          htmlobj += `<div class="mascot" ><img src="${data.mascot}"></img></div>`;
+          if (typeof data.id !== 'undefined'){
+          	data.mascot += '?x=' + Date.now();
+          }
+          htmlobj += `<div class="mascot"><img src="${data.mascot}" id="mascot"></img></div>`;
         	htmlobj += `</div>`;
         	
         	// Modify mascot's mouth height
