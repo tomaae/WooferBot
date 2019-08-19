@@ -31,4 +31,7 @@ Installation and configuration instruction available on [Wiki](https://github.co
   - Fully customizable replies
   - Can pick from multiple replies for better diversity
   - Each type of bot interaction can be disabled individually
+  - Supports animated mascots
   
+- Hardware support
+  - Nanoleaf
