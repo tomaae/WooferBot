@@ -6,18 +6,9 @@
 #
 #    This file is part of WooferBot.
 #
-#    WooferBot is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
 #    WooferBot is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with WooferBot.  If not, see <https://www.gnu.org/licenses/>.
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 ##########################################################################
 
@@ -92,7 +83,7 @@ class Twitch:
 					self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
 					continue
 					
-				print(line)
+				#print(line)
 
 				jsonData = self.fill_tags()
 				#
@@ -288,5 +279,5 @@ class Twitch:
 				emote = emote.split(":")[1]
 			emote = emote.split("-")
 			msg = msg[:int(emote[0])] + msg[int(emote[1])+1:]
-		print(msg)
+		#print(msg)
 		return msg
