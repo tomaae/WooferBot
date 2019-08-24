@@ -5,35 +5,35 @@
 		},
 		"Wave": {
 			"Image": "wave.png",
-			"MouthHeight": 110,
+			"MouthHeight": 120,
 			"Time": 5000
 		},
 		"Happy": {
 			"Image": "happy.png",
-			"MouthHeight": 110,
+			"MouthHeight": 140,
 			"Time": 7000
 		},
 		"Snack": {
-			"Image": "excited.png",
-			"MouthHeight": 110,
+			"Image": "snack.png",
+			"MouthHeight": 120,
 			"Time": 7000
 		}
 	},
 	"mascotAudio": {
 		"Wave": {
-			"Audio": ["hiiii.mp3", "hi_there.mp3"],
+			"Audio": ["wave.mp3"],
 			"Volume": 0.2
 		},
 		"Happy": {
-			"Audio": ["yaaaaayyyy.mp3", "hoorayyy.mp3"],
+			"Audio": ["happy.mp3"],
 			"Volume": 0.2
 		},
 		"Snack": {
-			"Audio": ["thank_yuuuu.mp3", "thanku_vur_much.mp3"],
+			"Audio": ["happy.mp3"],
 			"Volume": 0.2
 		}
 	},
 	"mascotStyles": {
-		"MascotMaxWidth": 130
+		"MascotMaxWidth": 240
 	}
 }
