@@ -6,18 +6,9 @@
 #
 #    This file is part of WooferBot.
 #
-#    WooferBot is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
 #    WooferBot is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with WooferBot.  If not, see <https://www.gnu.org/licenses/>.
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 ##########################################################################
 
@@ -82,7 +73,7 @@ class Settings:
 		self.Activities        = {}
 		self.Enabled           = {}
 		self.PoseMapping       = {}
-		self.CurrectMascot     = "tomaae"
+		self.CurrectMascot     = "malamute"
 		self.pathImages        = self.pathRoot + "mascots" + '\\' + self.CurrectMascot + '\\' + "images" + '\\'
 		self.pathAudio         = self.pathRoot + "mascots" + '\\' + self.CurrectMascot + '\\' + "audio" + '\\'
 		self.HostMessage       = ""
@@ -91,7 +82,7 @@ class Settings:
 		self.GlobalVolume      = 0.2
 		self.MinBits           = 0
 		self.Bots              = []
-		self.commonBots        = ["nightbot", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot"]
+		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot"]
 		self.ScheduledMessages = []
 		self.Commands          = {}
 		
