@@ -1,22 +1,17 @@
 <!--
-    WooferBot, an interactive BrowserSource Bot for twitch.tv
-    Copyright (C) 2019  Tomaae
-    (https://github.com/tomaae/WooferBot)
-
-    This file is part of WooferBot.
-
-    WooferBot is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    WooferBot is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with WooferBot.  If not, see <https://www.gnu.org/licenses/>.
+##########################################################################
+#
+#    WooferBot, an interactive BrowserSource Bot for twitch.tv
+#    Copyright (C) 2019  Tomaae
+#    (https://github.com/tomaae/WooferBot)
+#
+#    This file is part of WooferBot.
+#
+#    WooferBot is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+##########################################################################
 -->
 <html>
 <style>
@@ -43,6 +38,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 }
 
 .message {
+	display:none;
 	position: absolute;
   bottom: 95px;
   left: 160px;
@@ -102,7 +98,8 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 	border-bottom: 0;
 }
 
-.image {
+.msgimg {
+	display:none;
 	margin: 7px;
 	float: left;
 	height: 75px;
@@ -121,7 +118,15 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 
 <body>
   <div>
-		<p id="my_event"></p>
+		<p id="my_event">
+			<div class="mainbox">
+  			<div class="message"><div></div>
+  				<img class="msgimg" id="msgimg"></img>
+  				<div class="msg" id="msg"></div>
+  			</div>
+  			<div class="mascot"><img id="mascot"></img></div>
+			</div>
+		</p>
 	</div>
 </body>
 
@@ -150,10 +155,12 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
   	//---------------------------------
   	// HTML Elements
   	//---------------------------------
-  	myEvent: document.getElementById('my_event'),
+  	message: document.getElementById('msg'),
+  	messageImage: document.getElementById('msgimg'),
+  	mascot: document.getElementById('mascot'),
 
   	Listen: function() {
-  		this.socket = new WebSocket('ws://127.0.0.1:3338');
+  		this.socket = new WebSocket('ws://127.0.0.1:3339');
   		this.connected = false;
 
   		//---------------------------------
@@ -193,16 +200,13 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
           var data = JSON.parse(json.data);
           //console.log("data", data);
 
-          htmlobj = `<div class="mainbox ${message.timeStamp}">`;
+        	if(data.audio){
+        		var audio = new Audio(data.audio);
+         		audio.volume = data.volume;
+        		audio.play();
+        	}
+        	
           if(data.message){
-          	htmlobj += `<div class="message"><div></div>`;
-          	if(data.image)htmlobj += `<img class="image" src="${data.image}"></img>`;
-          	if(data.audio){
-          		var audio = new Audio(data.audio);
-           		audio.volume = data.volume;
-          		audio.play();
-          	}
-          	
           	while(data.message.indexOf("[") >= 0){
           		tmp = data.message.substring(data.message.indexOf("["), data.message.indexOf("]") + 1);
           		tmp = tmp.replace(/^\s*\[\s*|\s*\]\s*$/g, "");
@@ -230,22 +234,30 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
           		if(data.activity === undefined)data.activity = "";
           		data.message = data.message.replace(/{activity}/gi, '<span class="user">' + data.activity + '</span>');
           	}
-          	
-          	htmlobj += `<div class="msg">` + data.message + `</div>`;
-          	htmlobj += `</div>`;
           }
+          
           if (typeof data.id !== 'undefined'){
           	data.mascot += '?x=' + Date.now();
           }
-          htmlobj += `<div class="mascot"><img src="${data.mascot}" id="mascot"></img></div>`;
-        	htmlobj += `</div>`;
         	
         	// Modify mascot's mouth height
         	modifyCSSProperty(".message", "bottom", data.mascotmouth + "px");
         	
         	
         	// Update interface
-        	Overlay.myEvent.innerHTML = htmlobj
+        	Overlay.mascot.src = data.mascot;
+        	if(data.message){
+        		if(data.image){
+        			Overlay.messageImage.src = data.image;
+        			modifyCSSProperty(".msgimg", "display", "inline-block");
+        		}else{
+        			modifyCSSProperty(".msgimg", "display", "none");
+        		}
+        		Overlay.message.innerHTML = data.message
+        		modifyCSSProperty(".msg", "display", "block");
+        	}else{
+        		modifyCSSProperty(".msg", "display", "none");
+        	}
         }
   			
   			// You have received new data now process it
