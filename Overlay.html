@@ -120,7 +120,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
   <div>
 		<p id="my_event">
 			<div class="mainbox">
-  			<div class="message"><div></div>
+  			<div class="message" id="message"><div></div>
   				<img class="msgimg" id="msgimg"></img>
   				<div class="msg" id="msg"></div>
   			</div>
@@ -249,14 +249,14 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
         	if(data.message){
         		if(data.image){
         			Overlay.messageImage.src = data.image;
-        			modifyCSSProperty(".msgimg", "display", "inline-block");
+        			document.getElementById("msgimg").style.display = "inline-block";
         		}else{
-        			modifyCSSProperty(".msgimg", "display", "none");
+        			document.getElementById("msgimg").style.display = "none";
         		}
-        		Overlay.message.innerHTML = data.message
-        		modifyCSSProperty(".msg", "display", "block");
+        		Overlay.message.innerHTML = data.message;
+        		document.getElementById("message").style.display = "block";
         	}else{
-        		modifyCSSProperty(".msg", "display", "none");
+        		document.getElementById("message").style.display = "none";
         	}
         }
   			
