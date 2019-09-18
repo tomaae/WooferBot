@@ -17,6 +17,38 @@
 			"Image": "snack.png",
 			"MouthHeight": 114,
 			"Time": 7000
+		},
+		"Raid": {
+			"Image": "happy.png",
+			"MouthHeight": 114,
+			"Time": 7000
+		},
+		"!so": {
+			"Image": "happy.png",
+			"MouthHeight": 114,
+			"Time": 7000
+		}
+	},
+	"mascotAudio": {
+		"Wave": {
+			"Audio": ["Greeting.mp3"],
+			"Volume": 0.2
+		},
+		"Happy": {
+			"Audio": ["Happy.mp3"],
+			"Volume": 0.2
+		},
+		"Snack": {
+			"Audio": ["Excited.mp3"],
+			"Volume": 0.2
+		},
+		"Raid": {
+			"Audio": ["Raid.mp3"],
+			"Volume": 0.2
+		},
+		"!so": {
+			"Audio": ["Shoutout.mp3"],
+			"Volume": 0.2
 		}
 	},
 	"mascotStyles": {
