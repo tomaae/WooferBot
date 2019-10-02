@@ -45,7 +45,7 @@ class Settings:
 		self.mascotStyles = {}
 
 		try:
-			with codecs.open(self.pathRoot + "mascots\\" + self.CurrectMascot + "\\mascot.json", encoding="utf-8-sig", mode="r") as f:
+			with codecs.open(self.pathRoot + "mascots\\" + self.CurrentMascot + "\\mascot.json", encoding="utf-8-sig", mode="r") as f:
 				data = json.load(f, encoding="utf-8")
 				for key, value in data.items():
 						self.__dict__[key] = value 
@@ -54,11 +54,11 @@ class Settings:
 			exit(1)
 		
 		for action in self.mascotImages:
-			self.mascotImages[action]['Image'] = self.pathRoot + "mascots\\" + self.CurrectMascot + "\\images\\" + self.mascotImages[action]['Image']
+			self.mascotImages[action]['Image'] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\images\\" + self.mascotImages[action]['Image']
 			
 		for action in self.mascotAudio:
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrectMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
+				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
 		
 		return
 
@@ -73,9 +73,9 @@ class Settings:
 		self.Activities        = {}
 		self.Enabled           = {}
 		self.PoseMapping       = {}
-		self.CurrectMascot     = "malamute"
-		self.pathImages        = self.pathRoot + "mascots" + '\\' + self.CurrectMascot + '\\' + "images" + '\\'
-		self.pathAudio         = self.pathRoot + "mascots" + '\\' + self.CurrectMascot + '\\' + "audio" + '\\'
+		self.CurrentMascot     = "malamute"
+		self.pathImages        = self.pathRoot + "mascots" + '\\' + self.CurrentMascot + '\\' + "images" + '\\'
+		self.pathAudio         = self.pathRoot + "mascots" + '\\' + self.CurrentMascot + '\\' + "audio" + '\\'
 		self.HostMessage       = ""
 		self.AutohostMessage   = ""
 		self.FollowMessage     = ""
@@ -103,13 +103,13 @@ class Settings:
 			# CONVERT
 			#
 			self.TwitchChannel = self.TwitchChannel.lower()
-			self.CurrectMascot = self.CurrectMascot.lower()
+			self.CurrentMascot = self.CurrentMascot.lower()
 			self.Bots = [x.lower() for x in self.Bots]
 			#
 			# DEFAULT
 			#
-			if self.CurrectMascot == "":
-				self.CurrectMascot = "tomaae"
+			if self.CurrentMascot == "":
+				self.CurrentMascot = "tomaae"
 			if self.HostMessage == "":
 				self.HostMessage = "is now hosting you."
 			if self.AutohostMessage == "":
