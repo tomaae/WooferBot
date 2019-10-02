@@ -1,10 +1,10 @@
 # WooferBot
-WooferBot is fully customizable interactive mascot designed to be used as Browser Source within broadcasting software.
+WooferBot is fully customizable interactive mascot for streamers, designed to be used as Browser Source within broadcasting software.
 
-All interactions are done on screen, bot does not write anything in chat.
+For more information, visit [WooferBot website](https://wooferbot.com)  
 
 Announcements, Support and Development updates available on [Discord](https://discord.gg/vpprtdE)  
-Installation and configuration instruction available on [Wiki](https://github.com/tomaae/WooferBot/wiki)  
+Installation and configuration instruction available on [WooferBot website](https://wooferbot.com)  
 
 ### Features
 - Twitch notifications
