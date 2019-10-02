@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="{{ site.lang | default: "en-US" }}">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		{% seo %}
+		<link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
+		<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+		<script src="{{ '/assets/js/scale.fix.js' | relative_url }}"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	</head>
+	<body>
+		<div class="wrapper">
+			<header>
+				<h1 class="header">{{ site.title | default: site.github.repository_name }}</h1>
+				<ul>
+					<li{% if page.url == "/" %} class="active"{% endif %}><a class="buttons home" href="{{ site.github.url }}/">Home</a></li>
+					<li{% if page.url == "/mascots.html" %} class="active"{% endif %}><a class="buttons paw" href="{{ site.github.url }}/mascots">Mascots</a></li>
+					<li{% if page.url == "/documentation.html" %} class="active"{% endif %}><a class="buttons doc" href="{{ site.github.url }}/documentation">Documentation</a></li>
+					<li{% if page.url == "/changelog.html" %} class="active"{% endif %}><a class="buttons list" href="{{ site.github.url }}/changelog">Changelog</a></li>
+					<li{% if page.url == "/contacts.html" %} class="active"{% endif %}><a class="buttons contacts" href="{{ site.github.url }}/contacts">Contacts</a></li>
+					<li{% if page.url == "/license.html" %} class="active"{% endif %}><a class="buttons license" href="{{ site.github.url }}/license">License</a></li>
+				</ul>
+				<br>
+				<ul>
+					{% if site.show_downloads %}
+					<li class="download"><a class="buttons download" href="{{ site.github.latest_release.zipball_url }}">Download</a></li>
+					{% endif %}
+					<li><a class="buttons github" href="{{ site.github.repository_url }}" target="_blank">View On GitHub</a></li>
+				</ul>
+			</header>
+			<section{% if page.class %} class="{{ page.class }}"{% endif %}>
+				{{ content }}
+			</section>
+			<footer>
+				<p><small>Copyright © {{ site.time | date: '%Y' }}</small></p>
+			</footer>
+		</div>
+		<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+	</body>
+</html>
