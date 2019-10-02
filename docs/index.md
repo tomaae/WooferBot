@@ -2,7 +2,7 @@
 shorttitle: WooferBot
 title: WooferBot, visual bot for streamers
 description: >
-  WooferBot is fully customizable interactive mascot for streamers designed to be 
+  WooferBot is fully customizable interactive mascot for streamers, designed to be 
   used as Browser Source within broadcasting software.
 class: home
 tags:
