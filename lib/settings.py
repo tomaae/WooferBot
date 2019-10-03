@@ -161,9 +161,9 @@ class Settings:
 			# STYLES
 			#
 			if "BackgroundColor" not in self.Styles:
-				self.Styles["BackgroundColor"] = "#fef7ed"
+				self.Styles["BackgroundColor"] = "#fefeff"
 			if "BorderColor" not in self.Styles:
-				self.Styles["BorderColor"] = "#ffba70"
+				self.Styles["BorderColor"] = "#69656c"
 			if "BorderWidth" not in self.Styles:
 				self.Styles["BorderWidth"] = 4
 			if "BorderRadius" not in self.Styles:
@@ -177,17 +177,17 @@ class Settings:
 			if "TextWeight" not in self.Styles:
 				self.Styles["TextWeight"] = 900
 			if "TextColor" not in self.Styles:
-				self.Styles["TextColor"] = "#b16a16"
+				self.Styles["TextColor"] = "#69656c"
 			if "HighlightTextSize" not in self.Styles:
 				self.Styles["HighlightTextSize"] = 24
 			if "HighlightTextSpacing" not in self.Styles:
 				self.Styles["HighlightTextSpacing"] = 3
 			if "HighlightTextColor" not in self.Styles:
-				self.Styles["HighlightTextColor"] = "#ffba70"
+				self.Styles["HighlightTextColor"] = "#ca5c67"
 			if "HighlightTextStrokeColor" not in self.Styles:
-				self.Styles["HighlightTextStrokeColor"] = "#b16a16"
+				self.Styles["HighlightTextStrokeColor"] = "#8e4148"
 			if "HighlightTextShadowColor" not in self.Styles:
-				self.Styles["HighlightTextShadowColor"] = "#ffba70"
+				self.Styles["HighlightTextShadowColor"] = "#fc938f"
 			if "HighlightTextShadowOffset" not in self.Styles:
 				self.Styles["HighlightTextShadowOffset"] = 3
 			
