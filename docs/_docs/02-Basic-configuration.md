@@ -42,7 +42,7 @@ Syntax:
 ```
 "Bots": ["mybot1", "mybot2"]
 ```
-<span class="icon idea">Note: Following bots are already included: nightbot, streamlabs, streamelements, stay_hydrated_bot, botisimo, wizebot</span>
+<span class="icon idea">Note: Following bots are already included: nightbot, streamlabs, streamelements, stay_hydrated_bot, botisimo, wizebot, moobot</span>
 
 ### Chat parser configuration
 Customize notifications which relies on a chat parser.
