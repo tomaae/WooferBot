@@ -19,7 +19,7 @@ This section explains installation process, broadcasting software setup and firs
 3. Rename "settings.json.default" to "settings.json".
 
 ### Configure your login information
-Edit settings.json file and change login information for your <a class="icon website" href="https://www.twitch.tv" target="_blank">twitch.tv</a> account. These parameters are **mandatory** for bot to work.
+Edit "settings.json" file and change login information for your <a class="icon website" href="https://www.twitch.tv" target="_blank">twitch.tv</a> account. These parameters are **mandatory** for bot to work.
 ```
 {
     "TwitchChannel": "",
