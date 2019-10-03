@@ -82,7 +82,7 @@ class Settings:
 		self.GlobalVolume      = 0.2
 		self.MinBits           = 0
 		self.Bots              = []
-		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot"]
+		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []
 		self.Commands          = {}
 		
