@@ -168,7 +168,7 @@ class Twitch:
 						self.woofer.ProcessJson(jsonData)
 						continue
 						
-					# MASS GIFTSUB
+					# MASS SUBGIFT
 					if jsonData['msg-id'] == 'submysterygift':
 						jsonData['custom-tag'] = 'submysterygift'
 						#self.woofer.ProcessJson(jsonData)

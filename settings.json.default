@@ -31,7 +31,7 @@
         "resub": [
             "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for being our best friend for {months} months ^..^"
         ],
-        "giftsub": [
+        "subgift": [
             "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for gifting a sub to {recipient} ^..^"
         ],
         "bits": [
@@ -140,7 +140,7 @@
             "Image": "Happy",
             "Audio": "Happy"
         },
-        "giftsub": {
+        "subgift": {
             "Image": "Happy",
             "Audio": "Happy"
         },

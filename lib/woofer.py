@@ -133,11 +133,11 @@ class Woofer:
 			return
 			
 		if jsonData['custom-tag'] == 'subgift' and self.settings.Enabled["subgift"]:
-			self.woofer_giftsub(jsonData)
+			self.woofer_subgift(jsonData)
 			return
 			
 		if jsonData['custom-tag'] == 'anonsubgift' and self.settings.Enabled["anonsubgift"]:
-			self.woofer_giftsub(jsonData)
+			self.woofer_subgift(jsonData)
 			return
 			
 	#---------------------------
@@ -292,19 +292,19 @@ class Woofer:
 		return
 		
 	#---------------------------
-	#   woofer_giftsub
+	#   woofer_subgift
 	#---------------------------
-	def woofer_giftsub(self,jsonData):
+	def woofer_subgift(self,jsonData):
 		# "msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
 		if jsonData['custom-tag'] == 'anonsubgift':
 			jsonData['display-name'] = 'anonymous'
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['giftsub']),
+			"message"    : random.SystemRandom().choice(self.settings.Messages['subgift']),
 			"sender"     : jsonData['display-name'],
 			"recipient"  : jsonData['msg-param-recipient-display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"id"         : 'giftsub'
+			"id"         : 'subgift'
 		})
 		return
 	

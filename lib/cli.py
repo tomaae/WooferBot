@@ -41,7 +41,7 @@ class Cli:
 				print(" 8 - Host")
 				print(" 9 - Sub")
 				print("10 - Resub")
-				print("11 - Giftsub")
+				print("11 - Subgift")
 
 			#
 			# Start
@@ -169,15 +169,15 @@ class Cli:
 					})
 					
 			#
-			# Giftsub
+			# Subgift
 			#
 			if cmd == "11":
 				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['giftsub']),
+						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['subgift']),
 						"sender"     : "testname",
 						"recipient"  : "testname",
-						"customtag"  : "giftsub",
-						"id"         : "giftsub"
+						"customtag"  : "subgift",
+						"id"         : "subgift"
 					})
 				
 			

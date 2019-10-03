@@ -210,8 +210,8 @@ class Settings:
 				self.Messages["resub"] = [
 					"[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for being our best friend for {months} months ^..^"
 				]
-			if "giftsub" not in self.Messages:
-				self.Messages["giftsub"] = [
+			if "subgift" not in self.Messages:
+				self.Messages["subgift"] = [
 					"[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for gifting a sub to {recipient} ^..^"
 				]
 			if "bits" not in self.Messages:
