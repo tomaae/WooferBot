@@ -25,13 +25,13 @@
 					<li{% if page.url == "/contacts.html" %} class="active"{% endif %}><a class="buttons contacts" href="{{ site.github.url }}/contacts">Contacts</a></li>
 					<li{% if page.url == "/license.html" %} class="active"{% endif %}><a class="buttons license" href="{{ site.github.url }}/license">License</a></li>
 				</ul>
+				{% if site.show_downloads %}
 				<br>
 				<ul>
-					{% if site.show_downloads %}
 					<li class="download"><a class="buttons download" href="{{ site.github.latest_release.zipball_url }}">Download</a></li>
-					{% endif %}
 					<li><a class="buttons github" href="{{ site.github.repository_url }}" target="_blank">View On GitHub</a></li>
 				</ul>
+				{% endif %}
 			</header>
 			<section{% if page.class %} class="{{ page.class }}"{% endif %}>
 				{{ content }}
