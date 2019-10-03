@@ -79,7 +79,7 @@ class Woofer:
 			commonBots = set(self.settings.commonBots)
 			customBots = set(self.settings.Bots)
 			# alerts from chatbots
-			if jsonData['sender'] == self.settings.TwitchChannel + "bot" or in commonBots or jsonData['sender'] in customBots:
+			if jsonData['sender'] == self.settings.TwitchChannel + "bot" or jsonData['sender'] in commonBots or jsonData['sender'] in customBots:
 				# follow
 				if jsonData['message'].find(self.settings.FollowMessage) > 0 and self.settings.Enabled["follow"]:
 					line = jsonData['message'].split(" ")
