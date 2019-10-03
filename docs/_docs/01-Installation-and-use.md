@@ -27,7 +27,8 @@ Edit "settings.json" file and change login information for your <a class="icon w
 }
 ```
 * <span class="icon settings">TwitchChannel</span> Channel name.
-* <span class="icon settings">TwitchOAUTH</span> How to obtain a Twitch OAUTH: <a class="icon twitch" href="https://www.twitchapps.com/tmi/" target="_blank">www.twitchapps.com/tmi/</a>  
+* <span class="icon settings">TwitchOAUTH</span> How to obtain a Twitch OAUTH: <a class="icon twitch" href="https://www.twitchapps.com/tmi/" target="_blank">www.twitchapps.com/tmi/</a>
+
 <br><span class="icon idea">Never share your Twitch OAUTH with anyone. If someone has seen your OAUTH, generate a new one as soon as possible.</span>
 
 ### Add overlay
