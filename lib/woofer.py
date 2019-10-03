@@ -76,8 +76,10 @@ class Woofer:
 		# Messages
 		#
 		if jsonData['custom-tag'] == 'message':
-			# alerts from streamlabs chatbot
-			if jsonData['sender'] == self.settings.TwitchChannel + "bot" or jsonData['sender'] == "streamlabs" or jsonData['sender'] == "streamelements":
+			commonBots = set(self.settings.commonBots)
+			customBots = set(self.settings.Bots)
+			# alerts from chatbots
+			if jsonData['sender'] == self.settings.TwitchChannel + "bot" or in commonBots or jsonData['sender'] in customBots:
 				# follow
 				if jsonData['message'].find(self.settings.FollowMessage) > 0 and self.settings.Enabled["follow"]:
 					line = jsonData['message'].split(" ")
@@ -92,8 +94,6 @@ class Woofer:
 				return
 			
 			# greeting
-			commonBots = set(self.settings.commonBots)
-			customBots = set(self.settings.Bots)
 			if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData['sender'] not in customBots:
 				self.woofer_greet(jsonData)
 		
