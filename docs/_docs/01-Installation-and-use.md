@@ -4,8 +4,8 @@ anchor: installation-and-use
 toc: 
  - name: Download and prepare files
    anchor: download-and-prepare-files
- - name: Login information
-   anchor: login-information
+ - name: Configure your login information
+   anchor: configure-your-login-information
  - name: Add overlay
    anchor: add-overlay
  - name: Starting WooferBot
@@ -18,7 +18,7 @@ This section explains installation process, broadcasting software setup and firs
 2. Download and extract <a class="icon download" href="{{ site.github.url }}/assets/files/python37.zip">Embedded Python 3.7</a> into WooferBot main directory.
 3. Rename "settings.json.default" to "settings.json".
 
-### Login information
+### Configure your login information
 Edit settings.json file and change login information for your <a class="icon website" href="https://www.twitch.tv" target="_blank">twitch.tv</a> account. These parameters are **mandatory** for bot to work.
 ```
 {
