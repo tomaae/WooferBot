@@ -2,28 +2,14 @@
 name: Basic configuration
 anchor: basic-configuration
 toc: 
- - name: Login information
-   anchor: login-information
- - name: Miscellaneous parameters
-   anchor: miscellaneous-parameters
+ - name: Global parameters
+   anchor: global-parameters
  - name: Chat parser configuration
    anchor: chat-parser-configuration
 ---
-This section explains basic configuration such as authentication and global parameters.
+This section explains basic configuration and global parameters.
 
-### Login information
-Login information for your <a class="icon website" href="https://www.twitch.tv" target="_blank">twitch.tv</a> account. These parameters are **mandatory** for bot to work.
-```
-{
-    "TwitchChannel": "",
-    "TwitchOAUTH": ""
-}
-```
-* <span class="icon settings">TwitchChannel</span> Channel name.
-* <span class="icon settings">TwitchOAUTH</span> How to obtain a Twitch OAUTH: <a class="icon twitch" href="https://www.twitchapps.com/tmi/" target="_blank">www.twitchapps.com/tmi/</a>  
-<br><span class="icon idea">Never share your Twitch OAUTH with anyone. If someone has seen your OAUTH, generate a new one as soon as possible.</span>
-
-### Miscellaneous parameters
+### Global parameters
 Miscellaneous configurable parameters.
 ```
 {
@@ -42,7 +28,7 @@ Syntax:
 ```
 "Bots": ["mybot1", "mybot2"]
 ```
-<span class="icon idea">Note: Following bots are already included: nightbot, streamlabs, streamelements, stay_hydrated_bot, botisimo, wizebot</span>
+<span class="icon idea">Note: Following bots are already included: nightbot, streamlabs, streamelements, stay_hydrated_bot, botisimo, wizebot, moobot</span>
 
 ### Chat parser configuration
 Customize notifications which relies on a chat parser.
