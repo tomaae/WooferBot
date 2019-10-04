@@ -1,7 +1,7 @@
 # WooferBot
 WooferBot is fully customizable interactive mascot for streamers, designed to be used as Browser Source within broadcasting software.
 
-For more information, visit [WooferBot website](https://wooferbot.com)  
+For more information, visit [WooferBot website](https://wooferbot.com)
 
 Announcements, Support and Development updates available on [Discord](https://discord.gg/vpprtdE)  
 Installation and configuration instruction available on [WooferBot website](https://wooferbot.com)  
