@@ -20,3 +20,6 @@ tags:
 
 <a class="icon github" href="https://github.com/tomaae/WooferBot/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBug%5D" target="_blank">Report an issue</a>
  
+## Resources
+Do you want a WooferBot panel for twitch or website?
+![Twitch Panel](/assets/images/twitch-panel.png)
