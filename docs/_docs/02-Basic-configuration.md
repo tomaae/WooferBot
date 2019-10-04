@@ -19,7 +19,7 @@ Miscellaneous configurable parameters.
     "Bots": []
 }
 ```
-* <span class="icon settings">CurrentMascot</span> Name of active mascot.
+* <span class="icon settings">CurrentMascot</span> Set active mascot.
   * <a target="_blank" href="{{ site.github.url }}/mascots#beatrice">beatrice</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#cat-ragdoll">cat_ragdoll</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#cat-russian-blue">cat_russianblue</a>
@@ -31,7 +31,7 @@ Miscellaneous configurable parameters.
   * <a target="_blank" href="{{ site.github.url }}/mascots#nyuko">nyuko</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#tem">tem</a>
 * <span class="icon settings">GlobalVolume</span> Adjusts global volume.
-* <span class="icon settings">MinBits</span> Minimum amount of bits to trigger a bit notification
+* <span class="icon settings">MinBits</span> Minimum amount of bits to trigger a bit notification.
 * <span class="icon settings">Bots</span> List of bots on your channel. This parameter is used for ignoring greetings and parse specific messages.
 
 Syntax:
