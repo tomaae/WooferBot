@@ -34,4 +34,3 @@ Released <time datetime="{{ release.published_at | date_to_xmlschema }}">{{ rele
 </ul>
 {% endfor %}
 
-Not released yet, for pre-release, visit our discord.
