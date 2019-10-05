@@ -1,6 +1,6 @@
 ---
-name: Customize-bits
-anchor: customize-bits
+name: Customize bit notifications
+anchor: customize-bit-notifications
 toc: 
  - name: Create special notifications for bit ranges
    anchor: create-special-notifications-for-bit-ranges
