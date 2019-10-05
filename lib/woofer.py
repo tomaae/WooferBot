@@ -200,12 +200,12 @@ class Woofer:
 		# default_woofer
 		def default_woofer(queue_id):
 			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
-			if not os.path.exists(mascotIdleImage):
+			if not os.path.isfile(mascotIdleImage):
 				mascotIdleImage = ""
 			
 			if 'Idle' in self.settings.PoseMapping and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
 				tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-				if os.path.exists(tmp):
+				if os.path.isfile(tmp):
 					mascotIdleImage = tmp
 			
 			jsonData = {
@@ -542,7 +542,7 @@ class Woofer:
 	def mascotImagesFile(self, action):
 		if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Image'] in self.settings.mascotImages:
 			tmp = self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]['Image']
-			if os.path.exists(tmp):
+			if os.path.isfile(tmp):
 				return tmp
 				
 		return self.settings.mascotImages[self.settings.PoseMapping['DEFAULT']['Image']]['Image']
@@ -575,7 +575,7 @@ class Woofer:
 	def mascotAudioFile(self, action):
 		if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Audio'] in self.settings.mascotAudio:
 			tmp = random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Audio'])
-			if os.path.exists(tmp):
+			if os.path.isfile(tmp):
 				return tmp
 				
 		if self.settings.PoseMapping['DEFAULT']['Audio'] in self.settings.mascotAudio:

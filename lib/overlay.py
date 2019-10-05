@@ -61,19 +61,19 @@ class Overlay:
 			return 1
 			
 		if 'mascot' in jsonData:
-			if os.path.exists(jsonData["mascot"]):
+			if os.path.isfile(jsonData["mascot"]):
 				jsonData["mascot"] = "file:///" + jsonData["mascot"]
 			else:
 				jsonData["mascot"] = ""
 				
 		if 'audio' in jsonData:
-			if os.path.exists(jsonData["audio"]):
+			if os.path.isfile(jsonData["audio"]):
 				jsonData["audio"] = "file:///" + jsonData["audio"]
 			else:
 				jsonData["audio"] = ""
 			
 		if 'image' in jsonData:
-			if os.path.exists(jsonData["image"]):
+			if os.path.isfile(jsonData["image"]):
 				jsonData["image"] = "file:///" + jsonData["image"]
 			else:
 				if jsonData["image"].find('https://') != 0:
@@ -94,11 +94,11 @@ class Overlay:
 		self.active = self.active + 1
 		if not self.sendQueue:
 			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
-			if not os.path.exists(mascotIdleImage):
+			if not os.path.isfile(mascotIdleImage):
 				mascotIdleImage = ""
 			if 'Idle' in self.settings.PoseMapping and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
 				tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-				if os.path.exists(tmp):
+				if os.path.isfile(tmp):
 					mascotIdleImage = tmp
 			jsonData = {
 				"mascot": mascotIdleImage

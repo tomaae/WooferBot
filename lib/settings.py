@@ -26,10 +26,10 @@ class Settings:
 		if not os.path.isdir(self.pathRoot):
 			print("Working directory not detected.")
 			exit(1)
-		if not os.path.exists(self.pathRoot + "wooferbot.py"):
+		if not os.path.isfile(self.pathRoot + "wooferbot.py"):
 			print("Working directory incorrect.")
 			exit(1)
-		if not os.path.exists(self.pathRoot + "settings.json"):
+		if not os.path.isfile(self.pathRoot + "settings.json"):
 			print("Configuration file \"settings.json\" is missing.")
 			exit(1)
 			
