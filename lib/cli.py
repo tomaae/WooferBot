@@ -104,13 +104,11 @@ class Cli:
 			# Bits
 			#
 			if cmd == "5":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['bits']),
-						"sender"     : "testname",
-						"bits"       : "1000",
-						"customtag"  : "bits",
-						"id"         : "bits"
-					})
+				self.woofer.woofer_bits({
+						"display-name" : "testname",
+						"bits"         : "1000",
+						"custom-tag"   : "bits"
+				})
 					
 			#
 			# New chatter

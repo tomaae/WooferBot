@@ -312,13 +312,22 @@ class Woofer:
 	#   woofer_bits
 	#---------------------------
 	def woofer_bits(self,jsonData):
-		# "bits_total"
+		# "bits", "bits_total"
+		
+		customBitsId = 'bits'
+		customBitsMessage = random.SystemRandom().choice(self.settings.Messages['bits'])
+		for customBits in self.settings.CustomBits:
+			if int(jsonData['bits']) >= int(customBits['From']) and int(jsonData['bits']) <= int(customBits['To']):
+				customBitsId = customBits['Name']
+				if customBitsId in self.settings.Messages:
+					customBitsMessage = random.SystemRandom().choice(self.settings.Messages[customBitsId])
+			
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['bits']),
+			"message"    : customBitsMessage,
 			"sender"     : jsonData['display-name'],
 			"bits"       : jsonData['bits'],
 			"customtag"  : jsonData['custom-tag'],
-			"id"         : 'bits'
+			"id"         : customBitsId
 		})
 		return
 	

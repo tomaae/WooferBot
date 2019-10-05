@@ -164,5 +164,7 @@
     ],
     "Commands": {
     },
-    "NanoleafEnabled": false
+    "NanoleafEnabled": false,
+    "CustomBits": [
+    ]
 }
