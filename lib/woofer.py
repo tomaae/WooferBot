@@ -396,9 +396,9 @@ class Woofer:
 				return;
 				
 		image = ""
-		if 'Image' in  self.settings.Commands[jsonData['command']]:
+		if 'Image' in self.settings.Commands[jsonData['command']]:
 			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
-			if not os.path.exists(image):
+			if not os.path.isfile(image):
 				image = ""
 		
 		self.woofer_addtoqueue({
@@ -406,7 +406,7 @@ class Woofer:
 			"image"      : image,
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"id"         : 'command'
+			"id"         : jsonData['command']
 		})
 		return
 		
