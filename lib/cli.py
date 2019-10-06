@@ -58,47 +58,42 @@ class Cli:
 			# Follow
 			#
 			if cmd == "1":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['follow']),
-						"sender"     : "testname",
-						"customtag"  : "follow",
-						"id"         : "follow"
-					})
+				self.woofer.woofer_follow({
+						"display-name" : "testname",
+						"custom-tag"   : "follow"
+				})
 					
 			#
 			# Greet
 			#
 			if cmd == "2":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['greet']),
-						"sender"     : "testname",
-						"customtag"  : "greet",
-						"id"         : "greet"
-					})
+				self.woofer.woofer_greet({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"custom-tag"   : "greet"
+				})
 					
 			#
 			# Shoutout
 			#
 			if cmd == "3":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.settings.Messages['shoutout']) + random.SystemRandom().choice(self.settings.Activities["Game"]),
-						"sender"     : "testname",
-						"recipient"  : "testname",
-						"activity"   : "Pong",
-						"customtag"  : "shoutout",
-						"id"         : "shoutout"
-					})
-					
+				self.woofer.woofer_shoutout({
+						"moderator"    : "1",
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"command_parameter" : "testname",
+						"custom-tag"   : "shoutout"
+				})
+				
 			#
 			# Lurk
 			#
 			if cmd == "4":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['lurk']),
-						"sender"     : "testname",
-						"customtag"  : "lurk",
-						"id"         : "lurk"
-					})
+				self.woofer.woofer_lurk({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"custom-tag"   : "lurk"
+				})
 					
 			#
 			# Bits
@@ -114,70 +109,63 @@ class Cli:
 			# New chatter
 			#
 			if cmd == "6":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['new_chatter']),
-						"sender"     : "testname",
-						"customtag"  : "new_chatter",
-						"id"         : "new_chatter"
-					})
-					
+				self.woofer.woofer_new_chatter({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"custom-tag"   : "new_chatter"
+				})
+				
 			#
 			# Raid
 			#
 			if cmd == "7":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['raid']),
-						"sender"     : "testname",
-						"customtag"  : "raid",
-						"id"         : "raid"
-					})
-					
+				self.woofer.woofer_raid({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"custom-tag"   : "raid"
+				})
+				
 			#
 			# Host
 			#
 			if cmd == "8":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['host']),
-						"sender"     : "testname",
-						"customtag"  : "host",
-						"id"         : "host"
-					})
+				self.woofer.woofer_host({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"custom-tag"   : "host"
+				})
 					
 			#
 			# Sub
 			#
 			if cmd == "9":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['sub']),
-						"sender"     : "testname",
-						"customtag"  : "sub",
-						"id"         : "sub"
-					})
-					
+				self.woofer.woofer_sub({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"custom-tag"   : "sub"
+				})
+				
 			#
 			# Resub
 			#
 			if cmd == "10":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['resub']),
-						"sender"     : "testname",
-						"months"     : "3",
-						"customtag"  : "resub",
-						"id"         : "resub"
-					})
+				self.woofer.woofer_resub({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"msg-param-cumulative-months" : "3",
+						"custom-tag"   : "resub"
+				})
 					
 			#
 			# Subgift
 			#
 			if cmd == "11":
-				self.woofer.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(self.woofer.settings.Messages['subgift']),
-						"sender"     : "testname",
-						"recipient"  : "testname",
-						"customtag"  : "subgift",
-						"id"         : "subgift"
-					})
-				
+				self.woofer.woofer_subgift({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"msg-param-recipient-display-name" : "testname2",
+						"custom-tag"   : "subgift"
+				})
 			
 			#print(cmd)
 		return
