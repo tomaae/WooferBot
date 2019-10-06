@@ -17,7 +17,9 @@ You can create simple custom replies using "Commands".
 ```
     "Commands": {
         "!hello": {
-            "Message": ["[Hello;Hi;Hey;Hewwo;Ello] {sender} :3"],
+            "Message": [
+                "[Hello;Hi;Hey;Hewwo;Ello] {sender} :3"
+            ],
             "Image"  : "",
             "Enabled": 1,
             "Access" : ""
