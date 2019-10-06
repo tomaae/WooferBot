@@ -20,7 +20,9 @@ Allows you to schedule a message to appear every X minutes.
             "Timer": 30,
             "Enabled": 1,
             "Image": "twitterlogo.png",
-            "Message": ["Check out my twitter @Tomaae_ for stream updates."],
+            "Message": [
+                "Check out my twitter @Tomaae_ for stream updates."
+            ],
             "LastShown": 1544893802
         }
     ]
