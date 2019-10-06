@@ -282,12 +282,21 @@ class Woofer:
 	#---------------------------
 	def woofer_resub(self,jsonData):
 		# "msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
+		
+		customId = 'resub'
+		customMessage = random.SystemRandom().choice(self.settings.Messages['resub'])
+		for customObj in self.settings.CustomSubs:
+			if int(jsonData['msg-param-cumulative-months']) >= int(customObj['From']) and int(jsonData['msg-param-cumulative-months']) <= int(customObj['To']):
+				customId = customObj['Name']
+				if customId in self.settings.Messages:
+					customMessage = random.SystemRandom().choice(self.settings.Messages[customId])
+		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['resub']),
+			"message"    : customMessage,
 			"sender"     : jsonData['display-name'],
 			"months"     : jsonData['msg-param-cumulative-months'],
 			"customtag"  : jsonData['custom-tag'],
-			"id"         : 'resub'
+			"id"         : customId
 		})
 		return
 		
