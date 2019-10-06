@@ -1,14 +1,17 @@
 ---
-name: Customize bit notifications
-anchor: customize-bit-notifications
+name: Customize subscription and bit notifications
+anchor: customize-subscription-and-bit-notifications
 toc: 
- - name: Create special notifications for bit ranges
-   anchor: create-special-notifications-for-bit-ranges
+ - name: Create special notification ranges
+   anchor: create-special-notification-notification
 ---
-This section explains how to further customize notification for bits.
+This section explains how to further customize notification for subscription and bits.
 
-### Create special notifications for bit ranges
-You can define separate notification for specific amount or range of bits.
+### Create special notification ranges
+You can define separate notification for specific amount or ranges.
+
+* <span class="icon settings">CustomBits</span> Array of bit notification ranges
+* <span class="icon settings">CustomSubs</span> Array of subscription notification ranges
 
 *Example:*
 ```
@@ -23,6 +26,13 @@ You can define separate notification for specific amount or range of bits.
             "From": 1000,
             "To": 1000
         }
+    ],
+    "CustomSubs": [
+        {
+            "Name": "sub12",
+            "From": 12,
+            "To": 12
+        }
     ]
 ```
 **List of parameters**
@@ -30,4 +40,4 @@ You can define separate notification for specific amount or range of bits.
 * <span class="icon settings">From</span> Minimum amount of bits
 * <span class="icon settings">To</span> Maximum amount of bits
 
-<br><span class="icon idea">Note: You do not have to create a custom message for CustomBits range. In that case, default bit message will be used.</span>
+<br><span class="icon idea">Note: You do not have to create a custom message for CustomBits/CustomSubs range. In that case, default bit message will be used.</span>
