@@ -81,6 +81,8 @@ class Settings:
 		self.FollowMessage     = ""
 		self.GlobalVolume      = 0.2
 		self.MinBits           = 0
+		self.AutoShoutout      = False
+		self.AutoShoutoutTime  = 10
 		self.Bots              = []
 		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []
@@ -118,6 +120,10 @@ class Settings:
 				self.FollowMessage = "Thank you for the follow!"
 			if not self.MinBits:
 				self.MinBits = 0
+			if not self.AutoShoutout:
+				self.AutoShoutout = False
+			if not self.AutoShoutoutTime:
+				self.AutoShoutoutTime = 10
 				
 			#
 			# DEFAULT MAPPING

@@ -358,6 +358,13 @@ class Woofer:
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'raid'
 		})
+		
+		if self.settings.AutoShoutout:
+			jsonData['moderator'] = '1'
+			jsonData['command_parameter'] = jsonData['display-name']
+			jsonData['custom-tag'] = 'shoutout'
+			threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
+			
 		return
 		
 	#---------------------------
@@ -377,6 +384,13 @@ class Woofer:
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'host'
 		})
+		
+		if self.settings.AutoShoutout:
+			jsonData['moderator'] = '1'
+			jsonData['command_parameter'] = jsonData['display-name']
+			jsonData['custom-tag'] = 'shoutout'
+			threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
+		
 		return
 
 	#---------------------------

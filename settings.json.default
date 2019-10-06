@@ -159,6 +159,8 @@
     "FollowMessage": "Thank you for the follow!",
     "GlobalVolume": 0.2,
     "MinBits": 0,
+    "AutoShoutout": false,
+    "AutoShoutoutTime": 10,
     "Bots": [],
     "ScheduledMessages": [
     ],
