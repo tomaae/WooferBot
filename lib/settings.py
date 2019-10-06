@@ -86,6 +86,8 @@ class Settings:
 		self.Bots              = []
 		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []
+		self.CustomBits        = []
+		self.CustomSubs        = []
 		self.Commands          = {}
 		
 		self.NanoleafEnabled   = False
