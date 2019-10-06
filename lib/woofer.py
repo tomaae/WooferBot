@@ -512,9 +512,11 @@ class Woofer:
 		
 		# get channel last game
 		activity = self.twitchGetLastActivity(jsonResult['_id'])
-		activity_text = random.SystemRandom().choice(self.settings.Activities["Game"])
-		if activity in self.settings.Activities:
-			activity_text = random.SystemRandom().choice(self.settings.Activities[activity])
+		activity_text = ""
+		if activity:
+			activity_text = random.SystemRandom().choice(self.settings.Activities["Game"])
+			if activity in self.settings.Activities:
+				activity_text = random.SystemRandom().choice(self.settings.Activities[activity])
 		
 		self.woofer_addtoqueue({
 			"message"    : random.SystemRandom().choice(self.settings.Messages['shoutout']) + activity_text,
