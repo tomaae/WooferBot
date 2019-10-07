@@ -241,7 +241,9 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
           }
         	
         	// Modify mascot's mouth height
-        	modifyCSSProperty(".message", "bottom", data.mascotmouth + "px");
+        	if(data.mascotmouth){
+        		modifyCSSProperty(".message", "bottom", data.mascotmouth + "px");
+        	}
         	
         	
         	// Update interface
