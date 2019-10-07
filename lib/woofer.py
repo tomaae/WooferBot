@@ -404,11 +404,25 @@ class Woofer:
 			
 		self.greetedUsers.append(jsonData['sender'])
 		
+		customId = 'greet'
+		customMessage = random.SystemRandom().choice(self.settings.Messages['greet'])
+		if jsonData['display-name'] in self.settings.CustomGreets:
+			customMessage = random.SystemRandom().choice(self.settings.CustomGreets[jsonData['display-name']])
+			
+		if 'user_' + jsonData['display-name'] in self.settings.PoseMapping:
+			customId = 'user_' + jsonData['display-name']
+			
+		for customObj in self.settings.CustomBits:
+			if int(jsonData['bits']) >= int(customObj['From']) and int(jsonData['bits']) <= int(customObj['To']):
+				customId = customObj['Name']
+				if customId in self.settings.Messages:
+					customMessage = random.SystemRandom().choice(self.settings.Messages[customId])
+		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['greet']),
+			"message"    : customMessage,
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
-			"id"         : 'greet'
+			"id"         : customId
 		})
 		return
 		

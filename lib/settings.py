@@ -255,6 +255,7 @@ class Settings:
 		self.ScheduledMessages = []
 		self.CustomBits        = []
 		self.CustomSubs        = []
+		self.CustomGreets      = {}
 		self.Commands          = {}
 		
 		self.NanoleafEnabled   = False
