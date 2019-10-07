@@ -109,24 +109,44 @@ class Settings:
 		# Check default bindings
 		#
 		if 'Image' not in self.PoseMapping['DEFAULT']:
-			print("Default post mapping Image variable is missing.")
+			print("Default pose mapping Image variable is missing.")
 			error = 2
 		else:
 			if self.PoseMapping['DEFAULT']['Image'] not in self.mascotImages:
-				print("Default post mapping Image reference does not exist.")
+				print("Default pose mapping Image reference does not exist.")
 				error = 2
 
 		if 'Audio' not in self.PoseMapping['DEFAULT']:
-			print("Default post mapping Audio variable is missing.")
+			print("Default pose mapping Audio variable is missing.")
 			error = 2
 		else:
 			if self.PoseMapping['DEFAULT']['Audio'] not in self.mascotAudio:
-				print("Default post mapping Audio reference does not exist.")
+				print("Default pose mapping Audio reference does not exist.")
 				error = 2			
 
 		#
 		# Check other bindings
 		#
+		for action in self.PoseMapping:
+			if 'Image' not in self.PoseMapping[action]:
+				print("Pose mapping Image variable is missing for action: " + action)
+				if error < 2:
+					error = 1
+			else:
+				if self.PoseMapping[action]['Image'] not in self.mascotImages:
+					print("Pose mapping Image reference does not exist for action: " + action)
+					if error < 2:
+						error = 1
+			
+			if 'Audio' in self.PoseMapping[action]:
+				if self.PoseMapping[action]['Audio'] not in self.mascotAudio:
+						print("Pose mapping Audio reference does not exist for action: " + action)
+						if error < 2:
+							error = 1
+		
+		
+		
+		
 		
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
