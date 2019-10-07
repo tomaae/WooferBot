@@ -42,19 +42,69 @@ class Settings:
 		error = 0
 		
 		#
-		# Check mascot configuration
+		# Check mascot images configuration
 		#
 		for action in self.mascotImages:
 			if not os.path.isfile(self.mascotImages[action]['Image']):
 				print("Mascot image missing for action: " + action)
-				error = 1
+				if action == "Idle":
+					error = 2
+					
+				if error < 2:
+					error = 1
+					
+			if action != 'Idle':
+				if 'MouthHeight' not in self.mascotImages[action]:
+					print("Mascot image mouth height missing for action: " + action)
+					error = 2
+				else:
+					if self.mascotImages[action]['MouthHeight'] < 1:
+						print("Mascot image mouth height is too small for action: " + action)
+						if error < 2:
+							error = 1
 				
+				if 'Time' not in self.mascotImages[action]:
+					print("Mascot image time missing for action: " + action)
+					error = 2
+				else:
+					if self.mascotImages[action]['Time'] < 100:
+						print("Mascot image time is too short for action: " + action)
+						if error < 2:
+							error = 1
+				
+		#
+		# Check mascot audio configuration
+		#
 		for action in self.mascotAudio:
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
 				if not os.path.isfile(self.mascotAudio[action]['Audio'][idx]):
 					print("Mascot audio missing for action: " + action)
+					if error < 2:
+						error = 1
+						
+			if 'Volume' not in self.mascotAudio[action]:
+				print("Mascot audio volume missing for action: " + action)
+				error = 2
+			else:
+				if self.mascotAudio[action]['Volume'] > 0 and self.mascotAudio[action]['Volume'] <= 1:
+					error = error
+				else:
+					print("Mascot audio volume value is invalid for action: " + action)
+					if error < 2:
+						error = 1
+						
+		#
+		# Check mascot other configuration
+		#
+		if 'MascotMaxWidth' not in self.mascotStyles:
+			print("Mascot MascotMaxWidth missing")
+			error = 2
+		else:
+			if self.mascotStyles['MascotMaxWidth'] < 30:
+				print("Mascot MascotMaxWidth is too small")
+				if error < 2:
 					error = 1
-					
+						
 		#
 		# Check default bindings
 		#
