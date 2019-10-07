@@ -35,8 +35,39 @@ class Settings:
 			
 		self.Reload()
 		self.ReloadMascot()
+		self.CheckMascotDependencies()
 		return
 		
+	def CheckMascotDependencies(self):
+		error = 0
+		
+		#
+		# Check mascot configuration
+		#
+		for action in self.mascotImages:
+			if not os.path.isfile(self.mascotImages[action]['Image']):
+				print("Mascot image missing for action: " + action)
+				error = 1
+				
+		for action in self.mascotAudio:
+			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
+				if not os.path.isfile(self.mascotAudio[action]['Audio'][idx]):
+					print("Mascot audio missing for action: " + action)
+					error = 1
+					
+		#
+		# Check default bindings
+		#
+					
+		#
+		# Check other bindings
+		#
+		
+		if error == 2:
+			print("Mandatory dependencies are broken, see above.")
+			exit(1)
+		
+		return
 		
 	def ReloadMascot(self):
 		print("Loading mascot settings...")
