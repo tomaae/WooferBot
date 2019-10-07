@@ -144,10 +144,53 @@ class Settings:
 						if error < 2:
 							error = 1
 		
+		#
+		# Check messages
+		#
+		for action in self.Messages:
+			if not isinstance(self.Messages[action], list):
+				print("Message is not a list: " + action)
+				exit(1)
 		
+		for action in self.Enabled:
+			if action == 'autohost' or action == 'anonsubgift':
+				continue
+				
+			if action not in self.Messages:
+				print("Message does not exist: " + action)
+				exit(1)
 		
-		
-		
+		#
+		# Check ScheduledMessages
+		#
+		for action in self.ScheduledMessages:
+			if 'Name' not in action:
+				print("ScheduledMessages missing Name: ")
+				print(action)
+				exit(1)
+				
+			if 'Message' not in action:
+				print("ScheduledMessages missing Message: ")
+				print(action)
+				exit(1)
+			
+			if not isinstance(action['Message'], list):
+				print("ScheduledMessages Message is not a list: ")
+				print(action)
+				exit(1)
+				
+		#
+		# Check Commands
+		#
+		for action in self.Commands:
+			if 'Message' not in self.Commands[action]:
+				print("Commands missing Message: " + action)
+				exit(1)
+				
+			if not isinstance(self.Commands[action]['Message'], list):
+				print("Commands message is not a list: " + action)
+				exit(1)
+			
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
 			exit(1)
