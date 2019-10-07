@@ -108,7 +108,22 @@ class Settings:
 		#
 		# Check default bindings
 		#
-					
+		if 'Image' not in self.PoseMapping['DEFAULT']:
+			print("Default post mapping Image variable is missing.")
+			error = 2
+		else:
+			if self.PoseMapping['DEFAULT']['Image'] not in self.mascotImages:
+				print("Default post mapping Image reference does not exist.")
+				error = 2
+
+		if 'Audio' not in self.PoseMapping['DEFAULT']:
+			print("Default post mapping Audio variable is missing.")
+			error = 2
+		else:
+			if self.PoseMapping['DEFAULT']['Audio'] not in self.mascotAudio:
+				print("Default post mapping Audio reference does not exist.")
+				error = 2			
+
 		#
 		# Check other bindings
 		#
