@@ -35,8 +35,167 @@ class Settings:
 			
 		self.Reload()
 		self.ReloadMascot()
+		self.CheckMascotDependencies()
 		return
 		
+	def CheckMascotDependencies(self):
+		error = 0
+		
+		#
+		# Check mascot images configuration
+		#
+		for action in self.mascotImages:
+			if not os.path.isfile(self.mascotImages[action]['Image']):
+				print("Mascot image missing for action: " + action)
+				if action == "Idle":
+					error = 2
+					
+				if error < 2:
+					error = 1
+					
+			if action != 'Idle':
+				if 'MouthHeight' not in self.mascotImages[action]:
+					print("Mascot image mouth height missing for action: " + action)
+					error = 2
+				else:
+					if self.mascotImages[action]['MouthHeight'] < 1:
+						print("Mascot image mouth height is too small for action: " + action)
+						if error < 2:
+							error = 1
+				
+				if 'Time' not in self.mascotImages[action]:
+					print("Mascot image time missing for action: " + action)
+					error = 2
+				else:
+					if self.mascotImages[action]['Time'] < 100:
+						print("Mascot image time is too short for action: " + action)
+						if error < 2:
+							error = 1
+				
+		#
+		# Check mascot audio configuration
+		#
+		for action in self.mascotAudio:
+			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
+				if not os.path.isfile(self.mascotAudio[action]['Audio'][idx]):
+					print("Mascot audio missing for action: " + action)
+					if error < 2:
+						error = 1
+						
+			if 'Volume' not in self.mascotAudio[action]:
+				print("Mascot audio volume missing for action: " + action)
+				error = 2
+			else:
+				if self.mascotAudio[action]['Volume'] > 0 and self.mascotAudio[action]['Volume'] <= 1:
+					error = error
+				else:
+					print("Mascot audio volume value is invalid for action: " + action)
+					if error < 2:
+						error = 1
+						
+		#
+		# Check mascot other configuration
+		#
+		if 'MascotMaxWidth' not in self.mascotStyles:
+			print("Mascot MascotMaxWidth missing")
+			error = 2
+		else:
+			if self.mascotStyles['MascotMaxWidth'] < 30:
+				print("Mascot MascotMaxWidth is too small")
+				if error < 2:
+					error = 1
+						
+		#
+		# Check default bindings
+		#
+		if 'Image' not in self.PoseMapping['DEFAULT']:
+			print("Default pose mapping Image variable is missing.")
+			error = 2
+		else:
+			if self.PoseMapping['DEFAULT']['Image'] not in self.mascotImages:
+				print("Default pose mapping Image reference does not exist.")
+				error = 2
+
+		if 'Audio' not in self.PoseMapping['DEFAULT']:
+			print("Default pose mapping Audio variable is missing.")
+			error = 2
+		else:
+			if self.PoseMapping['DEFAULT']['Audio'] not in self.mascotAudio:
+				print("Default pose mapping Audio reference does not exist.")
+				error = 2			
+
+		#
+		# Check other bindings
+		#
+		for action in self.PoseMapping:
+			if 'Image' not in self.PoseMapping[action]:
+				print("Pose mapping Image variable is missing for action: " + action)
+				if error < 2:
+					error = 1
+			else:
+				if self.PoseMapping[action]['Image'] not in self.mascotImages:
+					print("Pose mapping Image reference does not exist for action: " + action)
+					if error < 2:
+						error = 1
+			
+			if 'Audio' in self.PoseMapping[action]:
+				if self.PoseMapping[action]['Audio'] not in self.mascotAudio:
+						print("Pose mapping Audio reference does not exist for action: " + action)
+						if error < 2:
+							error = 1
+		
+		#
+		# Check messages
+		#
+		for action in self.Messages:
+			if not isinstance(self.Messages[action], list):
+				print("Message is not a list: " + action)
+				exit(1)
+		
+		for action in self.Enabled:
+			if action == 'autohost' or action == 'anonsubgift':
+				continue
+				
+			if action not in self.Messages:
+				print("Message does not exist: " + action)
+				exit(1)
+		
+		#
+		# Check ScheduledMessages
+		#
+		for action in self.ScheduledMessages:
+			if 'Name' not in action:
+				print("ScheduledMessages missing Name: ")
+				print(action)
+				exit(1)
+				
+			if 'Message' not in action:
+				print("ScheduledMessages missing Message: ")
+				print(action)
+				exit(1)
+			
+			if not isinstance(action['Message'], list):
+				print("ScheduledMessages Message is not a list: ")
+				print(action)
+				exit(1)
+				
+		#
+		# Check Commands
+		#
+		for action in self.Commands:
+			if 'Message' not in self.Commands[action]:
+				print("Commands missing Message: " + action)
+				exit(1)
+				
+			if not isinstance(self.Commands[action]['Message'], list):
+				print("Commands message is not a list: " + action)
+				exit(1)
+			
+		if error == 2:
+			print("Mandatory dependencies are broken, see above.")
+			exit(1)
+		
+		return
 		
 	def ReloadMascot(self):
 		print("Loading mascot settings...")
@@ -54,9 +213,17 @@ class Settings:
 			exit(1)
 		
 		for action in self.mascotImages:
+			if 'Image' not in self.mascotImages[action]:
+				print("Mascot Image variable is missing for action: " + action)
+				exit(1)
+			
 			self.mascotImages[action]['Image'] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\images\\" + self.mascotImages[action]['Image']
 			
 		for action in self.mascotAudio:
+			if not isinstance(self.mascotAudio[action]['Audio'],list):
+				print("Mascot audio is not a list for action: " + action)
+				exit(1)
+				
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
 				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
 		
