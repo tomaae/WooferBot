@@ -170,9 +170,17 @@ class Settings:
 			exit(1)
 		
 		for action in self.mascotImages:
+			if 'Image' not in self.mascotImages[action]:
+				print("Mascot Image variable is missing for action: " + action)
+				exit(1)
+			
 			self.mascotImages[action]['Image'] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\images\\" + self.mascotImages[action]['Image']
 			
 		for action in self.mascotAudio:
+			if not isinstance(self.mascotAudio[action]['Audio'],list):
+				print("Mascot audio is not a list for action: " + action)
+				exit(1)
+				
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
 				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
 		
