@@ -5,6 +5,10 @@ tags:
   - contact
   - contacts
   - discord
+  - panels
+  - panel
+  - banners
+  - banner  
 ---
 ## Contacts
 
@@ -21,5 +25,15 @@ tags:
 <a class="icon github" href="https://github.com/tomaae/WooferBot/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBug%5D" target="_blank">Report an issue</a>
  
 ## Resources
-Do you want a WooferBot panel for twitch or website?
-![Twitch Panel](/assets/images/twitch-panel.png)
+Do you want a WooferBot panel for your twitch profile or website?
+![Twitch Panel](/assets/images/panels/apricot.png)
+![Twitch Panel](/assets/images/panels/beatrice.png)
+![Twitch Panel](/assets/images/panels/cat-ragdoll.png)
+![Twitch Panel](/assets/images/panels/cat-russian-blue.png)
+![Twitch Panel](/assets/images/panels/cat-siamese.png)
+![Twitch Panel](/assets/images/panels/cat-tabby.png)
+![Twitch Panel](/assets/images/panels/lydia.png)
+![Twitch Panel](/assets/images/panels/malamute.png)
+![Twitch Panel](/assets/images/panels/mango.png)
+![Twitch Panel](/assets/images/panels/nyuko.png)
+![Twitch Panel](/assets/images/panels/tem.png)
