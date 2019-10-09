@@ -190,6 +190,46 @@ class Settings:
 			if not isinstance(self.Commands[action]['Message'], list):
 				print("Commands message is not a list: " + action)
 				exit(1)
+				
+				
+		#
+		# CustomBits
+		#
+		for action in self.CustomBits:
+			if 'Name' not in action:
+				print("CustomBits missing Name: ")
+				print(action)
+				exit(1)
+				
+			if 'From' not in action:
+				print("CustomBits is missing parameter From: " + action['Name'])
+				exit(1)
+				
+			if not isinstance(action['From'], int):
+				print("CustomBits is From value is not a number: " + action['Name'])
+				exit(1)
+				
+			if 'To' not in action:
+				print("CustomBits is missing parameter From: " + action['Name'])
+				exit(1)
+				
+			if not isinstance(action['To'], int):
+				print("CustomBits is To value is not a number: " + action['Name'])
+				exit(1)
+				
+			if action['From'] >= action['To']:
+				print("CustomBits From value is higher or equal to To: " + action['Name'])
+				exit(1)
+				
+		#
+		# CustomSubs
+		#
+		
+		
+		#
+		# CustomGreets
+		#
+		
 			
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
