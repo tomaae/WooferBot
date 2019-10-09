@@ -224,7 +224,31 @@ class Settings:
 		#
 		# CustomSubs
 		#
-		
+		for action in self.CustomSubs:
+			if 'Name' not in action:
+				print("CustomSubs missing Name: ")
+				print(action)
+				exit(1)
+				
+			if 'From' not in action:
+				print("CustomSubs is missing parameter From: " + action['Name'])
+				exit(1)
+				
+			if not isinstance(action['From'], int):
+				print("CustomSubs is From value is not a number: " + action['Name'])
+				exit(1)
+				
+			if 'To' not in action:
+				print("CustomSubs is missing parameter From: " + action['Name'])
+				exit(1)
+				
+			if not isinstance(action['To'], int):
+				print("CustomSubs is To value is not a number: " + action['Name'])
+				exit(1)
+				
+			if action['From'] >= action['To']:
+				print("CustomSubs From value is higher or equal to To: " + action['Name'])
+				exit(1)
 		
 		#
 		# CustomGreets
