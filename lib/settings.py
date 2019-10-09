@@ -191,7 +191,6 @@ class Settings:
 				print("Commands message is not a list: " + action)
 				exit(1)
 				
-				
 		#
 		# CustomBits
 		#
@@ -253,7 +252,11 @@ class Settings:
 		#
 		# CustomGreets
 		#
-		
+		for action in self.CustomGreets:
+			if not isinstance(self.CustomGreets[action], list):
+				print("CustomGreets message is not a list: " + action)
+				exit(1)
+				
 			
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
