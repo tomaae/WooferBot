@@ -308,6 +308,7 @@ class Settings:
 		self.Enabled           = {}
 		self.PoseMapping       = {}
 		self.CurrentMascot     = "malamute"
+		self.AlignMascot       = "left"
 		self.pathImages        = self.pathRoot + "mascots" + '\\' + self.CurrentMascot + '\\' + "images" + '\\'
 		self.pathAudio         = self.pathRoot + "mascots" + '\\' + self.CurrentMascot + '\\' + "audio" + '\\'
 		self.HostMessage       = ""

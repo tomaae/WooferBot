@@ -154,6 +154,7 @@
         }
     },
     "CurrentMascot": "malamute",
+    "AlignMascot": "left",
     "HostMessage": "is now hosting you",
     "AutohostMessage": "is auto hosting you",
     "FollowMessage": "Thank you for the follow!",

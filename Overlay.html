@@ -22,6 +22,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 .mainbox {
 	position: relative;
 	height: 400px;
+	text-align: left;
 }
 
 .mascot {
@@ -70,6 +71,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 }
 
 .message::after {
+	display:none;
 	content: '';
 	position: absolute;
 	left: 0;
@@ -86,6 +88,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 }
 
 .message div:first-child {
+	display:none;
 	content: '';
 	position: absolute;
 	left: -26px;
@@ -95,6 +98,37 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 	border: 23px solid transparent;
 	border-right-color: #ffba70;
 	border-left: 0;
+	border-bottom: 0;
+}
+
+.message::before {
+	display:none;
+	content: '';
+	position: absolute;
+	left: 100%;
+	bottom: 10px;
+	width: 0;
+	height: 0;
+	border: 32px solid transparent;
+	border-left-color: #fff;
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -14.5px;
+	margin-left: -3.5px;
+	z-index: -1;
+}
+
+.message div:last-child {
+	display:none;
+	content: '';
+	position: absolute;
+	left: 100%;
+	bottom: 11px;
+	width: 0;
+	height: 0;
+	border: 26px solid transparent;
+	border-left-color: #ffba70;
+	border-right: 0;
 	border-bottom: 0;
 }
 
@@ -122,7 +156,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
 			<div class="mainbox">
   			<div class="message" id="message"><div></div>
   				<img class="msgimg" id="msgimg"></img>
-  				<div class="msg" id="msg"></div>
+  				<div class="msg" id="msg"></div><div></div>
   			</div>
   			<div class="mascot"><img id="mascot"></img></div>
 			</div>

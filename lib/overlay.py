@@ -147,7 +147,27 @@ class Overlay:
 			self.settings.mascotStyles["MascotMaxWidth"] = 150
 		
 		css[".mascot|width"] = str(self.settings.mascotStyles["MascotMaxWidth"]) + "px"
-		css[".message|left"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10 ) + "px"
+		
+		if self.settings.AlignMascot == "right":
+			css[".mascot|left"] = "auto"
+			css[".mascot|right"] = "0"
+			css[".message|right"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10 ) + "px"
+			css[".message|left"] = "auto"
+			css[".mainbox|text-align"] = "right"
+			css[".message::after|display"] = "none"
+			css[".message div:first-child|display"] = "none"
+			css[".message::before|display"] = "block"
+			css[".message div:last-child|display"] = "block"
+		else:
+			css[".mascot|left"] = "0"
+			css[".mascot|right"] = "auto"
+			css[".message|left"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10 ) + "px"
+			css[".message|right"] = "auto"
+			css[".mainbox|text-align"] = "left"
+			css[".message::after|display"] = "block"
+			css[".message div:first-child|display"] = "block"
+			css[".message::before|display"] = "none"
+			css[".message div:last-child|display"] = "none"
 		
 		HighlightTextStrokeColor = ""
 		HighlightTextShadowColor = ""
@@ -163,6 +183,7 @@ class Overlay:
 				css[".message|border-color"] = val
 				css[".image|border-color"] = val
 				css[".message div:first-child|border-right-color"] = val
+				css[".message div:last-child|border-right-color"] = val
 				
 			if style == "BorderWidth":
 				css[".message|border-width"] = val
@@ -176,9 +197,11 @@ class Overlay:
 				if val == "":
 					css[".message|box-shadow"] = ""
 					css[".message::after|border-right-color"] = "transparent" # Not working
+					css[".message::before|border-right-color"] = "transparent" # Not working
 				else:
 					css[".message|box-shadow"] = "-1px -1px 0 " + val + ", 1px -1px 0 " + val + ", -1px 1px 0 " + val + ", 1px 1px 0 " + val
 					css[".message::after|border-right-color"] = val  # Not working
+					css[".message::before|border-right-color"] = val  # Not working
 					
 					
 			if style == "TextFontFamily":
