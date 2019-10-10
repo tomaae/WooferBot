@@ -14,6 +14,7 @@ Miscellaneous configurable parameters.
 ```
 {
     "CurrentMascot": "malamute",
+    "AlignMascot": "left",
     "GlobalVolume": 0.2,
     "MinBits": 0,
     "AutoShoutout": false,
@@ -33,6 +34,7 @@ Miscellaneous configurable parameters.
   * <a target="_blank" href="{{ site.github.url }}/mascots#nyuko">nyuko</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#tem">tem</a>
 * <span class="icon settings">GlobalVolume</span> Adjusts global volume.
+* <span class="icon settings">AlignMascot</span> (left/right) Align mascot to left or right side of the screen.
 * <span class="icon settings">MinBits</span> Minimum amount of bits to trigger a bit notification.
 * <span class="icon settings">AutoShoutout</span> (true/false) Enable automatic shoutout after raid and host.
 * <span class="icon settings">AutoShoutoutTime</span> Number of seconds between raid/host and automatic shoutout.
