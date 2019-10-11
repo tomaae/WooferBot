@@ -122,7 +122,8 @@ class Settings:
 		else:
 			if self.PoseMapping['DEFAULT']['Audio'] not in self.mascotAudio:
 				print("Default pose mapping Audio reference does not exist.")
-				error = 2			
+				if error < 2:
+					error = 1
 
 		#
 		# Check other bindings
