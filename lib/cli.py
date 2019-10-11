@@ -47,13 +47,14 @@ class Cli:
 			# Start
 			#
 			if cmd == "0":
-				self.woofer.woofer_addtoqueue({
-						"message"    : "{Sender}",
-						"sender"     : self.settings.Commands['!start']['Message'],
-						"customtag"  : "follow",
-						"id"         : "!start"
-					})
-
+				self.woofer.woofer_commands({
+						"display-name" : "testname",
+						"sender"       : "testname",
+						"broadcaster"  : 1,
+						"command"      : "!start",
+						"custom-tag"   : "!start"
+				})
+				
 			#
 			# Follow
 			#

@@ -34,10 +34,13 @@ class Woofer:
 		self.greetedUsers.append(self.settings.TwitchChannel)
 		self.greetedUsers.append(self.settings.TwitchChannel + "bot")
 		
-		self.lurkingUsers   = []
-		self.unlurkingUsers = []
-		self.hostingUsers   = []
-		self.shoutoutUsers  = []
+		self.lurkingUsers          = []
+		self.unlurkingUsers        = []
+		self.hostingUsers          = []
+		self.shoutoutUsers         = []
+		self.commandsViewerOnce    = {}
+		self.commandsViewerTimeout = {}
+		self.commandsGlobalTimeout = {}
 		
 		for message in self.settings.ScheduledMessages:
 			currentEpoch = int(time.time())
@@ -425,16 +428,53 @@ class Woofer:
 	#---------------------------
 	def woofer_commands(self, jsonData):
 		if 'Enabled' in self.settings.Commands[jsonData['command']] and int(self.settings.Commands[jsonData['command']]['Enabled']) == 0:
-			return;
+			return
 			
 		if 'Access' in self.settings.Commands[jsonData['command']] and (self.settings.Commands[jsonData['command']]['Access'] == 'mod' or self.settings.Commands[jsonData['command']]['Access'] == 'mods'):
 			if int(jsonData['moderator']) != 1:
-				return;
-
+				return
+				
 		if 'Access' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['Access'] == 'broadcaster':
 			if int(jsonData['broadcaster']) != 1:
-				return;
+				return
 				
+				
+		#
+		# ViewerOnce
+		#
+		if 'ViewerOnce' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['ViewerOnce']:
+			if jsonData['command'] in self.commandsViewerOnce and jsonData['sender'] in self.commandsViewerOnce[jsonData['command']]:
+				return
+			
+			if jsonData['command'] not in self.commandsViewerOnce:
+				self.commandsViewerOnce[jsonData['command']] = []
+			self.commandsViewerOnce[jsonData['command']].append(jsonData['sender'])
+			
+		#
+		# ViewerTimeout
+		#
+		if 'ViewerTimeout' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['ViewerTimeout'] > 0:
+			currentEpoch = int(time.time())
+			
+			if jsonData['command'] in self.commandsViewerTimeout and jsonData['sender'] in self.commandsViewerTimeout[jsonData['command']] and (currentEpoch - self.commandsViewerTimeout[jsonData['command']][jsonData['sender']]) < self.settings.Commands[jsonData['command']]['ViewerTimeout']:
+				return
+			
+			if jsonData['command'] not in self.commandsViewerTimeout:
+				self.commandsViewerTimeout[jsonData['command']] = {}
+			self.commandsViewerTimeout[jsonData['command']][jsonData['sender']] = currentEpoch
+			
+		#
+		# GlobalTimeout
+		#
+		if 'GlobalTimeout' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['GlobalTimeout'] > 0:
+			currentEpoch = int(time.time())
+			
+			if jsonData['command'] in self.commandsGlobalTimeout and (currentEpoch - self.commandsGlobalTimeout[jsonData['command']]) < self.settings.Commands[jsonData['command']]['GlobalTimeout']:
+				return
+			
+			self.commandsGlobalTimeout[jsonData['command']] = currentEpoch
+			
+			
 		image = ""
 		if 'Image' in self.settings.Commands[jsonData['command']]:
 			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
