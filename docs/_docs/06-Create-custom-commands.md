@@ -22,6 +22,9 @@ You can create simple custom replies using "Commands".
             ],
             "Image"  : "",
             "Enabled": 1,
+            "ViewerOnce": false,
+            "ViewerTimeout": 0,
+            "GlobalTimeout": 0,
             "Access" : ""
         }
     }
@@ -33,6 +36,9 @@ You can create simple custom replies using "Commands".
   * "" - Everyone can use the command if left empty
   * "mod" - Only mods or broadcaster can use the commands
   * "broadcasted" - Only broadcaster can use the commands
+* <span class="icon settings">ViewerOnce</span> (true/false) Command can be used only once per viewer during a session.
+* <span class="icon settings">ViewerTimeout</span> Command can be used only once per viewer within X number of seconds (0 - disabled).
+* <span class="icon settings">GlobalTimeout</span> Command can be used only once within X number of seconds (0 - disabled).
 * <span class="icon settings">Enabled</span> (0/1)
 
 ### Mapping mascot poses to custom commands
