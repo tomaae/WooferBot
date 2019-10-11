@@ -24,8 +24,11 @@ Installation and configuration instruction available on [WooferBot website](http
   - Lurk/Back
 
 - Custom
-  - Broadcaster can create custom timers
-  - Broadcaster can create custom commands
+  - Create custom timers
+  - Create custom commands
+  - Create custom greeting for individual viewers
+  - Create custom sub notification for different sub lengths or ranges
+  - Create custom bit notification for different bit amounts or ranges
   
 - Other
   - Fully customizable replies
