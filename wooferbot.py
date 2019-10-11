@@ -11,6 +11,7 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 ##########################################################################
+wooferbotVersion = 'v1.1.0'
 
 import sys
 import os
@@ -29,7 +30,7 @@ from nanoleaf import Nanoleaf
 #   Main
 #---------------------------
 
-print('WooferBot  Copyright (C) 2019  Tomaae')
+print('WooferBot ' + wooferbotVersion + '  Copyright (C) 2019  Tomaae')
 print('This program comes with ABSOLUTELY NO WARRANTY.')
 print('This is free software, and you are welcome to redistribute it')
 print('under certain conditions.')
