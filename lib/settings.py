@@ -331,6 +331,10 @@ class Settings:
 		self.NanoleafIP        = ""
 		self.NanoleafToken     = ""
 		
+		self.HueEnabled        = False
+		self.HueIP             = ""
+		self.HueToken          = ""
+		
 		try:
 			with codecs.open(self.pathRoot + "settings.json", encoding="utf-8-sig", mode="r") as f:
 				data = json.load(f, encoding="utf-8")
