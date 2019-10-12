@@ -349,6 +349,8 @@ class Settings:
 			self.TwitchChannel = self.TwitchChannel.lower()
 			self.TwitchBotChannel = self.TwitchBotChannel.lower()
 			self.CurrentMascot = self.CurrentMascot.lower()
+			if self.TwitchBotChannel:
+				self.Bots.append(self.TwitchBotChannel)
 			self.Bots = [x.lower() for x in self.Bots]
 			#
 			# DEFAULT
