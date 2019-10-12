@@ -22,7 +22,7 @@ import os
 #   Overlay Handling
 #---------------------------
 class Overlay:
-	def __init__(self, settings):
+	def __init__(self, settings, chatbot):
 		self.bindIP       = '127.0.0.1'
 		self.bindPort     = 3339
 		self.active       = 0
@@ -31,6 +31,7 @@ class Overlay:
 		self.loop         = None
 		self.loopThread   = None
 		self.settings     = settings
+		self.chatbot      = chatbot
 
 	#---------------------------
 	#   Start
@@ -81,12 +82,12 @@ class Overlay:
 
 		jsonDataRaw = {
 			"event": event,
-			"data": json.dumps(jsonData)
+			"data": jsonData
 		}
 		if init == 1:
 			jsonDataRaw["styles"] = self.get_styles()
 			
-		self.sendQueue = json.dumps(jsonDataRaw)
+		self.sendQueue = jsonDataRaw
 		return 0
 		
 	async def Connection(self, websocket, path):
@@ -110,7 +111,10 @@ class Overlay:
 			if self.sendQueue:
 				jsonDataRaw = self.sendQueue
 				try:
-					await websocket.send(jsonDataRaw)
+					await websocket.send(json.dumps(jsonDataRaw))
+					if 'message' in jsonDataRaw['data']:
+						#print(json.dumps(jsonDataRaw['data'], indent=4, sort_keys=True))
+						self.chatbot.Send(jsonDataRaw['data']['message'])
 				except websockets.exceptions.ConnectionClosed:
 					print("Connection closed by overlay...")
 					self.active = self.active - 1
