@@ -28,7 +28,7 @@ class Woofer:
 		self.settings       = settings
 		self.overlay        = overlay
 		self.nanoleaf       = nanoleaf
-    self.hue            = hue
+		self.hue            = hue
 		self.chatbot        = chatbot
 		
 		self.queue          = []
