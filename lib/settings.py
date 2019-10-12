@@ -590,11 +590,7 @@ class Settings:
 			exit(1)
 			
 		if self.UseChatbot:
-			if len(self.TwitchBotChannel) < 1:
-				print("Twitch Bot channel not specified")
-				exit(1)
-				
-			if self.TwitchBotOAUTH.find('oauth:') != 0:
+			if len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
 				print("Twitch Bot OAUTH is invalid")
 				exit(1)
 			

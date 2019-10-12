@@ -46,8 +46,8 @@ nanoleaf = Nanoleaf(settings=settings)
 settings.Save()
 
 # Initialize twitch chatbot
-if settings.UseChatbot:
-	twitchBot = Twitch(settings=settings, woofer=None, bot = True)
+twitchBot = Twitch(settings=settings, woofer=None, bot = True)
+if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
 	twitchBot.Connect()
 
 # Initialize overlay
@@ -61,6 +61,8 @@ woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, chatbot=t
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
+if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
+	twitchBot.LinkTwitch(twitch)
 
 # Start CLI
 cli = Cli(settings=settings, woofer=woofer)

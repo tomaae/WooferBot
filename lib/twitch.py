@@ -22,14 +22,15 @@ import re
 #---------------------------
 class Twitch:
 	def __init__(self, settings, woofer, bot = False):
-		self.bot       = bot
-		self.settings  = settings
-		self.woofer    = woofer
-		self.host      = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
-		self.port      = 6667                                      # Default IRC-Port
-		self.chrset    = 'UTF-8'
-		self.con       = socket.socket()
-		self.connected = False
+		self.bot        = bot
+		self.settings   = settings
+		self.woofer     = woofer
+		self.host       = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
+		self.port       = 6667                                      # Default IRC-Port
+		self.chrset     = 'UTF-8'
+		self.con        = socket.socket()
+		self.connected  = False
+		self.linkTwitch = False
 		return
 		
 	#---------------------------
@@ -40,15 +41,28 @@ class Twitch:
 		return
 		
 	#---------------------------
-	#   Connection
+	#   LinkTwitch
+	#---------------------------
+	def LinkTwitch(self, account):
+		self.linkTwitch = account
+		return 
+		
+	#---------------------------
+	#   Send
 	#---------------------------
 	def Send(self, message):
+		if self.linkTwitch:
+			self.linkTwitch.Send(message)
+			
 		if not self.connected:
 			return False
 		
 		self.con.send(bytes("PRIVMSG #" + self.settings.TwitchChannel +' :'+ message +'\r\n', self.chrset))
 		return True
 		
+	#---------------------------
+	#   Connection
+	#---------------------------
 	def Connection(self):
 		if self.bot:
 			TwitchLogin = self.settings.TwitchBotChannel
