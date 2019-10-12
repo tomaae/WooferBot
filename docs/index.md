@@ -51,6 +51,7 @@ Supported platforms: twitch.tv (if you are streaming on a different platform and
   - Supports animated mascots
   
 - Hardware support
+  - Philips Hue
   - Nanoleaf
 
 ## Support or Contact
