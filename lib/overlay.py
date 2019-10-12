@@ -17,6 +17,7 @@ import json
 import asyncio
 import threading
 import os
+import random
 
 #---------------------------
 #   Overlay Handling
@@ -111,10 +112,25 @@ class Overlay:
 			if self.sendQueue:
 				jsonDataRaw = self.sendQueue
 				try:
-					await websocket.send(json.dumps(jsonDataRaw))
 					if 'message' in jsonDataRaw['data']:
-						#print(json.dumps(jsonDataRaw['data'], indent=4, sort_keys=True))
-						self.chatbot.Send(jsonDataRaw['data']['message'])
+						while jsonDataRaw['data']['message'].find("[") >= 0:
+							tmp = jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("[") + 1, jsonDataRaw['data']['message'].find("]"))]
+							jsonDataRaw['data']['message'] = jsonDataRaw['data']['message'][slice(0, jsonDataRaw['data']['message'].find("["))] + random.SystemRandom().choice(tmp.split(";")) + jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("]") + 1, 9999)]
+						
+						chatbotMsg = jsonDataRaw['data']['message']
+						
+						if chatbotMsg.find("{") >= 0:
+							while chatbotMsg.find("{") >= 0:
+								tmp = chatbotMsg[slice(chatbotMsg.find("{") + 1, chatbotMsg.find("}"))]
+								tmp2 = ""
+								if tmp in jsonDataRaw['data']:
+									tmp2 = jsonDataRaw['data'][tmp]
+									
+								chatbotMsg = chatbotMsg[slice(0, chatbotMsg.find("{"))] + tmp2 + chatbotMsg[slice(chatbotMsg.find("}") + 1, 9999)]
+						
+						self.chatbot.Send(chatbotMsg)
+						
+					await websocket.send(json.dumps(jsonDataRaw))
 				except websockets.exceptions.ConnectionClosed:
 					print("Connection closed by overlay...")
 					self.active = self.active - 1
