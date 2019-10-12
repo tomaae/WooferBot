@@ -302,6 +302,9 @@ class Settings:
 		print("Loading settings...")
 		self.TwitchChannel     = ""
 		self.TwitchOAUTH       = ""
+		self.TwitchBotChannel  = ""
+		self.TwitchBotOAUTH    = ""
+		self.UseChatbot        = False
 		self.twitchClientID    = "zpm94cuvrntu030mauvxvz9cv2ldja"
 		self.Styles            = {}
 		self.Messages          = {}
@@ -348,7 +351,10 @@ class Settings:
 			# CONVERT
 			#
 			self.TwitchChannel = self.TwitchChannel.lower()
+			self.TwitchBotChannel = self.TwitchBotChannel.lower()
 			self.CurrentMascot = self.CurrentMascot.lower()
+			if self.TwitchBotChannel:
+				self.Bots.append(self.TwitchBotChannel)
 			self.Bots = [x.lower() for x in self.Bots]
 			#
 			# DEFAULT
@@ -588,6 +594,11 @@ class Settings:
 		if self.TwitchOAUTH.find('oauth:') != 0:
 			print("Twitch OAUTH is invalid")
 			exit(1)
+			
+		if self.UseChatbot:
+			if len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
+				print("Twitch Bot OAUTH is invalid")
+				exit(1)
 			
 		if len(self.twitchClientID) < 1:
 			print("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")

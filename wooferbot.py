@@ -49,16 +49,24 @@ hue = Hue(settings=settings)
 
 settings.Save()
 
+# Initialize twitch chatbot
+twitchBot = Twitch(settings=settings, woofer=None, bot = True)
+if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
+	twitchBot.Connect()
+
 # Initialize overlay
-overlay = Overlay(settings=settings)
+overlay = Overlay(settings=settings, chatbot=twitchBot)
 overlay.Start()
 
+
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, chatbot=twitchBot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
+if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
+	twitchBot.LinkTwitch(twitch)
 
 # Start CLI
 cli = Cli(settings=settings, woofer=woofer)

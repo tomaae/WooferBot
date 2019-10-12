@@ -21,13 +21,16 @@ import re
 #   Twitch API
 #---------------------------
 class Twitch:
-	def __init__(self, settings, woofer):
-		self.settings = settings
-		self.woofer   = woofer
-		self.host     = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
-		self.port     = 6667                                      # Default IRC-Port
-		self.chrset   = 'UTF-8'
-		self.con      = socket.socket()
+	def __init__(self, settings, woofer, bot = False):
+		self.bot        = bot
+		self.settings   = settings
+		self.woofer     = woofer
+		self.host       = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
+		self.port       = 6667                                      # Default IRC-Port
+		self.chrset     = 'UTF-8'
+		self.con        = socket.socket()
+		self.connected  = False
+		self.linkTwitch = False
 		return
 		
 	#---------------------------
@@ -38,21 +41,52 @@ class Twitch:
 		return
 		
 	#---------------------------
+	#   LinkTwitch
+	#---------------------------
+	def LinkTwitch(self, account):
+		self.linkTwitch = account
+		return 
+		
+	#---------------------------
+	#   Send
+	#---------------------------
+	def Send(self, message):
+		if self.linkTwitch:
+			self.linkTwitch.Send(message)
+			
+		if not self.connected:
+			return False
+		
+		self.con.send(bytes("PRIVMSG #" + self.settings.TwitchChannel +' :'+ message +'\r\n', self.chrset))
+		return True
+		
+	#---------------------------
 	#   Connection
 	#---------------------------
 	def Connection(self):
-		print("Connecting to Twitch...")
+		if self.bot:
+			TwitchLogin = self.settings.TwitchBotChannel
+			TwitchOAUTH = self.settings.TwitchBotOAUTH
+		else:
+			TwitchLogin = self.settings.TwitchChannel
+			TwitchOAUTH = self.settings.TwitchOAUTH
+		
+		print("Connecting " + TwitchLogin + " to Twitch...")
+			
 		try:
 			self.con = socket.socket()
 			self.con.connect((self.host, self.port))
-			self.con.send(bytes('PASS %s\r\n'  % self.settings.TwitchOAUTH,         self.chrset)) # www.twitchapps.com/tmi/ will help to retrieve the required authkey
-			self.con.send(bytes('NICK %s\r\n'  % self.settings.TwitchChannel,       self.chrset))
-			self.con.send(bytes('JOIN #%s\r\n' % self.settings.TwitchChannel,       self.chrset))
-			self.con.send(bytes('CAP REQ :twitch.tv/tags twitch.tv/commands\r\n',   self.chrset))
+			self.con.send(bytes('PASS %s\r\n'  % TwitchOAUTH,                     self.chrset)) # www.twitchapps.com/tmi/ will help to retrieve the required authkey
+			self.con.send(bytes('NICK %s\r\n'  % TwitchLogin,                     self.chrset))
+			self.con.send(bytes('JOIN #%s\r\n' % self.settings.TwitchChannel,     self.chrset))
+			if not self.bot:
+				self.con.send(bytes('CAP REQ :twitch.tv/tags twitch.tv/commands\r\n', self.chrset))
 		except:
-			print("Unable to connect to Twitch...")
+			print("Unable to connect " + TwitchLogin + " to Twitch...")
+			self.connected = False
 			return 1
-		print("Connected to Twitch...")
+		print("Connected " + TwitchLogin + " to Twitch...")
+		self.connected = True
 		
 		data = ""
 		while True:
@@ -64,10 +98,10 @@ class Twitch:
 				threading.Thread(target=self.ProcessData, args=(data_split,)).start()
 				
 			except socket.error:
-				print("Twitch socket error")
+				print("Twitch " + TwitchLogin + " socket error")
 			
 			except socket.timeout:
-				print("Twitch socket timeout")
+				print("Twitch " + TwitchLogin + " socket timeout")
 		return
 		
 	#---------------------------
@@ -82,7 +116,9 @@ class Twitch:
 				if line[0] == 'PING':
 					self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
 					continue
-					
+				
+				if self.bot:
+					continue
 				#print(line)
 
 				jsonData = self.fill_tags()

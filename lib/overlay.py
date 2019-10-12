@@ -17,12 +17,13 @@ import json
 import asyncio
 import threading
 import os
+import random
 
 #---------------------------
 #   Overlay Handling
 #---------------------------
 class Overlay:
-	def __init__(self, settings):
+	def __init__(self, settings, chatbot):
 		self.bindIP       = '127.0.0.1'
 		self.bindPort     = 3339
 		self.active       = 0
@@ -31,6 +32,7 @@ class Overlay:
 		self.loop         = None
 		self.loopThread   = None
 		self.settings     = settings
+		self.chatbot      = chatbot
 
 	#---------------------------
 	#   Start
@@ -81,12 +83,12 @@ class Overlay:
 
 		jsonDataRaw = {
 			"event": event,
-			"data": json.dumps(jsonData)
+			"data": jsonData
 		}
 		if init == 1:
 			jsonDataRaw["styles"] = self.get_styles()
 			
-		self.sendQueue = json.dumps(jsonDataRaw)
+		self.sendQueue = jsonDataRaw
 		return 0
 		
 	async def Connection(self, websocket, path):
@@ -110,7 +112,25 @@ class Overlay:
 			if self.sendQueue:
 				jsonDataRaw = self.sendQueue
 				try:
-					await websocket.send(jsonDataRaw)
+					if 'message' in jsonDataRaw['data']:
+						while jsonDataRaw['data']['message'].find("[") >= 0:
+							tmp = jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("[") + 1, jsonDataRaw['data']['message'].find("]"))]
+							jsonDataRaw['data']['message'] = jsonDataRaw['data']['message'][slice(0, jsonDataRaw['data']['message'].find("["))] + random.SystemRandom().choice(tmp.split(";")) + jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("]") + 1, 9999)]
+						
+						chatbotMsg = jsonDataRaw['data']['message']
+						
+						if chatbotMsg.find("{") >= 0:
+							while chatbotMsg.find("{") >= 0:
+								tmp = chatbotMsg[slice(chatbotMsg.find("{") + 1, chatbotMsg.find("}"))]
+								tmp2 = ""
+								if tmp in jsonDataRaw['data']:
+									tmp2 = jsonDataRaw['data'][tmp]
+									
+								chatbotMsg = chatbotMsg[slice(0, chatbotMsg.find("{"))] + tmp2 + chatbotMsg[slice(chatbotMsg.find("}") + 1, 9999)]
+						
+						self.chatbot.Send(chatbotMsg)
+						
+					await websocket.send(json.dumps(jsonDataRaw))
 				except websockets.exceptions.ConnectionClosed:
 					print("Connection closed by overlay...")
 					self.active = self.active - 1

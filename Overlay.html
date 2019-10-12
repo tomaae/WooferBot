@@ -231,7 +231,7 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
         }
         
         if(json.event == 'EVENT_WOOFERBOT') {
-          var data = JSON.parse(json.data);
+          var data = json.data;
           //console.log("data", data);
 
         	if(data.audio){
@@ -241,13 +241,6 @@ body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden;ba
         	}
         	
           if(data.message){
-          	while(data.message.indexOf("[") >= 0){
-          		tmp = data.message.substring(data.message.indexOf("["), data.message.indexOf("]") + 1);
-          		tmp = tmp.replace(/^\s*\[\s*|\s*\]\s*$/g, "");
-          		val = tmp.split(/\s*;\s*/);
-          		data.message = data.message.substring(0, data.message.indexOf("[")) + val[Math.floor(Math.random() * val.length)] + data.message.substring(data.message.indexOf("]") + 1);
-          	}
-
           	if(data.message.indexOf("{sender}")){
           		if(data.sender === undefined)data.sender = "";
           		data.message = data.message.replace(/{sender}/gi, '<span class="user">' + data.sender + '</span>');
