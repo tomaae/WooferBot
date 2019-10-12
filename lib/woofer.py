@@ -24,10 +24,11 @@ import os
 #   Woofer logic
 #---------------------------
 class Woofer:
-	def __init__(self, settings, overlay, nanoleaf):
+	def __init__(self, settings, overlay, nanoleaf, chatbot):
 		self.settings       = settings
 		self.overlay        = overlay
 		self.nanoleaf       = nanoleaf
+		self.chatbot        = chatbot
 		
 		self.queue          = []
 		self.greetedUsers   = []

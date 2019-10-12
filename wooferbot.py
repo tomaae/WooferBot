@@ -45,12 +45,18 @@ nanoleaf = Nanoleaf(settings=settings)
 
 settings.Save()
 
+# Initialize twitch chatbot
+if settings.UseChatbot:
+	twitchBot = Twitch(settings=settings, woofer=None, bot = True)
+	twitchBot.Connect()
+
 # Initialize overlay
-overlay = Overlay(settings=settings)
+overlay = Overlay(settings=settings, chatbot=twitchBot)
 overlay.Start()
 
+
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, chatbot=twitchBot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
