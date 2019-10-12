@@ -25,6 +25,7 @@ from woofer import Woofer
 from twitch import Twitch
 from cli import Cli
 from nanoleaf import Nanoleaf
+from hue import Hue
 
 #---------------------------
 #   Main
@@ -43,6 +44,9 @@ settings = Settings(pathRoot=pathRoot)
 # Initialize nanoleaf
 nanoleaf = Nanoleaf(settings=settings)
 
+# Initialize Philips HUE
+hue = Hue(settings=settings)
+
 settings.Save()
 
 # Initialize twitch chatbot
@@ -56,7 +60,7 @@ overlay.Start()
 
 
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, chatbot=twitchBot)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, chatbot=twitchBot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)

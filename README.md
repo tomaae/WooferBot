@@ -37,4 +37,5 @@ Installation and configuration instruction available on [WooferBot website](http
   - Supports animated mascots
   
 - Hardware support
+  - Philips Hue
   - Nanoleaf

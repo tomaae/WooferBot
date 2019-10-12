@@ -24,10 +24,11 @@ import os
 #   Woofer logic
 #---------------------------
 class Woofer:
-	def __init__(self, settings, overlay, nanoleaf, chatbot):
+	def __init__(self, settings, overlay, nanoleaf, hue, chatbot):
 		self.settings       = settings
 		self.overlay        = overlay
 		self.nanoleaf       = nanoleaf
+    self.hue            = hue
 		self.chatbot        = chatbot
 		
 		self.queue          = []
@@ -201,8 +202,14 @@ class Woofer:
 		if 'nanoleaf' in jsonData and jsonData['nanoleaf'] != "":
 			self.nanoleaf.Scene(jsonData['nanoleaf'])
 		
+		# hue
+		if 'hue' in jsonData:
+			for device in jsonData['hue']:
+				if 'Brightness' in jsonData['hue'][device] and jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in jsonData['hue'][device] and len(jsonData['hue'][device]['Color']) >= 6 and len(jsonData['hue'][device]['Color']) <= 7:
+					self.hue.state(device = device, bri = jsonData['hue'][device]['Brightness'], col = jsonData['hue'][device]['Color'])
+		
 		# default_woofer
-		def default_woofer(queue_id):
+		def default_woofer(queue_id, old_jsonData):
 			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
 			if not os.path.isfile(mascotIdleImage):
 				mascotIdleImage = ""
@@ -217,12 +224,18 @@ class Woofer:
 			}
 			self.overlay.Send("EVENT_WOOFERBOT", jsonData)
 			self.nanoleaf.Off()
+			# hue
+			if 'hue' in old_jsonData:
+				for device in old_jsonData['hue']:
+					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
+						self.hue.state(device = device)
+			
 			if self.queue:
 				self.queue.remove(queue_id)
 			return
 		
 		# Reset to default after X seconds
-		threading.Timer(jsonData['time'] / 1000, default_woofer, args=(queue_id,)).start()
+		threading.Timer(jsonData['time'] / 1000, default_woofer, args=(queue_id,jsonData)).start()
 		return
 
 	#---------------------------
@@ -236,7 +249,8 @@ class Woofer:
 		jsonResponse["time"]        = self.mascotImagesTime(jsonResponse["id"])
 		jsonResponse["audio"]       = self.mascotAudioFile(jsonResponse["id"])
 		jsonResponse["volume"]      = self.mascotAudioVolume(jsonResponse["id"])
-		jsonResponse["nanoleaf"]	  = self.mascotNanoleafScene(jsonResponse["id"])
+		jsonResponse["nanoleaf"]    = self.mascotNanoleafScene(jsonResponse["id"])
+		jsonResponse["hue"]         = self.mascotHueDevices(jsonResponse["id"])
 		
 		# add to queue and wait for slot
 		queue_id = uuid.uuid4()
@@ -686,3 +700,16 @@ class Woofer:
 			return self.settings.PoseMapping['DEFAULT']['Nanoleaf']
 			
 		return ""
+		
+	#---------------------------
+	#   mascotHueDevices
+	#---------------------------
+	def mascotHueDevices(self, action):
+		if action in self.settings.PoseMapping and 'Hue' in self.settings.PoseMapping[action]:
+			return self.settings.PoseMapping[action]['Hue']
+		
+		if 'Hue' in self.settings.PoseMapping['DEFAULT']:
+			return self.settings.PoseMapping['DEFAULT']['Hue']
+			
+		return ""
+		
