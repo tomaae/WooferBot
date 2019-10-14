@@ -20,7 +20,8 @@ You can create simple custom replies using "Commands".
             "Message": [
                 "[Hello;Hi;Hey;Hewwo;Ello] {sender} :3"
             ],
-            "Image"  : "",
+            "Image" : "",
+            "Script" : "",
             "Enabled": 1,
             "ViewerOnce": false,
             "ViewerTimeout": 0,
@@ -32,6 +33,7 @@ You can create simple custom replies using "Commands".
 **List of parameters**
 * <span class="icon settings">Message</span> Message shown on screen
 * <span class="icon settings">Image</span> Optional image (has to be placed into "images" directory)
+* <span class="icon settings">Script</span> Execute a script (has to be placed into "scripts" directory)
 * <span class="icon settings">Access</span>
   * "" - Everyone can use the command if left empty
   * "mod" - Only mods or broadcaster can use the commands
