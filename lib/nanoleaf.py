@@ -44,7 +44,7 @@ class Nanoleaf:
 		if not self.ip or not self.portup(self.ip, 16021):
 			ip_list = []
 			discovery_time = 5
-			while True:
+			while len(ip_list) == 0:
 				ip_list = self.ssdp_discovery(discovery_time)
 				if len(ip_list) == 0:
 					print("Nanoleaf not found")
@@ -63,12 +63,11 @@ class Nanoleaf:
 		#
 		result = self.put_request("state", { 'on': { 'value': False } })
 		if self.token == "" or result.status_code == 401:
-			while True:
-				if not self.auth():
-					print("Press C to cancel or any key to try again")
-					input_char = msvcrt.getch().decode("utf-8").upper()
-					if input_char == 'C':
-						return
+			while not self.auth():
+				print("Press C to cancel or any key to try again")
+				input_char = msvcrt.getch().decode("utf-8").upper()
+				if input_char == 'C':
+					return
 			
 			settings.NanoleafToken = self.token
 		
