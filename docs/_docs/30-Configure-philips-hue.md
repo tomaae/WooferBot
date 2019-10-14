@@ -38,11 +38,13 @@ Add "Hue" variable into pose mapping and add all lights you want to use for each
             		"Brightness": 100,
             		"Color": "#ff0000"
             	}
-            }
+            },
+            "HuePermanent": false
         }
     }
 ```
 
+* <span class="icon settings">HuePermanent</span> (true/false) Apply light settings permanently.
 * Light names ("Hue lightstrip outdoor 1", "Hue color lamp 1") are taken from Hue Bridge, see your Hue App.
 * <span class="icon settings">Brightness</span> Light brightness (1-100)
 * <span class="icon settings">Color</span> Colors are defined with hashtag, followed by 6-digit hexidecimal number. You can use web based <a class="icon website" href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">color picker</a> to choose or convert colors.

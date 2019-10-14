@@ -29,7 +29,8 @@ Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value
         "follow": {
             "Image": "Wave",
             "Audio": "Wave",
-            "Nanoleaf": "Nemo"
+            "Nanoleaf": "Nemo",
+            "NanoleafPermanent": false
         },
         "sub": {
             "Image": "Sub",
@@ -38,3 +39,5 @@ Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value
         }
     }
 ```
+
+* <span class="icon settings">NanoleafPermanent</span> (true/false) Apply light settings permanently.
