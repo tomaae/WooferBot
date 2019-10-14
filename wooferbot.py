@@ -55,7 +55,7 @@ if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.Twitc
 	twitchBot.Connect()
 
 # Initialize overlay
-overlay = Overlay(settings=settings, chatbot=twitchBot)
+overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, chatbot=twitchBot)
 overlay.Start()
 
 

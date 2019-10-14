@@ -23,7 +23,7 @@ import random
 #   Overlay Handling
 #---------------------------
 class Overlay:
-	def __init__(self, settings, chatbot):
+	def __init__(self, settings, nanoleaf, hue, chatbot):
 		self.bindIP       = '127.0.0.1'
 		self.bindPort     = 3339
 		self.active       = 0
@@ -33,6 +33,8 @@ class Overlay:
 		self.loopThread   = None
 		self.settings     = settings
 		self.chatbot      = chatbot
+		self.nanoleaf     = nanoleaf
+		self.hue          = hue
 
 	#---------------------------
 	#   Start
@@ -98,10 +100,20 @@ class Overlay:
 			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
 			if not os.path.isfile(mascotIdleImage):
 				mascotIdleImage = ""
-			if 'Idle' in self.settings.PoseMapping and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
-				tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-				if os.path.isfile(tmp):
-					mascotIdleImage = tmp
+			if 'Idle' in self.settings.PoseMapping:
+				if 'Image' in self.settings.PoseMapping['Idle'] and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
+					tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
+					if os.path.isfile(tmp):
+						mascotIdleImage = tmp
+				
+				if 'Nanoleaf' in self.settings.PoseMapping['Idle']:
+					self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
+					
+				if 'Hue' in self.settings.PoseMapping['Idle']:
+					for device in self.settings.PoseMapping['Idle']['Hue']:
+						if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
+							self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+					
 			jsonData = {
 				"mascot": mascotIdleImage
 			}

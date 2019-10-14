@@ -225,15 +225,32 @@ class Woofer:
 					mascotIdleImage = tmp
 			
 			jsonData = {
-				"mascot": mascotIdleImage,
+				"mascot": mascotIdleImage
 			}
 			self.overlay.Send("EVENT_WOOFERBOT", jsonData)
-			self.nanoleaf.Scene()
+			
+			if 'nanoleaf' in old_jsonData and old_jsonData['nanoleaf']:
+				if 'Nanoleaf' in self.settings.PoseMapping['Idle']:
+					self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
+				else:
+					self.nanoleaf.Scene()
+				
 			# hue
 			if 'hue' in old_jsonData:
-				for device in old_jsonData['hue']:
-					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
-						self.hue.state(device = device)
+				if 'Hue' in self.settings.PoseMapping['Idle']:
+					for device in self.settings.PoseMapping['Idle']['Hue']:
+						if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
+							self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+					
+					for device in old_jsonData['hue']:
+						if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
+							if device not in self.settings.PoseMapping['Idle']:
+								self.hue.state(device = device)
+					
+				else:
+					for device in old_jsonData['hue']:
+						if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
+							self.hue.state(device = device)
 			
 			if self.queue:
 				self.queue.remove(queue_id)
