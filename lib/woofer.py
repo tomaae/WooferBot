@@ -209,7 +209,7 @@ class Woofer:
 		if 'nanoleaf' in jsonData and jsonData['nanoleaf'] != "":
 			self.nanoleaf.Scene(jsonData['nanoleaf'])
 			
-			if 'nanoleafpermanent' in jsonData and jsonData['nanoleafpermanent']:
+			if 'nanoleafpersistent' in jsonData and jsonData['nanoleafpersistent']:
 				self.changedLightsNanoleaf = jsonData['nanoleaf']
 		
 		# hue
@@ -218,7 +218,7 @@ class Woofer:
 				if 'Brightness' in jsonData['hue'][device] and jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in jsonData['hue'][device] and len(jsonData['hue'][device]['Color']) >= 6 and len(jsonData['hue'][device]['Color']) <= 7:
 					self.hue.state(device = device, bri = jsonData['hue'][device]['Brightness'], col = jsonData['hue'][device]['Color'])
 					
-			if 'huepermanent' in jsonData and jsonData['huepermanent']:
+			if 'huepersistent' in jsonData and jsonData['huepersistent']:
 				self.changedLightsHue = jsonData['hue']
 		
 		# default_woofer
@@ -287,15 +287,15 @@ class Woofer:
 	def woofer_addtoqueue(self,jsonResponse):
 		print("{0}: {1}".format(jsonResponse['customtag'], jsonResponse['sender']))
 		
-		jsonResponse["mascot"]            = self.mascotImagesFile(jsonResponse["id"])
-		jsonResponse["mascotmouth"]       = self.mascotImagesMouthHeight(jsonResponse["id"])
-		jsonResponse["time"]              = self.mascotImagesTime(jsonResponse["id"])
-		jsonResponse["audio"]             = self.mascotAudioFile(jsonResponse["id"])
-		jsonResponse["volume"]            = self.mascotAudioVolume(jsonResponse["id"])
-		jsonResponse["nanoleaf"]          = self.mascotNanoleafScene(jsonResponse["id"])
-		jsonResponse["nanoleafpermanent"] = self.mascotNanoleafPermanent(jsonResponse["id"])
-		jsonResponse["hue"]               = self.mascotHueDevices(jsonResponse["id"])
-		jsonResponse["huepermanent"]      = self.mascotHuePermanent(jsonResponse["id"])
+		jsonResponse["mascot"]             = self.mascotImagesFile(jsonResponse["id"])
+		jsonResponse["mascotmouth"]        = self.mascotImagesMouthHeight(jsonResponse["id"])
+		jsonResponse["time"]               = self.mascotImagesTime(jsonResponse["id"])
+		jsonResponse["audio"]              = self.mascotAudioFile(jsonResponse["id"])
+		jsonResponse["volume"]             = self.mascotAudioVolume(jsonResponse["id"])
+		jsonResponse["nanoleaf"]           = self.mascotNanoleafScene(jsonResponse["id"])
+		jsonResponse["nanoleafpersistent"] = self.mascotNanoleafPersistent(jsonResponse["id"])
+		jsonResponse["hue"]                = self.mascotHueDevices(jsonResponse["id"])
+		jsonResponse["huepersistent"]      = self.mascotHuePersistent(jsonResponse["id"])
 		
 		# add to queue and wait for slot
 		queue_id = uuid.uuid4()
@@ -754,14 +754,14 @@ class Woofer:
 		return ""
 		
 	#---------------------------
-	#   mascotNanoleafPermanent
+	#   mascotNanoleafPersistent
 	#---------------------------
-	def mascotNanoleafPermanent(self, action):
-		if action in self.settings.PoseMapping and 'NanoleafPermanent' in self.settings.PoseMapping[action]:
-			return self.settings.PoseMapping[action]['NanoleafPermanent']
+	def mascotNanoleafPersistent(self, action):
+		if action in self.settings.PoseMapping and 'NanoleafPersistent' in self.settings.PoseMapping[action]:
+			return self.settings.PoseMapping[action]['NanoleafPersistent']
 		
-		if 'NanoleafPermanent' in self.settings.PoseMapping['DEFAULT']:
-			return self.settings.PoseMapping['DEFAULT']['NanoleafPermanent']
+		if 'NanoleafPersistent' in self.settings.PoseMapping['DEFAULT']:
+			return self.settings.PoseMapping['DEFAULT']['NanoleafPersistent']
 			
 		return ""
 		
@@ -778,13 +778,13 @@ class Woofer:
 		return ""
 		
 	#---------------------------
-	#   mascotHuePermanent
+	#   mascotHuePersistent
 	#---------------------------
-	def mascotHuePermanent(self, action):
-		if action in self.settings.PoseMapping and 'HuePermanent' in self.settings.PoseMapping[action]:
-			return self.settings.PoseMapping[action]['HuePermanent']
+	def mascotHuePersistent(self, action):
+		if action in self.settings.PoseMapping and 'HuePersistent' in self.settings.PoseMapping[action]:
+			return self.settings.PoseMapping[action]['HuePersistent']
 		
-		if 'HuePermanent' in self.settings.PoseMapping['DEFAULT']:
-			return self.settings.PoseMapping['DEFAULT']['HuePermanent']
+		if 'HuePersistent' in self.settings.PoseMapping['DEFAULT']:
+			return self.settings.PoseMapping['DEFAULT']['HuePersistent']
 			
 		return ""
