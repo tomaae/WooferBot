@@ -30,7 +30,7 @@ Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value
             "Image": "Wave",
             "Audio": "Wave",
             "Nanoleaf": "Nemo",
-            "NanoleafPermanent": false
+            "NanoleafPersistent": false
         },
         "sub": {
             "Image": "Sub",
@@ -40,4 +40,4 @@ Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value
     }
 ```
 
-* <span class="icon settings">NanoleafPermanent</span> (true/false) Apply light settings permanently.
+* <span class="icon settings">NanoleafPersistent</span> (true/false) Apply light settings persistently. This will also replace Idle light mapping until bot is restarted.
