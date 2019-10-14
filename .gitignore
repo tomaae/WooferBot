@@ -3,6 +3,8 @@
 /settings.bak
 /images/*
 !/images/__place_images.txt
+/scripts/*
+!/scripts/__place_scripts.txt
 /mascots/tomaae/
 !/mascots/__place_mascots.txt
 /lib/__pycache__/

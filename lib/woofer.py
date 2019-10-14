@@ -198,6 +198,11 @@ class Woofer:
 			threading.Timer(1, self.woofer_queue, args=(queue_id, jsonData)).start()
 			return
 		
+		
+		# execute custom scripts
+		if 'script' in jsonData and jsonData['script'] != "":
+			os.system("\"" + jsonData['script'] + "\"")
+		
 		# nanoleaf
 		if 'nanoleaf' in jsonData and jsonData['nanoleaf'] != "":
 			self.nanoleaf.Scene(jsonData['nanoleaf'])
@@ -495,10 +500,17 @@ class Woofer:
 			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
 			if not os.path.isfile(image):
 				image = ""
+				
+		script = ""
+		if 'Script' in self.settings.Commands[jsonData['command']]:
+			script = self.settings.pathRoot + "\\scripts\\" + self.settings.Commands[jsonData['command']]['Script']
+			if not os.path.isfile(script):
+				script = ""
 		
 		self.woofer_addtoqueue({
 			"message"    : random.SystemRandom().choice(self.settings.Commands[jsonData['command']]['Message']),
 			"image"      : image,
+			"script"     : script,
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : jsonData['command']
