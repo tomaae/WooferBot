@@ -150,24 +150,18 @@ class Nanoleaf:
 		except socket.error:  # not a valid address
 			return False
 		return True
-
-	#---------------------------
-	#   Off
-	#---------------------------
-	def Off(self):
-		if not self.active:
-			return
-			
-		data = { 'on': { 'value': False } }
-		result = self.put_request("state", data)
-		return result
 		
 	#---------------------------
 	#   Scene
 	#---------------------------
-	def Scene(self, name):
+	def Scene(self, name = None):
 		if not self.active:
 			return
+			
+		if not name:
+			data = { 'on': { 'value': False } }
+			result = self.put_request("state", data)
+			return result
 			
 		data = { 'select': name } 
 		result = self.put_request("effects", data)

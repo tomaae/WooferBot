@@ -228,7 +228,7 @@ class Woofer:
 				"mascot": mascotIdleImage,
 			}
 			self.overlay.Send("EVENT_WOOFERBOT", jsonData)
-			self.nanoleaf.Off()
+			self.nanoleaf.Scene()
 			# hue
 			if 'hue' in old_jsonData:
 				for device in old_jsonData['hue']:
