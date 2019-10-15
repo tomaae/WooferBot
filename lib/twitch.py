@@ -51,12 +51,15 @@ class Twitch:
 	#   Send
 	#---------------------------
 	def Send(self, message):
+		## Send over linked account in set
 		if self.linkTwitch:
 			self.linkTwitch.Send(message)
-			
+		
+		## Do nothing if not connected
 		if not self.connected:
 			return False
 		
+		## Send message to chat
 		self.con.send(bytes("PRIVMSG #" + self.settings.TwitchChannel +' :'+ message +'\r\n', self.chrset))
 		return True
 		
@@ -64,6 +67,7 @@ class Twitch:
 	#   Connection
 	#---------------------------
 	def Connection(self):
+		## Set login
 		if self.bot:
 			TwitchLogin = self.settings.TwitchBotChannel
 			TwitchOAUTH = self.settings.TwitchBotOAUTH
@@ -72,7 +76,10 @@ class Twitch:
 			TwitchOAUTH = self.settings.TwitchOAUTH
 		
 		print("Connecting " + TwitchLogin + " to Twitch...")
-			
+		
+		#
+		# Log in
+		#
 		try:
 			self.con = socket.socket()
 			self.con.connect((self.host, self.port))
@@ -88,18 +95,18 @@ class Twitch:
 		print("Connected " + TwitchLogin + " to Twitch...")
 		self.connected = True
 		
+		#
+		# Twitch loop
+		#
 		data = ""
 		while True:
 			try:
 				data = data+self.con.recv(1024).decode(self.chrset)
 				data_split = re.split(r"[~\r\n]+", data)
 				data = data_split.pop()
-				
 				threading.Thread(target=self.ProcessData, args=(data_split,)).start()
-				
 			except socket.error:
 				print("Twitch " + TwitchLogin + " socket error")
-			
 			except socket.timeout:
 				print("Twitch " + TwitchLogin + " socket timeout")
 		return
@@ -113,14 +120,18 @@ class Twitch:
 			line = line.split(" ")
 								
 			if len(line) >= 1:
+				#
+				# PING
+				#
 				if line[0] == 'PING':
 					self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
 					continue
 				
+				## Bot check
 				if self.bot:
 					continue
 				#print(line)
-
+				
 				jsonData = self.fill_tags()
 				#
 				# DM
@@ -166,7 +177,7 @@ class Twitch:
 						self.woofer.ProcessJson(jsonData)
 						continue
 					continue
-					
+				
 				#
 				# USERNOTICE
 				#
@@ -185,25 +196,25 @@ class Twitch:
 						jsonData['custom-tag'] = 'sub'
 						self.woofer.ProcessJson(jsonData)
 						continue
-						
+					
 					# RESUB
 					if jsonData['msg-id'] == 'resub':
 						jsonData['custom-tag'] = 'resub'
 						self.woofer.ProcessJson(jsonData)
 						continue
-						
+					
 					# SUBGIFT
 					if jsonData['msg-id'] == 'subgift':
 						jsonData['custom-tag'] = 'subgift'
 						self.woofer.ProcessJson(jsonData)
 						continue
-						
+					
 					# ANON SUBGIFT
 					if jsonData['msg-id'] == 'anonsubgift':
 						jsonData['custom-tag'] = 'anonsubgift'
 						self.woofer.ProcessJson(jsonData)
 						continue
-						
+					
 					# MASS SUBGIFT
 					if jsonData['msg-id'] == 'submysterygift':
 						jsonData['custom-tag'] = 'submysterygift'
@@ -220,7 +231,7 @@ class Twitch:
 					
 					continue
 		return
-
+		
 	#---------------------------
 	#   fill_tags
 	#---------------------------
@@ -249,7 +260,7 @@ class Twitch:
 			"custom-tag": ""
 		}
 		return result
-
+		
 	#---------------------------
 	#   parse_tags
 	#---------------------------
@@ -274,7 +285,7 @@ class Twitch:
 				if tag[0] in jsonData:
 					jsonData[tag[0]] = tag[1]
 		return jsonData
-
+		
 	#---------------------------
 	#   get_sender
 	#---------------------------
@@ -286,7 +297,7 @@ class Twitch:
 			if char != ":":
 				result += char
 		return result
-
+		
 	#---------------------------
 	#   get_message
 	#---------------------------
@@ -307,7 +318,7 @@ class Twitch:
 	def remove_emotes(self, msg, emotes):
 		if not emotes:
 			return msg
-			
+		
 		emotes = emotes.replace('/', ',')
 		emotes = emotes.split(",")
 		for emote in reversed(emotes):

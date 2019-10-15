@@ -35,7 +35,7 @@ class Hue:
 		
 		if not self.enabled:
 			return
-			
+		
 		print("Initializing Philips HUE...")
 		#
 		# IP Not set
@@ -53,10 +53,10 @@ class Hue:
 						discovery_time = discovery_time + 5
 					if input_char == 'C':
 						return
-						
+			
 			self.ip = ip_list[0]
 			settings.HueIP = self.ip
-			
+		
 		#
 		# Token not set
 		#
@@ -64,9 +64,9 @@ class Hue:
 		result = requests.get(url, data = json.dumps({ 'devicetype': 'wooferbot' }), timeout = 5)
 		output_json = result.json()
 		if result.status_code != 200 or len(output_json) == 0:
-			print("Philips HUE Bridge did not responded correctly")
+			print("Philips HUE Bridge did not responding correctly")
 			return
-			
+		
 		if isinstance(output_json, list) and 'error' in output_json[0] and 'description' in output_json[0]['error']:
 			if output_json[0]['error']['description'] == "unauthorized user" or output_json[0]['error']['description'] == "method, GET, not available for resource, /":
 				while not self.auth():
@@ -90,23 +90,32 @@ class Hue:
 	#   state
 	#---------------------------
 	def state(self, device, col = "", bri = 100):
-		data = {}
+		## Check if hue is active
+		if not self.active:
+			return
+		
+		## Check if light has been detected on startup
 		if device not in self.lights:
 			print("Philips HUE Device \"" + device + "\" does not detected")
 			return
+		
+		data = {}
+		if col:
+			## Turn hue light on
+			data['on'] = True
+			tmp = self.hex_to_hue(col)
+			data['hue'] = tmp[0]
+			data['sat'] = tmp[1]
 		else:
-			if col:
-				data['on'] = True
-				tmp = self.hex_to_hue(col)
-				data['hue'] = tmp[0]
-				data['sat'] = tmp[1]
-			else:
-				data['on'] = False
-				
+			## Turn hue light off
+			data['on'] = False
+		
+		if 'bri' in data:
 			data['bri'] = round(bri *2.54)
-				
-			url = "http://" + self.ip + ":80/api/" + self.token + "/lights/" + str(self.lights[device]) + "/state"
-			requests.put(url, data = json.dumps(data), timeout = 5)
+		
+		## Send API request to Hue Bridge
+		url = "http://" + self.ip + ":80/api/" + self.token + "/lights/" + str(self.lights[device]) + "/state"
+		requests.put(url, data = json.dumps(data), timeout = 5)
 		return
 		
 	#---------------------------
@@ -136,19 +145,21 @@ class Hue:
 				
 				if len(output_json[items]['name']) > 0:
 					self.lights[output_json[items]['name']] = items
-				
+		
 		return
 		
 	#---------------------------
 	#   ssdp_discovery
 	#---------------------------
 	def ssdp_discovery(self, discovery_time: float = 5):
+		devices = []
+		
+		#
+		# Set request
+		#
 		SSDP_IP = "239.255.255.250"
 		SSDP_PORT = 1900
 		SSDP_MX = 10
-		
-		devices = []
-		
 		req = ['M-SEARCH * HTTP/1.1',
 		'HOST: ' + SSDP_IP + ':' + str(SSDP_PORT),
 		'MAN: "ssdp:discover"',
@@ -156,36 +167,44 @@ class Hue:
 		'ST: ssdp:all']
 		req = '\r\n'.join(req).encode('utf-8')
 		
+		#
+		# Send broadcast
+		#
 		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, SSDP_MX)
 		sock.bind((socket.gethostname(), 9090))
 		sock.sendto(req, (SSDP_IP, SSDP_PORT))
 		sock.setblocking(False)
 		
+		#
+		# Detection loop
+		#
 		timeout = time.time() + discovery_time
 		print("Starting HUE discovery.")
 		while time.time() < timeout:
 			try:
+				## Get data from socket
 				ready = select.select([sock], [], [], 5)
 				if ready[0]:
 					response = sock.recv(1024).decode("utf-8")
+					## Process only a response from Hue Bridge
 					if 'ipbridge' not in response.lower():
 						continue
 					
+					## Parse IP from location entry
 					ip = ""
 					for line in response.lower().split("\n"):
 						if "location:" in line:
 							ip = re.search( r'[0-9]+(?:\.[0-9]+){3}', line).group()
-							
-							if ip not in devices and self.is_valid_ipv4_address(ip):
+							if ip not in devices and (self.is_valid_ipv4_address(ip) or self.is_valid_ipv6_address(ip)):
 								devices.append(ip)
-					
+			
 			except socket.error as err:
 				print("Socket error while discovering SSDP devices!")
 				print(err)
-				sock.close()
 				break
-				
+		
+		sock.close()
 		return devices
 		
 	#---------------------------
@@ -193,7 +212,7 @@ class Hue:
 	#---------------------------
 	def auth(self):
 		print("Registering HueBridge...")
-		
+		## Send API request
 		data = { 'devicetype': 'wooferbot' }
 		url = "http://" + self.ip + ":80/api"
 		result = requests.post(url, data = json.dumps(data), timeout = 5)
@@ -203,17 +222,20 @@ class Hue:
 			i = -1
 			for items in output_json:
 				i = i + 1
+				## Authorization requires hardware confirmation
 				if 'error' in items:
 					error_type = output_json[i]['error']['type']
 					if error_type == 101:
 						print("Error: Press link button and try again")
 						return False
-						
+				
+				## Authorization successful 
 				if 'success' in items:
 					self.token = output_json[i]['success']['username']
 					print("Authorized successfully")
 					return True
-						
+		
+		## General error
 		print("Error connecting")
 		return False
 		
@@ -282,7 +304,7 @@ class Hue:
 				b: (r - g) / d + 4,
 			}[high]
 			h /= 6
-			
+		
 		h = round(h * 65535)
 		s = round(s *254)
 		return h, s

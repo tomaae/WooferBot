@@ -43,13 +43,18 @@ class Woofer:
 		self.commandsViewerOnce    = {}
 		self.commandsViewerTimeout = {}
 		self.commandsGlobalTimeout = {}
+		
 		self.changedLightsNanoleaf = ""
 		self.changedLightsHue      = {}
 		
+		## Reset time on all ScheduledMessages
 		for message in self.settings.ScheduledMessages:
 			currentEpoch = int(time.time())
 			message['LastShown'] = currentEpoch
+		
+		## Start timer for ScheduledMessages
 		threading.Timer(300, self.woofer_timer).start()
+		
 		return
 		
 	#---------------------------
@@ -60,12 +65,13 @@ class Woofer:
 		# Commands
 		#
 		if jsonData['custom-tag'] == 'command':
-			# shoutout
+			## Shoutout
 			if jsonData['command'] == '!so' or jsonData['command'] == '!shoutout':
 				if self.settings.Enabled["shoutout"]:
 					self.woofer_shoutout(jsonData)
 				return
-			# lurk/unlurk
+			
+			## Lurk/unlurk
 			if self.settings.Enabled["lurk"]:
 				if jsonData['command'] == '!lurk':
 					self.woofer_lurk(jsonData)
@@ -73,90 +79,90 @@ class Woofer:
 				if jsonData['command'] == '!unlurk' or jsonData['command'] == '!back':
 					self.woofer_unlurk(jsonData)
 					return
-					
-			# custom commands
+			
+			## Custom commands
 			if jsonData['command'] in self.settings.Commands:
 				self.woofer_commands(jsonData)
 			return
-
+		
 		#
 		# Messages
 		#
 		if jsonData['custom-tag'] == 'message':
 			commonBots = set(self.settings.commonBots)
 			customBots = set(self.settings.Bots)
-			# alerts from chatbots
+			## Alerts from chatbots
 			if jsonData['sender'] == self.settings.TwitchChannel + "bot" or jsonData['sender'] in commonBots or jsonData['sender'] in customBots:
-				# follow
+				## Follow
 				if jsonData['message'].find(self.settings.FollowMessage) > 0 and self.settings.Enabled["follow"]:
 					line = jsonData['message'].split(" ")
 					jsonData['display-name'] = line[0].rstrip(',')
 					self.woofer_follow(jsonData)
 					return
 				return
-				
-			# bits
+			
+			## Bits
 			if int(jsonData['bits']) > 0 and int(jsonData['bits']) >= self.settings.MinBits and self.settings.Enabled["bits"]:
 				self.woofer_bits(jsonData)
 				return
 			
-			# greeting
+			## Greeting
 			if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData['sender'] not in customBots:
 				self.woofer_greet(jsonData)
-		
-			return
 			
+			return
+		
 		#
 		# Rituals
 		#
 		if jsonData['custom-tag'] == 'new_chatter' and self.settings.Enabled["new_chatter"]:
 			self.woofer_new_chatter(jsonData)
 			return
-
+		
 		#
 		# Raid/host/autohost
 		#
 		if jsonData['custom-tag'] == 'raid' and self.settings.Enabled["raid"]:
 			self.woofer_raid(jsonData)
 			return
-			
+		
 		if jsonData['custom-tag'] == 'host' and self.settings.Enabled["host"]:
 			self.woofer_host(jsonData)
 			return
-			
+		
 		if jsonData['custom-tag'] == 'autohost' and self.settings.Enabled["autohost"]:
 			self.woofer_host(jsonData)
 			return
-			
+		
 		#
 		# Sub
 		#
 		if jsonData['custom-tag'] == 'sub' and self.settings.Enabled["sub"]:
 			self.woofer_sub(jsonData)
 			return
-			
+		
 		if jsonData['custom-tag'] == 'resub' and self.settings.Enabled["resub"]:
 			self.woofer_resub(jsonData)
 			return
-			
+		
 		if jsonData['custom-tag'] == 'subgift' and self.settings.Enabled["subgift"]:
 			self.woofer_subgift(jsonData)
 			return
-			
+		
 		if jsonData['custom-tag'] == 'anonsubgift' and self.settings.Enabled["anonsubgift"]:
 			self.woofer_subgift(jsonData)
 			return
-			
+		
 	#---------------------------
 	#   woofer_timer
 	#---------------------------
 	def woofer_timer(self):
-		
-		# Check if overlay is connected
+		## Check if overlay is connected
 		if self.overlay.active < 1:
 			threading.Timer(30, self.woofer_timer).start()
 			return
-			
+		
+		## Check if timer is enabled
 		for message in self.settings.ScheduledMessages:
 			if message['Enabled'] == 0:
 				continue
@@ -171,116 +177,157 @@ class Woofer:
 					"customtag"  : "ScheduledMessage",
 					"id"         : message['Name']
 				})
-
-			
-		# Reset to default after X seconds
+		
+		## Reset to default after X seconds
 		threading.Timer(60, self.woofer_timer).start()
 		return
-	
+		
 	#---------------------------
 	#   woofer_queue
 	#---------------------------
 	def woofer_queue(self, queue_id, jsonData):
+		#
+		# Check if there is somethign in queue
+		#
 		if not self.queue:
 			return
 		
+		#
 		# Check if overlay is connected
+		#
 		if self.overlay.active < 1:
 			print("waiting")
 			threading.Timer(3, self.woofer_queue, args=(queue_id, jsonData)).start()
 			return
 		
+		#
 		# Check if our turn in queue
+		#
 		if self.queue[0] != queue_id:
 			threading.Timer(0.5, self.woofer_queue, args=(queue_id, jsonData)).start()
 			return
 		
+		#
 		# Send to overlay, retry later if overlay buffer is full
+		#
 		if self.overlay.Send("EVENT_WOOFERBOT", jsonData) == 1:
 			threading.Timer(1, self.woofer_queue, args=(queue_id, jsonData)).start()
 			return
 		
-		
-		# execute custom scripts
+		#
+		# Execute custom scripts
+		#
 		if 'script' in jsonData and jsonData['script'] != "":
 			os.system("\"" + jsonData['script'] + "\"")
 		
-		# nanoleaf
+		#
+		# Turn on Nanoleaf
+		#
 		if 'nanoleaf' in jsonData and jsonData['nanoleaf'] != "":
 			self.nanoleaf.Scene(jsonData['nanoleaf'])
-			
 			if 'nanoleafpersistent' in jsonData and jsonData['nanoleafpersistent']:
 				self.changedLightsNanoleaf = jsonData['nanoleaf']
 		
-		# hue
+		#
+		# Turn on Hue
+		#
 		if 'hue' in jsonData:
 			for device in jsonData['hue']:
 				if 'Brightness' in jsonData['hue'][device] and jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in jsonData['hue'][device] and len(jsonData['hue'][device]['Color']) >= 6 and len(jsonData['hue'][device]['Color']) <= 7:
 					self.hue.state(device = device, bri = jsonData['hue'][device]['Brightness'], col = jsonData['hue'][device]['Color'])
-					
+			
 			if 'huepersistent' in jsonData and jsonData['huepersistent']:
 				self.changedLightsHue = jsonData['hue']
 		
-		# default_woofer
-		def default_woofer(queue_id, old_jsonData):
-			mascotIdleImage = self.settings.mascotImages['Idle']['Image']
-			if not os.path.isfile(mascotIdleImage):
-				mascotIdleImage = ""
-			
-			if 'Idle' in self.settings.PoseMapping and 'Image' in self.settings.PoseMapping['Idle'] and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
-				tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-				if os.path.isfile(tmp):
-					mascotIdleImage = tmp
-			
-			jsonData = {
-				"mascot": mascotIdleImage
-			}
-			self.overlay.Send("EVENT_WOOFERBOT", jsonData)
-			
-			# nanoleaf
-			if 'nanoleaf' in old_jsonData and old_jsonData['nanoleaf']:
-				if self.changedLightsNanoleaf:
-					self.nanoleaf.Scene(self.changedLightsNanoleaf)
-				elif 'Nanoleaf' in self.settings.PoseMapping['Idle']:
-					self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
-				else:
-					self.nanoleaf.Scene()
-				
-			# hue
-			if 'hue' in old_jsonData:
-				if self.changedLightsHue:
-					for device in self.changedLightsHue:
-						if 'Brightness' in self.changedLightsHue[device] and self.changedLightsHue[device]['Brightness'] >= 1 and 'Color' in self.changedLightsHue[device] and len(self.changedLightsHue[device]['Color']) >= 6 and len(self.changedLightsHue[device]['Color']) <= 7:
-							self.hue.state(device = device, bri = self.changedLightsHue[device]['Brightness'], col = self.changedLightsHue[device]['Color'])
-					
-					for device in old_jsonData['hue']:
-						if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
-							if device not in self.changedLightsHue:
-								self.hue.state(device = device)
-					
-				elif 'Hue' in self.settings.PoseMapping['Idle']:
-					for device in self.settings.PoseMapping['Idle']['Hue']:
-						if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
-							self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
-					
-					for device in old_jsonData['hue']:
-						if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
-							if device not in self.settings.PoseMapping['Idle']:
-								self.hue.state(device = device)
-					
-				else:
-					for device in old_jsonData['hue']:
-						if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
-							self.hue.state(device = device)
-			
-			if self.queue:
-				self.queue.remove(queue_id)
+		#
+		# Reset to default after X seconds
+		#
+		threading.Timer(jsonData['time'] / 1000, self.woofer_queue_default, args=(queue_id,jsonData)).start()
+		return
+		
+	#---------------------------
+	#   woofer_queue_default
+	#---------------------------
+	def woofer_queue_default(self,queue_id, old_jsonData):
+		#
+		# Set default Idle image
+		#
+		mascotIdleImage = self.settings.mascotImages['Idle']['Image']
+		if not os.path.isfile(mascotIdleImage):
+			mascotIdleImage = ""
+		
+		#
+		# Check mapping for custom Idle image
+		#
+		if 'Idle' in self.settings.PoseMapping and 'Image' in self.settings.PoseMapping['Idle'] and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
+			tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
+			if os.path.isfile(tmp):
+				mascotIdleImage = tmp
+		
+		#
+		# Send to overlay, retry later if overlay buffer is full
+		#
+		jsonData = {
+			"mascot": mascotIdleImage
+		}
+		if self.overlay.Send("EVENT_WOOFERBOT", jsonData) == 1:
+			threading.Timer(1, self.woofer_queue_default, args=(queue_id, old_jsonData)).start()
 			return
 		
-		# Reset to default after X seconds
-		threading.Timer(jsonData['time'] / 1000, default_woofer, args=(queue_id,jsonData)).start()
+		#
+		# Reset Nanoleaf to Idle
+		#
+		if 'nanoleaf' in old_jsonData and old_jsonData['nanoleaf']:
+			## Reset to persistent lights
+			if self.changedLightsNanoleaf:
+				self.nanoleaf.Scene(self.changedLightsNanoleaf)
+			## Reset to Idle lights
+			elif 'Nanoleaf' in self.settings.PoseMapping['Idle']:
+				self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
+			## Turn off lights
+			else:
+				self.nanoleaf.Scene()
+		
+		#
+		# Reset Hue to Idle
+		#
+		if 'hue' in old_jsonData:
+			## Reset to persistent lights
+			if self.changedLightsHue:
+				for device in self.changedLightsHue:
+					if 'Brightness' in self.changedLightsHue[device] and self.changedLightsHue[device]['Brightness'] >= 1 and 'Color' in self.changedLightsHue[device] and len(self.changedLightsHue[device]['Color']) >= 6 and len(self.changedLightsHue[device]['Color']) <= 7:
+						self.hue.state(device = device, bri = self.changedLightsHue[device]['Brightness'], col = self.changedLightsHue[device]['Color'])
+				
+				for device in old_jsonData['hue']:
+					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
+						if device not in self.changedLightsHue:
+							self.hue.state(device = device)
+			
+			## Reset to Idle lights
+			elif 'Hue' in self.settings.PoseMapping['Idle']:
+				for device in self.settings.PoseMapping['Idle']['Hue']:
+					if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
+						self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+				
+				for device in old_jsonData['hue']:
+					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
+						if device not in self.settings.PoseMapping['Idle']:
+							self.hue.state(device = device)
+			
+			## Turn off lights
+			else:
+				for device in old_jsonData['hue']:
+					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
+						self.hue.state(device = device)
+		
+		#
+		# Remove notification from queue
+		#
+		if self.queue:
+			self.queue.remove(queue_id)
+			
 		return
-
+		
 	#---------------------------
 	#   woofer_addtoqueue
 	#---------------------------
@@ -297,12 +344,12 @@ class Woofer:
 		jsonResponse["hue"]                = self.mascotHueDevices(jsonResponse["id"])
 		jsonResponse["huepersistent"]      = self.mascotHuePersistent(jsonResponse["id"])
 		
-		# add to queue and wait for slot
+		## Add to queue
 		queue_id = uuid.uuid4()
 		self.queue.append(queue_id)
 		threading.Thread(target=self.woofer_queue, args=(queue_id, jsonResponse)).start()
 		return
-
+		
 	#---------------------------
 	#   woofer_new_chatter
 	#---------------------------
@@ -314,7 +361,7 @@ class Woofer:
 			"id"         : 'new_chatter'
 		})
 		return
-
+		
 	#---------------------------
 	#   woofer_follow
 	#---------------------------
@@ -326,12 +373,11 @@ class Woofer:
 			"id"         : 'follow'
 		})
 		return
-
+		
 	#---------------------------
 	#   woofer_sub
 	#---------------------------
 	def woofer_sub(self,jsonData):
-		# "msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
 		self.woofer_addtoqueue({
 			"message"    : random.SystemRandom().choice(self.settings.Messages['sub']),
 			"sender"     : jsonData['display-name'],
@@ -344,8 +390,7 @@ class Woofer:
 	#   woofer_resub
 	#---------------------------
 	def woofer_resub(self,jsonData):
-		# "msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
-		
+		## Check for custom sub definitions
 		customId = 'resub'
 		customMessage = random.SystemRandom().choice(self.settings.Messages['resub'])
 		for customObj in self.settings.CustomSubs:
@@ -367,7 +412,6 @@ class Woofer:
 	#   woofer_subgift
 	#---------------------------
 	def woofer_subgift(self,jsonData):
-		# "msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
 		if jsonData['custom-tag'] == 'anonsubgift':
 			jsonData['display-name'] = 'anonymous'
 		
@@ -379,13 +423,12 @@ class Woofer:
 			"id"         : 'subgift'
 		})
 		return
-	
+		
 	#---------------------------
 	#   woofer_bits
 	#---------------------------
 	def woofer_bits(self,jsonData):
-		# "bits", "bits_total"
-		
+		## Check for custom bits definitions
 		customId = 'bits'
 		customMessage = random.SystemRandom().choice(self.settings.Messages['bits'])
 		for customObj in self.settings.CustomBits:
@@ -393,7 +436,7 @@ class Woofer:
 				customId = customObj['Name']
 				if customId in self.settings.Messages:
 					customMessage = random.SystemRandom().choice(self.settings.Messages[customId])
-			
+		
 		self.woofer_addtoqueue({
 			"message"    : customMessage,
 			"sender"     : jsonData['display-name'],
@@ -402,17 +445,16 @@ class Woofer:
 			"id"         : customId
 		})
 		return
-	
+		
 	#---------------------------
 	#   woofer_raid
 	#---------------------------
 	def woofer_raid(self,jsonData):
-		#"msg-param-viewerCount": "", # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
-		# Check if user has already raided/hosted
+		## Check if user has already raided/hosted
 		s = set(self.hostingUsers)
 		if jsonData['sender'] in s:
 			return
-			
+		
 		self.hostingUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
@@ -422,6 +464,7 @@ class Woofer:
 			"id"         : 'raid'
 		})
 		
+		## Automatic shoutout
 		if self.settings.AutoShoutout:
 			jsonData['moderator'] = '1'
 			jsonData['command_parameter'] = jsonData['display-name']
@@ -434,11 +477,11 @@ class Woofer:
 	#   woofer_host
 	#---------------------------
 	def woofer_host(self,jsonData):
-		# Check if user has already raided/hosted
+		## Check if user has already raided/hosted
 		s = set(self.hostingUsers)
 		if jsonData['sender'] in s:
 			return
-			
+		
 		self.hostingUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
@@ -448,6 +491,7 @@ class Woofer:
 			"id"         : 'host'
 		})
 		
+		## Automatic shoutout
 		if self.settings.AutoShoutout:
 			jsonData['moderator'] = '1'
 			jsonData['command_parameter'] = jsonData['display-name']
@@ -455,26 +499,27 @@ class Woofer:
 			threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
 		
 		return
-
+		
 	#---------------------------
 	#   woofer_greet
 	#---------------------------
 	def woofer_greet(self,jsonData):
-		# Check if user was already greeted
+		## Check if user was already greeted
 		s = set(self.greetedUsers)
 		if jsonData['sender'] in s:
 			return
-			
+		
 		self.greetedUsers.append(jsonData['sender'])
 		
-		customId = 'greet'
+		## Check for custom greeting definitions
 		customMessage = random.SystemRandom().choice(self.settings.Messages['greet'])
 		if jsonData['display-name'] in self.settings.CustomGreets:
 			customMessage = random.SystemRandom().choice(self.settings.CustomGreets[jsonData['display-name']])
-			
+		
+		customId = 'greet'
 		if 'viewer_' + jsonData['display-name'] in self.settings.PoseMapping:
 			customId = 'viewer_' + jsonData['display-name']
-			
+		
 		self.woofer_addtoqueue({
 			"message"    : customMessage,
 			"sender"     : jsonData['display-name'],
@@ -487,18 +532,24 @@ class Woofer:
 	#   woofer_commands
 	#---------------------------
 	def woofer_commands(self, jsonData):
+		#
+		# Check if command is enabled
+		#
 		if 'Enabled' in self.settings.Commands[jsonData['command']] and int(self.settings.Commands[jsonData['command']]['Enabled']) == 0:
 			return
-			
-		if 'Access' in self.settings.Commands[jsonData['command']] and (self.settings.Commands[jsonData['command']]['Access'] == 'mod' or self.settings.Commands[jsonData['command']]['Access'] == 'mods'):
-			if int(jsonData['moderator']) != 1:
-				return
-				
-		if 'Access' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['Access'] == 'broadcaster':
-			if int(jsonData['broadcaster']) != 1:
-				return
-				
-				
+		
+		#
+		# Check access rights
+		#
+		if 'Access' in self.settings.Commands[jsonData['command']]:
+			if self.settings.Commands[jsonData['command']]['Access'] == 'mod' or self.settings.Commands[jsonData['command']]['Access'] == 'mods':
+				if int(jsonData['moderator']) != 1:
+					return
+					
+			if self.settings.Commands[jsonData['command']]['Access'] == 'broadcaster':
+				if int(jsonData['broadcaster']) != 1:
+					return
+		
 		#
 		# ViewerOnce
 		#
@@ -508,8 +559,9 @@ class Woofer:
 			
 			if jsonData['command'] not in self.commandsViewerOnce:
 				self.commandsViewerOnce[jsonData['command']] = []
+				
 			self.commandsViewerOnce[jsonData['command']].append(jsonData['sender'])
-			
+		
 		#
 		# ViewerTimeout
 		#
@@ -522,25 +574,29 @@ class Woofer:
 			if jsonData['command'] not in self.commandsViewerTimeout:
 				self.commandsViewerTimeout[jsonData['command']] = {}
 			self.commandsViewerTimeout[jsonData['command']][jsonData['sender']] = currentEpoch
-			
+		
 		#
 		# GlobalTimeout
 		#
 		if 'GlobalTimeout' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['GlobalTimeout'] > 0:
 			currentEpoch = int(time.time())
-			
 			if jsonData['command'] in self.commandsGlobalTimeout and (currentEpoch - self.commandsGlobalTimeout[jsonData['command']]) < self.settings.Commands[jsonData['command']]['GlobalTimeout']:
 				return
 			
 			self.commandsGlobalTimeout[jsonData['command']] = currentEpoch
-			
-			
+		
+		#
+		# Check custom image
+		#
 		image = ""
 		if 'Image' in self.settings.Commands[jsonData['command']]:
 			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
 			if not os.path.isfile(image):
 				image = ""
-				
+		
+		#
+		# Check custom script
+		#
 		script = ""
 		if 'Script' in self.settings.Commands[jsonData['command']]:
 			script = self.settings.pathRoot + "\\scripts\\" + self.settings.Commands[jsonData['command']]['Script']
@@ -562,7 +618,7 @@ class Woofer:
 	#---------------------------
 	def woofer_lurk(self, jsonData):
 		
-		# Check if user was already lurking
+		## Check if user was already lurking
 		s = set(self.lurkingUsers)
 		if jsonData['sender'] in s:
 			return
@@ -582,11 +638,12 @@ class Woofer:
 	#---------------------------
 	def woofer_unlurk(self, jsonData):
 		
-		# Check if user was already lurking
+		## Check if user was already lurking
 		s = set(self.lurkingUsers)
 		if jsonData['sender'] not in s:
 			return
 		
+		## Check if user already used unlurk
 		s = set(self.unlurkingUsers)
 		if jsonData['sender'] in s:
 			return
@@ -605,27 +662,37 @@ class Woofer:
 	#   woofer_shoutout
 	#---------------------------
 	def woofer_shoutout(self, jsonData):
+		#
+		# Check access rights
+		#
 		if jsonData['moderator'] != '1':
 			return
-			
+		
+		#
+		# Check if channel parameter was specified
+		#
 		if not jsonData['command_parameter']:
 			return
 		
 		if jsonData['command_parameter'].find('@') == 0:
 			jsonData['command_parameter'] = jsonData['command_parameter'] [1:]
 		
-		# get user twitch info
+		#
+		# Get user info
+		#
 		jsonResult = self.twitchGetUser(jsonData['command_parameter'])
 		if not jsonResult:
 			return
-			
+		
 		s = set(self.shoutoutUsers)
 		if jsonResult['display_name'] in s:
 			return
-			
+		
 		self.shoutoutUsers.append(jsonResult['display_name'])
 		
-		# get channel last game
+		#
+		# Get channel last game
+		#
 		activity = self.twitchGetLastActivity(jsonResult['_id'])
 		activity_text = ""
 		if activity:
@@ -644,46 +711,51 @@ class Woofer:
 		})
 		return
 		
-		
 	#---------------------------
 	#   twitchGetUser
 	#---------------------------
 	def twitchGetUser(self, targetUser):
+		## Get user info from API
 		headers = {'Client-ID': self.settings.twitchClientID, 'Accept': 'application/vnd.twitchtv.v5+json'}
 		result = requests.get("https://api.twitch.tv/kraken/users?login={0}".format(targetUser.lower()), headers=headers)
-
+		
+		## Check encoding
 		if result.encoding is None:
 			result.encoding = 'utf-8'
-
+		
 		jsonResult = json.loads(result.text)
-
+		
+		## Check exit code
 		if result.status_code != 200:
 			print("lookup user: {0}".format(jsonResult))
 			return ""
-
-		if not jsonResult['users']:
+		
+		## User defined in result json
+		if 'users' not in jsonResult and not jsonResult['users']:
 			print("Unknown Twitch Username")
 			return ""
-			
-		jsonResult = jsonResult['users'][0]
-		return jsonResult
+		
+		return jsonResult['users'][0]
 		
 	#---------------------------
 	#   twitchGetLastActivity
 	#---------------------------
 	def twitchGetLastActivity(self, userId):
+		## Get channel activity from API
 		headers = {'Client-ID': self.settings.twitchClientID, 'Accept': 'application/vnd.twitchtv.v5+json'}
 		result = requests.get("https://api.twitch.tv/kraken/channels/{0}".format(userId), headers=headers)
 		
+		## Check encoding
 		if result.encoding is None:
 			result.encoding = 'utf-8'
-			
+		
 		jsonResult = json.loads(result.text)
 		
-		if result.status_code == 200:
-			return jsonResult['game']
-			
-		return ""
+		## Check exit code
+		if result.status_code != 200:
+			return ""
+		
+		return jsonResult['game']
 		
 	#---------------------------
 	#   mascotImagesFile
@@ -726,10 +798,10 @@ class Woofer:
 			tmp = random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Audio'])
 			if os.path.isfile(tmp):
 				return tmp
-				
+		
 		if self.settings.PoseMapping['DEFAULT']['Audio'] in self.settings.mascotAudio:
 			return random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping['DEFAULT']['Audio']]['Audio'])
-			
+		
 		return ""
 		
 	#---------------------------
@@ -738,7 +810,7 @@ class Woofer:
 	def mascotAudioVolume(self, action):
 		if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Audio'] in self.settings.mascotAudio:
 			return self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Volume']
-				
+		
 		return self.settings.GlobalVolume
 		
 	#---------------------------
@@ -750,7 +822,7 @@ class Woofer:
 		
 		if 'Nanoleaf' in self.settings.PoseMapping['DEFAULT']:
 			return self.settings.PoseMapping['DEFAULT']['Nanoleaf']
-			
+		
 		return ""
 		
 	#---------------------------
@@ -762,7 +834,7 @@ class Woofer:
 		
 		if 'NanoleafPersistent' in self.settings.PoseMapping['DEFAULT']:
 			return self.settings.PoseMapping['DEFAULT']['NanoleafPersistent']
-			
+		
 		return ""
 		
 	#---------------------------
@@ -774,7 +846,7 @@ class Woofer:
 		
 		if 'Hue' in self.settings.PoseMapping['DEFAULT']:
 			return self.settings.PoseMapping['DEFAULT']['Hue']
-			
+		
 		return ""
 		
 	#---------------------------
@@ -786,5 +858,5 @@ class Woofer:
 		
 		if 'HuePersistent' in self.settings.PoseMapping['DEFAULT']:
 			return self.settings.PoseMapping['DEFAULT']['HuePersistent']
-			
+		
 		return ""
