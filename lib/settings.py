@@ -407,31 +407,31 @@ class Settings:
 		# ENABLED
 		#
 		if "new_chatter" not in self.Enabled:
-			self.Enabled["new_chatter"] = 1
+			self.Enabled["new_chatter"] = True
 		if "greet" not in self.Enabled:
-			self.Enabled["greet"] = 1
+			self.Enabled["greet"] = True
 		if "follow" not in self.Enabled:
-			self.Enabled["follow"] = 1
+			self.Enabled["follow"] = True
 		if "raid" not in self.Enabled:
-			self.Enabled["raid"] = 1
+			self.Enabled["raid"] = True
 		if "host" not in self.Enabled:
-			self.Enabled["host"] = 1
+			self.Enabled["host"] = True
 		if "autohost" not in self.Enabled:
-			self.Enabled["autohost"] = 1
+			self.Enabled["autohost"] = True
 		if "sub" not in self.Enabled:
-			self.Enabled["sub"] = 1
+			self.Enabled["sub"] = True
 		if "resub" not in self.Enabled:
-			self.Enabled["resub"] = 1
+			self.Enabled["resub"] = True
 		if "subgift" not in self.Enabled:
-			self.Enabled["subgift"] = 1
+			self.Enabled["subgift"] = True
 		if "anonsubgift" not in self.Enabled:
-			self.Enabled["anonsubgift"] = 1
+			self.Enabled["anonsubgift"] = True
 		if "bits" not in self.Enabled:
-			self.Enabled["bits"] = 1
+			self.Enabled["bits"] = True
 		if "lurk" not in self.Enabled:
-			self.Enabled["lurk"] = 1
+			self.Enabled["lurk"] = True
 		if "shoutout" not in self.Enabled:
-			self.Enabled["shoutout"] = 1
+			self.Enabled["shoutout"] = True
 		
 		#
 		# STYLES

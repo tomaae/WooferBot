@@ -164,7 +164,7 @@ class Woofer:
 		
 		## Check if timer is enabled
 		for message in self.settings.ScheduledMessages:
-			if message['Enabled'] == 0:
+			if not message['Enabled']:
 				continue
 			
 			currentEpoch = int(time.time())
@@ -545,7 +545,7 @@ class Woofer:
 		#
 		# Check if command is enabled
 		#
-		if 'Enabled' in self.settings.Commands[jsonData['command']] and int(self.settings.Commands[jsonData['command']]['Enabled']) == 0:
+		if 'Enabled' in self.settings.Commands[jsonData['command']] and not self.settings.Commands[jsonData['command']]['Enabled']:
 			return
 		
 		#

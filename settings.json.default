@@ -105,19 +105,19 @@
         ]
     },
     "Enabled": {
-        "new_chatter": 1,
-        "greet": 1,
-        "follow": 1,
-        "raid": 1,
-        "host": 1,
-        "autohost": 1,
-        "sub": 1,
-        "resub": 1,
-        "subgift": 1,
-        "anonsubgift": 1,
-        "bits": 1,
-        "lurk": 1,
-        "shoutout": 1
+        "new_chatter": true,
+        "greet": true,
+        "follow": true,
+        "raid": true,
+        "host": true,
+        "autohost": true,
+        "sub": true,
+        "resub": true,
+        "subgift": true,
+        "anonsubgift": true,
+        "bits": true,
+        "lurk": true,
+        "shoutout": true
     },
     "PoseMapping": {
         "DEFAULT": {
