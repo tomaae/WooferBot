@@ -174,15 +174,21 @@ class Settings:
 				print(action)
 				exit(1)
 			
-			if 'Message' not in action:
-				print("ScheduledMessages missing Message: ")
-				print(action)
-				exit(1)
-			
-			if not isinstance(action['Message'], list):
-				print("ScheduledMessages Message is not a list: ")
-				print(action)
-				exit(1)
+			if 'Command' in action:
+				if action['Command'] not in self.Commands:
+					print("ScheduledMessages command not in command list: ")
+					print(action)
+					exit(1)
+			else:
+				if 'Message' not in action:
+					print("ScheduledMessages missing Message: ")
+					print(action)
+					exit(1)
+				
+				if not isinstance(action['Message'], list):
+					print("ScheduledMessages Message is not a list: ")
+					print(action)
+					exit(1)
 		
 		#
 		# Check Commands

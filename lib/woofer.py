@@ -170,13 +170,23 @@ class Woofer:
 			currentEpoch = int(time.time())
 			if (currentEpoch - message['LastShown']) >= (message['Timer'] * 60):
 				message['LastShown'] = currentEpoch
-				self.woofer_addtoqueue({
-					"message"    : random.SystemRandom().choice(message['Message']),
-					"image"      : self.settings.pathRoot + "\\images\\" + message['Image'],
-					"sender"     : "",
-					"customtag"  : "ScheduledMessage",
-					"id"         : message['Name']
-				})
+				
+				if 'Command' in message:
+					self.woofer_commands({
+						"command"      : message['Command'],
+						"broadcaster"  : 1,
+						"sender" : self.settings.TwitchChannel.lower(),
+						"display-name" : self.settings.TwitchChannel,
+						"custom-tag"   : 'command'
+					})
+				else:
+					self.woofer_addtoqueue({
+						"message"    : random.SystemRandom().choice(message['Message']),
+						"image"      : self.settings.pathRoot + "\\images\\" + message['Image'],
+						"sender"     : "",
+						"customtag"  : "ScheduledMessage",
+						"id"         : message['Name']
+					})
 		
 		## Reset to default after X seconds
 		threading.Timer(60, self.woofer_timer).start()
