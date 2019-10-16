@@ -22,7 +22,7 @@ You can create simple custom replies using "Commands".
             ],
             "Image" : "",
             "Script" : "",
-            "Enabled": 1,
+            "Enabled": true,
             "ViewerOnce": false,
             "ViewerTimeout": 0,
             "GlobalTimeout": 0,
@@ -41,7 +41,7 @@ You can create simple custom replies using "Commands".
 * <span class="icon settings">ViewerOnce</span> (true/false) Command can be used only once per viewer during a session.
 * <span class="icon settings">ViewerTimeout</span> Command can be used only once per viewer within X number of seconds (0 - disabled).
 * <span class="icon settings">GlobalTimeout</span> Command can be used only once within X number of seconds (0 - disabled).
-* <span class="icon settings">Enabled</span> (0/1)
+* <span class="icon settings">Enabled</span> (true/false)
 
 ### Mapping mascot poses to custom commands
 PoseMapping allows you to map available mascot poses to your custom commands.

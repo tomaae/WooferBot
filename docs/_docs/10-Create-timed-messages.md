@@ -18,7 +18,7 @@ Allows you to schedule a message to appear every X minutes.
         {
             "Name": "Twitter",
             "Timer": 30,
-            "Enabled": 1,
+            "Enabled": true,
             "Command": "!twitter",
             "Image": "twitterlogo.png",
             "Message": [
@@ -31,7 +31,7 @@ Allows you to schedule a message to appear every X minutes.
 **List of parameters**
 * <span class="icon settings">Name</span> Name of the Timer (Not shown on stream)
 * <span class="icon settings">Timer</span> Timer in minutes
-* <span class="icon settings">Enabled</span> (0/1)
+* <span class="icon settings">Enabled</span> (true/false)
 * <span class="icon settings">Command</span> Name of a custom command. This will execute custom command (Image and Message values in this scheduled message will be ignored).
 * <span class="icon settings">Image</span> Optional image (has to be placed into "images" directory)
 * <span class="icon settings">Message</span> Message shown on screen

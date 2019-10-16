@@ -88,12 +88,11 @@ By default, all notifications and commands are enabled.
 *Example:*
 ```
     "Enabled": {
-        "new_chatter": 0,
-        "greet": 1
+        "new_chatter": false,
+        "greet": true
     }
 ```
-* 1 - Enabled
-* 0 - Disabled
+* (true/false)
 
 <span class="icon info">See <a class="icon doc" href="{{ site.github.url }}/documentation#list-of-predefined-notification-and-commands">List of predefined notification and commands</a> section for all available notifications and commands.</span>
 
