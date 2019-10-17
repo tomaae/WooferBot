@@ -647,6 +647,13 @@ class Settings:
 	#---------------------------
 	def UpgradeSettingsFile(self):
 		#
+		# CurrectMascot fix v1.1
+		#
+		if hasattr(self, 'CurrectMascot'):
+			self.CurrentMascot = self.CurrectMascot
+			del self.CurrectMascot
+		
+		#
 		# ScheduledMessages Messages v1.2
 		#
 		for action in self.ScheduledMessages:
