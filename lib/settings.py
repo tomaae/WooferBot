@@ -387,6 +387,8 @@ class Settings:
 				self.Commands[action]['ViewerTimeout'] = 0
 			if 'GlobalTimeout' not in self.Commands[action]:
 				self.Commands[action]['GlobalTimeout'] = 0
+			if 'Aliases' not in self.Commands[action]:
+				self.Commands[action]['Aliases'] = []
 			
 			## Autofill CustomBits
 			for action in self.CustomBits:

@@ -77,6 +77,13 @@ class Woofer:
 			## Custom commands
 			if jsonData['command'] in self.settings.Commands:
 				self.woofer_commands(jsonData)
+				
+			for action in self.settings.Commands:
+				for alias in self.settings.Commands[action]['Aliases']:
+					if jsonData['command'] == alias:
+						jsonData['command'] = action
+						self.woofer_commands(jsonData)
+				
 			return
 		
 		#
