@@ -23,6 +23,7 @@ Miscellaneous configurable parameters.
 }
 ```
 * <span class="icon settings">CurrentMascot</span> Set active mascot.
+  * <a target="_blank" href="{{ site.github.url }}/mascots#apricot">apricot</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#beatrice">beatrice</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#cat-ragdoll">cat_ragdoll</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#cat-russian-blue">cat_russianblue</a>
