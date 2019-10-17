@@ -21,9 +21,6 @@ Allows you to schedule a message to appear every X minutes.
             "Enabled": true,
             "Command": "!twitter",
             "Image": "twitterlogo.png",
-            "Message": [
-                "Check out my twitter @Tomaae_ for stream updates."
-            ],
             "LastShown": 1544893802
         }
     ]
@@ -34,8 +31,9 @@ Allows you to schedule a message to appear every X minutes.
 * <span class="icon settings">Enabled</span> (true/false)
 * <span class="icon settings">Command</span> Name of a custom command. This will execute custom command (Image and Message values in this scheduled message will be ignored).
 * <span class="icon settings">Image</span> Optional image (has to be placed into "images" directory)
-* <span class="icon settings">Message</span> Message shown on screen
 * <span class="icon settings">LastShown</span> Internal parameter, do not modify
+
+<br><span class="icon info">To add text messages to timers, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
 
 ### Mapping mascot poses to timed messages
 PoseMapping allows you to map available mascot poses to timed messages.
