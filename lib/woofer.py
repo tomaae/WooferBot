@@ -338,6 +338,12 @@ class Woofer:
 	def woofer_addtoqueue(self,jsonResponse):
 		print("{0}: {1}".format(jsonResponse['customtag'], jsonResponse['sender']))
 		
+		if 'message' not in jsonResponse or jsonResponse["message"] == "":
+			if jsonResponse["id"] in self.settings.Messages:
+				jsonResponse["message"]             = random.SystemRandom().choice(self.settings.Messages[jsonResponse["id"]])
+			else:
+				jsonResponse["message"] = ""
+		
 		jsonResponse["mascot"]             = self.mascotImagesFile(jsonResponse["id"])
 		jsonResponse["mascotmouth"]        = self.mascotImagesMouthHeight(jsonResponse["id"])
 		jsonResponse["time"]               = self.mascotImagesTime(jsonResponse["id"])
@@ -359,7 +365,6 @@ class Woofer:
 	#---------------------------
 	def woofer_new_chatter(self,jsonData):
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['new_chatter']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'new_chatter'
@@ -371,7 +376,6 @@ class Woofer:
 	#---------------------------
 	def woofer_follow(self,jsonData):
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['follow']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'follow'
@@ -396,15 +400,11 @@ class Woofer:
 	def woofer_resub(self,jsonData):
 		## Check for custom sub definitions
 		customId = 'resub'
-		customMessage = random.SystemRandom().choice(self.settings.Messages['resub'])
 		for customObj in self.settings.CustomSubs:
 			if int(jsonData['msg-param-cumulative-months']) >= int(customObj['From']) and int(jsonData['msg-param-cumulative-months']) <= int(customObj['To']):
 				customId = customObj['Name']
-				if customId in self.settings.Messages:
-					customMessage = random.SystemRandom().choice(self.settings.Messages[customId])
 		
 		self.woofer_addtoqueue({
-			"message"    : customMessage,
 			"sender"     : jsonData['display-name'],
 			"months"     : jsonData['msg-param-cumulative-months'],
 			"customtag"  : jsonData['custom-tag'],
@@ -420,7 +420,6 @@ class Woofer:
 			jsonData['display-name'] = 'anonymous'
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['subgift']),
 			"sender"     : jsonData['display-name'],
 			"recipient"  : jsonData['msg-param-recipient-display-name'],
 			"customtag"  : jsonData['custom-tag'],
@@ -434,15 +433,11 @@ class Woofer:
 	def woofer_bits(self,jsonData):
 		## Check for custom bits definitions
 		customId = 'bits'
-		customMessage = random.SystemRandom().choice(self.settings.Messages['bits'])
 		for customObj in self.settings.CustomBits:
 			if int(jsonData['bits']) >= int(customObj['From']) and int(jsonData['bits']) <= int(customObj['To']):
 				customId = customObj['Name']
-				if customId in self.settings.Messages:
-					customMessage = random.SystemRandom().choice(self.settings.Messages[customId])
 		
 		self.woofer_addtoqueue({
-			"message"    : customMessage,
 			"sender"     : jsonData['display-name'],
 			"bits"       : jsonData['bits'],
 			"customtag"  : jsonData['custom-tag'],
@@ -462,7 +457,6 @@ class Woofer:
 		self.hostingUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['raid']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'raid'
@@ -489,7 +483,6 @@ class Woofer:
 		self.hostingUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['host']),
 			"sender"     : jsonData['sender'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'host'
@@ -516,7 +509,7 @@ class Woofer:
 		self.greetedUsers.append(jsonData['sender'])
 		
 		## Check for custom greeting definitions
-		customMessage = random.SystemRandom().choice(self.settings.Messages['greet'])
+		customMessage = ""
 		if jsonData['display-name'] in self.settings.CustomGreets:
 			customMessage = random.SystemRandom().choice(self.settings.CustomGreets[jsonData['display-name']])
 		
@@ -539,37 +532,36 @@ class Woofer:
 		#
 		# Check if command is enabled
 		#
-		if 'Enabled' in self.settings.Commands[jsonData['command']] and not self.settings.Commands[jsonData['command']]['Enabled']:
+		if not self.settings.Commands[jsonData['command']]['Enabled']:
 			return
 		
 		#
 		# Check access rights
 		#
-		if 'Access' in self.settings.Commands[jsonData['command']]:
-			if self.settings.Commands[jsonData['command']]['Access'] == 'mod' or self.settings.Commands[jsonData['command']]['Access'] == 'mods':
-				if int(jsonData['moderator']) != 1:
-					return
-					
-			if self.settings.Commands[jsonData['command']]['Access'] == 'broadcaster':
-				if int(jsonData['broadcaster']) != 1:
-					return
+		if self.settings.Commands[jsonData['command']]['Access'] == 'mod' or self.settings.Commands[jsonData['command']]['Access'] == 'mods':
+			if int(jsonData['moderator']) != 1:
+				return
+		
+		if self.settings.Commands[jsonData['command']]['Access'] == 'broadcaster':
+			if int(jsonData['broadcaster']) != 1:
+				return
 		
 		#
 		# ViewerOnce
 		#
-		if 'ViewerOnce' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['ViewerOnce']:
+		if self.settings.Commands[jsonData['command']]['ViewerOnce']:
 			if jsonData['command'] in self.commandsViewerOnce and jsonData['sender'] in self.commandsViewerOnce[jsonData['command']]:
 				return
 			
 			if jsonData['command'] not in self.commandsViewerOnce:
 				self.commandsViewerOnce[jsonData['command']] = []
-				
+			
 			self.commandsViewerOnce[jsonData['command']].append(jsonData['sender'])
 		
 		#
 		# ViewerTimeout
 		#
-		if 'ViewerTimeout' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['ViewerTimeout'] > 0:
+		if self.settings.Commands[jsonData['command']]['ViewerTimeout'] > 0:
 			currentEpoch = int(time.time())
 			
 			if jsonData['command'] in self.commandsViewerTimeout and jsonData['sender'] in self.commandsViewerTimeout[jsonData['command']] and (currentEpoch - self.commandsViewerTimeout[jsonData['command']][jsonData['sender']]) < self.settings.Commands[jsonData['command']]['ViewerTimeout']:
@@ -577,12 +569,13 @@ class Woofer:
 			
 			if jsonData['command'] not in self.commandsViewerTimeout:
 				self.commandsViewerTimeout[jsonData['command']] = {}
+			
 			self.commandsViewerTimeout[jsonData['command']][jsonData['sender']] = currentEpoch
 		
 		#
 		# GlobalTimeout
 		#
-		if 'GlobalTimeout' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']]['GlobalTimeout'] > 0:
+		if self.settings.Commands[jsonData['command']]['GlobalTimeout'] > 0:
 			currentEpoch = int(time.time())
 			if jsonData['command'] in self.commandsGlobalTimeout and (currentEpoch - self.commandsGlobalTimeout[jsonData['command']]) < self.settings.Commands[jsonData['command']]['GlobalTimeout']:
 				return
@@ -593,7 +586,7 @@ class Woofer:
 		# Check custom image
 		#
 		image = ""
-		if 'Image' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']] != "":
+		if self.settings.Commands[jsonData['command']]['Image'] != "":
 			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
 			if not os.path.isfile(image):
 				image = ""
@@ -602,13 +595,12 @@ class Woofer:
 		# Check custom script
 		#
 		script = ""
-		if 'Script' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']] != "":
+		if self.settings.Commands[jsonData['command']]['Script'] != "":
 			script = self.settings.pathRoot + "\\scripts\\" + self.settings.Commands[jsonData['command']]['Script']
 			if not os.path.isfile(script):
 				script = ""
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages[jsonData['command']]),
 			"image"      : image,
 			"script"     : script,
 			"sender"     : jsonData['display-name'],
@@ -630,7 +622,6 @@ class Woofer:
 		self.lurkingUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['lurk']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'lurk'
@@ -655,7 +646,6 @@ class Woofer:
 		self.unlurkingUsers.append(jsonData['sender'])
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['unlurk']),
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'unlurk'
