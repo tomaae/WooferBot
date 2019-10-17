@@ -74,7 +74,7 @@ class Settings:
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
 				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
 		
-		self.CheckConfigDependencies()
+		self.CheckSettingsDependencies()
 		return
 		
 	#---------------------------
@@ -131,6 +131,8 @@ class Settings:
 		except:
 			print("Unable to load settings.json")
 			exit(1)
+		
+		self.UpgradeSettingsFile()
 		
 		#
 		# CONVERT
@@ -405,9 +407,9 @@ class Settings:
 		return
 		
 	#---------------------------
-	#   CheckConfigDependencies
+	#   CheckSettingsDependencies
 	#---------------------------
-	def CheckConfigDependencies(self):
+	def CheckSettingsDependencies(self):
 		error = 0
 		
 		#
@@ -637,6 +639,36 @@ class Settings:
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
 			exit(1)
+		
+		return
+		
+	#---------------------------
+	#   UpgradeSettingsFile
+	#---------------------------
+	def UpgradeSettingsFile(self):
+		#
+		# ScheduledMessages Messages v1.2
+		#
+		for action in self.ScheduledMessages:
+			if 'Message' in action:
+				if action['Name'] in self.Messages:
+					print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. " + action['Name'] + " already exists in Messages.")
+					exit(1)
+				else:
+					self.Messages[action['Name']] = action['Message']
+					del action['Message']
+		
+		#
+		# Commands Messages v1.2
+		#
+		for action in self.Commands:
+			if 'Message' in self.Commands[action]:
+				if action in self.Messages:
+					print("Upgrade: Cannot migrate message values from Commands to Messages. " + action + " already exists in Messages.")
+					exit(1)
+				else:
+					self.Messages[action] = self.Commands[action]['Message']
+					del self.Commands[action]['Message']
 		
 		return
 		
