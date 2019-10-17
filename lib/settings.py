@@ -36,242 +36,6 @@ class Settings:
 		
 		self.Reload()
 		self.ReloadMascot()
-		self.CheckMascotDependencies()
-		return
-		
-	#---------------------------
-	#   CheckMascotDependencies
-	#---------------------------
-	def CheckMascotDependencies(self):
-		error = 0
-		
-		#
-		# Check mascot images configuration
-		#
-		for action in self.mascotImages:
-			if not os.path.isfile(self.mascotImages[action]['Image']):
-				print("Mascot image missing for action: " + action)
-				if action == "Idle":
-					error = 2
-				
-				if error < 2:
-					error = 1
-			
-			if action != 'Idle':
-				if 'MouthHeight' not in self.mascotImages[action]:
-					print("Mascot image mouth height missing for action: " + action)
-					error = 2
-				else:
-					if self.mascotImages[action]['MouthHeight'] < 1:
-						print("Mascot image mouth height is too small for action: " + action)
-						if error < 2:
-							error = 1
-				
-				if 'Time' not in self.mascotImages[action]:
-					print("Mascot image time missing for action: " + action)
-					error = 2
-				else:
-					if self.mascotImages[action]['Time'] < 100:
-						print("Mascot image time is too short for action: " + action)
-						if error < 2:
-							error = 1
-		
-		#
-		# Check mascot audio configuration
-		#
-		for action in self.mascotAudio:
-			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-				if not os.path.isfile(self.mascotAudio[action]['Audio'][idx]):
-					print("Mascot audio missing for action: " + action)
-					if error < 2:
-						error = 1
-			
-			if 'Volume' not in self.mascotAudio[action]:
-				print("Mascot audio volume missing for action: " + action)
-				error = 2
-			else:
-				if self.mascotAudio[action]['Volume'] > 0 and self.mascotAudio[action]['Volume'] <= 1:
-					error = error
-				else:
-					print("Mascot audio volume value is invalid for action: " + action)
-					if error < 2:
-						error = 1
-		
-		#
-		# Check mascot other configuration
-		#
-		if 'MascotMaxWidth' not in self.mascotStyles:
-			print("Mascot MascotMaxWidth missing")
-			error = 2
-		else:
-			if self.mascotStyles['MascotMaxWidth'] < 30:
-				print("Mascot MascotMaxWidth is too small")
-				if error < 2:
-					error = 1
-		
-		#
-		# Check default bindings
-		#
-		if 'Image' not in self.PoseMapping['DEFAULT']:
-			print("Default pose mapping Image variable is missing.")
-			error = 2
-		else:
-			if self.PoseMapping['DEFAULT']['Image'] not in self.mascotImages:
-				print("Default pose mapping Image reference does not exist.")
-				error = 2
-		
-		if 'Audio' not in self.PoseMapping['DEFAULT']:
-			print("Default pose mapping Audio variable is missing.")
-			error = 2
-		else:
-			if self.PoseMapping['DEFAULT']['Audio'] not in self.mascotAudio:
-				print("Default pose mapping Audio reference does not exist.")
-				if error < 2:
-					error = 1
-		
-		#
-		# Check other bindings
-		#
-		for action in self.PoseMapping:
-			if 'Image' not in self.PoseMapping[action]:
-				print("Pose mapping Image variable is missing for action: " + action)
-				if error < 2:
-					error = 1
-			else:
-				if self.PoseMapping[action]['Image'] not in self.mascotImages:
-					print("Pose mapping Image reference does not exist for action: " + action)
-					if error < 2:
-						error = 1
-			
-			if 'Audio' in self.PoseMapping[action]:
-				if self.PoseMapping[action]['Audio'] not in self.mascotAudio:
-						print("Pose mapping Audio reference does not exist for action: " + action)
-						if error < 2:
-							error = 1
-		
-		#
-		# Check messages
-		#
-		for action in self.Messages:
-			if not isinstance(self.Messages[action], list):
-				print("Message is not a list: " + action)
-				exit(1)
-		
-		for action in self.Enabled:
-			if action == 'autohost' or action == 'anonsubgift':
-				continue
-				
-			if action not in self.Messages:
-				print("Message does not exist: " + action)
-				exit(1)
-		
-		#
-		# Check ScheduledMessages
-		#
-		for action in self.ScheduledMessages:
-			if 'Name' not in action:
-				print("ScheduledMessages missing Name: ")
-				print(action)
-				exit(1)
-			
-			if 'Command' in action:
-				if action['Command'] not in self.Commands:
-					print("ScheduledMessages command not in command list: ")
-					print(action)
-					exit(1)
-			else:
-				if 'Message' not in action:
-					print("ScheduledMessages missing Message: ")
-					print(action)
-					exit(1)
-				
-				if not isinstance(action['Message'], list):
-					print("ScheduledMessages Message is not a list: ")
-					print(action)
-					exit(1)
-		
-		#
-		# Check Commands
-		#
-		for action in self.Commands:
-			if 'Message' not in self.Commands[action]:
-				print("Commands missing Message: " + action)
-				exit(1)
-			
-			if not isinstance(self.Commands[action]['Message'], list):
-				print("Commands message is not a list: " + action)
-				exit(1)
-		
-		#
-		# CustomBits
-		#
-		for action in self.CustomBits:
-			if 'Name' not in action:
-				print("CustomBits missing Name: ")
-				print(action)
-				exit(1)
-				
-			if 'From' not in action:
-				print("CustomBits is missing parameter From: " + action['Name'])
-				exit(1)
-				
-			if not isinstance(action['From'], int):
-				print("CustomBits is From value is not a number: " + action['Name'])
-				exit(1)
-				
-			if 'To' not in action:
-				print("CustomBits is missing parameter From: " + action['Name'])
-				exit(1)
-				
-			if not isinstance(action['To'], int):
-				print("CustomBits is To value is not a number: " + action['Name'])
-				exit(1)
-				
-			if action['From'] >= action['To']:
-				print("CustomBits From value is higher or equal to To: " + action['Name'])
-				exit(1)
-		
-		#
-		# CustomSubs
-		#
-		for action in self.CustomSubs:
-			if 'Name' not in action:
-				print("CustomSubs missing Name: ")
-				print(action)
-				exit(1)
-			
-			if 'From' not in action:
-				print("CustomSubs is missing parameter From: " + action['Name'])
-				exit(1)
-			
-			if not isinstance(action['From'], int):
-				print("CustomSubs is From value is not a number: " + action['Name'])
-				exit(1)
-			
-			if 'To' not in action:
-				print("CustomSubs is missing parameter From: " + action['Name'])
-				exit(1)
-			
-			if not isinstance(action['To'], int):
-				print("CustomSubs is To value is not a number: " + action['Name'])
-				exit(1)
-			
-			if action['From'] >= action['To']:
-				print("CustomSubs From value is higher or equal to To: " + action['Name'])
-				exit(1)
-		
-		#
-		# CustomGreets
-		#
-		for action in self.CustomGreets:
-			if not isinstance(self.CustomGreets[action], list):
-				print("CustomGreets message is not a list: " + action)
-				exit(1)
-		
-		if error == 2:
-			print("Mandatory dependencies are broken, see above.")
-			exit(1)
-		
 		return
 		
 	#---------------------------
@@ -310,6 +74,7 @@ class Settings:
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
 				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
 		
+		self.CheckConfigDependencies()
 		return
 		
 	#---------------------------
@@ -377,11 +142,19 @@ class Settings:
 			self.Bots.append(self.TwitchBotChannel)
 		self.Bots = [x.lower() for x in self.Bots]
 		
+		self.AutofillSettings()
+		self.Verify()
+		return
+		
+	#---------------------------
+	#   AutofillSettings
+	#---------------------------
+	def AutofillSettings(self):
 		#
 		# DEFAULT
 		#
 		if self.CurrentMascot == "":
-			self.CurrentMascot = "tomaae"
+			self.CurrentMascot = "malamute"
 		if self.HostMessage == "":
 			self.HostMessage = "is now hosting you."
 		if self.AutohostMessage == "":
@@ -579,8 +352,300 @@ class Settings:
 			self.Activities["ASMR"] = [
 				" and they were last streaming ASMR"
 			]
+			
+		## Autofill ScheduledMessages
+		for action in self.ScheduledMessages:
+			if 'Timer' not in action:
+				action['Timer'] = 30
+			if 'Enabled' not in action:
+				action['Enabled'] = False
+			if 'Command' not in action:
+				action['Command'] = ""
+			if 'Image' not in action:
+				action['Image'] = ""
 		
-		self.Verify()
+		## Autofill Commands
+		for action in self.Commands:
+			if 'Image' not in self.Commands[action]:
+				self.Commands[action]['Image'] = ""
+			if 'Script' not in self.Commands[action]:
+				self.Commands[action]['Script'] = ""
+			if 'Enabled' not in self.Commands[action]:
+				self.Commands[action]['Enabled'] = False
+			if 'ViewerOnce' not in self.Commands[action]:
+				self.Commands[action]['ViewerOnce'] = False
+			if 'ViewerTimeout' not in self.Commands[action]:
+				self.Commands[action]['ViewerTimeout'] = 0
+			if 'GlobalTimeout' not in self.Commands[action]:
+				self.Commands[action]['GlobalTimeout'] = 0
+			
+			## Autofill CustomBits
+			for action in self.CustomBits:
+				if 'From' not in action:
+					action['From'] = 0
+				if 'To' not in action:
+					action['To'] = 0
+					
+			## Autofill CustomSubs
+			for action in self.CustomSubs:
+				if 'From' not in action:
+					action['From'] = 0
+				if 'To' not in action:
+					action['To'] = 0
+			
+			## Autofill PoseMapping
+			for action in self.PoseMapping:
+				if 'Hue' in self.PoseMapping[action]:
+					for light in self.PoseMapping[action]['Hue']:
+						if 'Brightness' not in self.PoseMapping[action]['Hue'][light]:
+							self.PoseMapping[action]['Hue'][light]['Brightness'] = 0
+						if 'Color' not in self.PoseMapping[action]['Hue'][light]:
+							self.PoseMapping[action]['Hue'][light]['Color'] = "#ffffff"
+			
+		return
+		
+	#---------------------------
+	#   CheckConfigDependencies
+	#---------------------------
+	def CheckConfigDependencies(self):
+		error = 0
+		
+		#
+		# Check mascot images configuration
+		#
+		for action in self.mascotImages:
+			if not os.path.isfile(self.mascotImages[action]['Image']):
+				print("Mascot image missing for action: " + action)
+				if action == "Idle":
+					error = 2
+				
+				if error < 2:
+					error = 1
+			
+			if action != 'Idle':
+				if 'MouthHeight' not in self.mascotImages[action]:
+					print("Mascot image mouth height missing for action: " + action)
+					error = 2
+				else:
+					if self.mascotImages[action]['MouthHeight'] < 1:
+						print("Mascot image mouth height is too small for action: " + action)
+						if error < 2:
+							error = 1
+				
+				if 'Time' not in self.mascotImages[action]:
+					print("Mascot image time missing for action: " + action)
+					error = 2
+				else:
+					if self.mascotImages[action]['Time'] < 100:
+						print("Mascot image time is too short for action: " + action)
+						if error < 2:
+							error = 1
+		
+		#
+		# Check mascot audio configuration
+		#
+		for action in self.mascotAudio:
+			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
+				if not os.path.isfile(self.mascotAudio[action]['Audio'][idx]):
+					print("Mascot audio missing for action: " + action)
+					if error < 2:
+						error = 1
+			
+			if 'Volume' not in self.mascotAudio[action]:
+				print("Mascot audio volume missing for action: " + action)
+				error = 2
+			else:
+				if self.mascotAudio[action]['Volume'] > 0 and self.mascotAudio[action]['Volume'] <= 1:
+					error = error
+				else:
+					print("Mascot audio volume value is invalid for action: " + action)
+					if error < 2:
+						error = 1
+		
+		#
+		# Check mascot other configuration
+		#
+		if 'MascotMaxWidth' not in self.mascotStyles:
+			print("Mascot MascotMaxWidth missing")
+			error = 2
+		else:
+			if self.mascotStyles['MascotMaxWidth'] < 30:
+				print("Mascot MascotMaxWidth is too small")
+				if error < 2:
+					error = 1
+		
+		#
+		# Check default bindings
+		#
+		if 'Image' not in self.PoseMapping['DEFAULT']:
+			print("Default pose mapping Image variable is missing.")
+			error = 2
+		else:
+			if self.PoseMapping['DEFAULT']['Image'] not in self.mascotImages:
+				print("Default pose mapping Image reference does not exist.")
+				error = 2
+		
+		if 'Audio' not in self.PoseMapping['DEFAULT']:
+			print("Default pose mapping Audio variable is missing.")
+			if error < 2:
+				error = 1
+		else:
+			if self.PoseMapping['DEFAULT']['Audio'] not in self.mascotAudio:
+				print("Default pose mapping Audio reference does not exist.")
+				if error < 2:
+					error = 1
+		
+		#
+		# Check other bindings
+		#
+		for action in self.PoseMapping:
+			if 'Image' not in self.PoseMapping[action]:
+				print("Pose mapping Image variable is missing for action: " + action)
+				if error < 2:
+					error = 1
+			else:
+				if self.PoseMapping[action]['Image'] not in self.mascotImages:
+					print("Pose mapping Image reference does not exist for action: " + action)
+					if error < 2:
+						error = 1
+			
+			if 'Audio' in self.PoseMapping[action]:
+				if self.PoseMapping[action]['Audio'] not in self.mascotAudio:
+						print("Pose mapping Audio reference does not exist for action: " + action)
+						if error < 2:
+							error = 1
+		
+		#
+		# Check messages
+		#
+		for action in self.Messages:
+			if not isinstance(self.Messages[action], list):
+				print("Message is not a list: " + action)
+				exit(1)
+		
+		for action in self.Enabled:
+			if action == 'autohost' or action == 'anonsubgift':
+				continue
+				
+			if action not in self.Messages:
+				print("Message does not exist: " + action)
+				exit(1)
+		
+		#
+		# Check ScheduledMessages
+		#
+		for action in self.ScheduledMessages:
+			if 'Name' not in action:
+				print("ScheduledMessages missing Name: ")
+				print(action)
+				exit(1)
+			
+			if 'Command' in action:
+				if action['Command'] not in self.Commands:
+					print("ScheduledMessages command not in command list: ")
+					print(action)
+					exit(1)
+			else:
+				if 'Message' not in action:
+					print("ScheduledMessages missing Message: ")
+					print(action)
+					exit(1)
+				
+				if not isinstance(action['Message'], list):
+					print("ScheduledMessages Message is not a list: ")
+					print(action)
+					exit(1)
+		
+		#
+		# Check Commands
+		#
+		for action in self.Commands:
+			if 'Message' not in self.Commands[action]:
+				print("Commands missing Message: " + action)
+				exit(1)
+			
+			if not isinstance(self.Commands[action]['Message'], list):
+				print("Commands message is not a list: " + action)
+				exit(1)
+		
+		#
+		# CustomBits
+		#
+		for action in self.CustomBits:
+			if 'Name' not in action:
+				print("CustomBits missing Name: ")
+				print(action)
+				exit(1)
+				
+			if 'From' not in action:
+				print("CustomBits is missing parameter From: " + action['Name'])
+				exit(1)
+				
+			if not isinstance(action['From'], int):
+				print("CustomBits is From value is not a number: " + action['Name'])
+				exit(1)
+				
+			if 'To' not in action:
+				print("CustomBits is missing parameter From: " + action['Name'])
+				exit(1)
+				
+			if not isinstance(action['To'], int):
+				print("CustomBits is To value is not a number: " + action['Name'])
+				exit(1)
+				
+			if action['To'] == 0:
+				print("CustomBits To value is 0: " + action['Name'])
+				exit(1)
+				
+			if action['From'] > action['To']:
+				print("CustomBits From value is higher or equal to To: " + action['Name'])
+				exit(1)
+		
+		#
+		# CustomSubs
+		#
+		for action in self.CustomSubs:
+			if 'Name' not in action:
+				print("CustomSubs missing Name: ")
+				print(action)
+				exit(1)
+			
+			if 'From' not in action:
+				print("CustomSubs is missing parameter From: " + action['Name'])
+				exit(1)
+			
+			if not isinstance(action['From'], int):
+				print("CustomSubs is From value is not a number: " + action['Name'])
+				exit(1)
+			
+			if 'To' not in action:
+				print("CustomSubs is missing parameter From: " + action['Name'])
+				exit(1)
+			
+			if not isinstance(action['To'], int):
+				print("CustomSubs is To value is not a number: " + action['Name'])
+				exit(1)
+				
+			if action['To'] == 0:
+				print("CustomSubs To value is 0: " + action['Name'])
+				exit(1)
+			
+			if action['From'] > action['To']:
+				print("CustomSubs From value is higher or equal to To: " + action['Name'])
+				exit(1)
+		
+		#
+		# CustomGreets
+		#
+		for action in self.CustomGreets:
+			if not isinstance(self.CustomGreets[action], list):
+				print("CustomGreets message is not a list: " + action)
+				exit(1)
+		
+		if error == 2:
+			print("Mandatory dependencies are broken, see above.")
+			exit(1)
+		
 		return
 		
 	#---------------------------
