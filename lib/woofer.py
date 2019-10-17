@@ -48,9 +48,9 @@ class Woofer:
 		self.changedLightsHue      = {}
 		
 		## Reset time on all ScheduledMessages
-		for message in self.settings.ScheduledMessages:
+		for action in self.settings.ScheduledMessages:
 			currentEpoch = int(time.time())
-			message['LastShown'] = currentEpoch
+			action['LastShown'] = currentEpoch
 		
 		## Start timer for ScheduledMessages
 		threading.Timer(300, self.woofer_timer).start()
@@ -163,17 +163,17 @@ class Woofer:
 			return
 		
 		## Check if timer is enabled
-		for message in self.settings.ScheduledMessages:
-			if not message['Enabled']:
+		for action in self.settings.ScheduledMessages:
+			if not action['Enabled']:
 				continue
 			
 			currentEpoch = int(time.time())
-			if (currentEpoch - message['LastShown']) >= (message['Timer'] * 60):
-				message['LastShown'] = currentEpoch
+			if (currentEpoch - action['LastShown']) >= (action['Timer'] * 60):
+				action['LastShown'] = currentEpoch
 				
-				if 'Command' in message:
+				if 'Command' in action:
 					self.woofer_commands({
-						"command"      : message['Command'],
+						"command"      : action['Command'],
 						"broadcaster"  : 1,
 						"sender" : self.settings.TwitchChannel.lower(),
 						"display-name" : self.settings.TwitchChannel,
@@ -181,11 +181,11 @@ class Woofer:
 					})
 				else:
 					self.woofer_addtoqueue({
-						"message"    : random.SystemRandom().choice(message['Message']),
-						"image"      : self.settings.pathRoot + "\\images\\" + message['Image'],
+						"message"    : random.SystemRandom().choice(self.settings.Messages[action['Name']]),
+						"image"      : self.settings.pathRoot + "\\images\\" + action['Image'],
 						"sender"     : "",
 						"customtag"  : "ScheduledMessage",
-						"id"         : message['Name']
+						"id"         : action['Name']
 					})
 		
 		## Reset to default after X seconds
@@ -599,7 +599,7 @@ class Woofer:
 		# Check custom image
 		#
 		image = ""
-		if 'Image' in self.settings.Commands[jsonData['command']]:
+		if 'Image' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']] != "":
 			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
 			if not os.path.isfile(image):
 				image = ""
@@ -608,13 +608,13 @@ class Woofer:
 		# Check custom script
 		#
 		script = ""
-		if 'Script' in self.settings.Commands[jsonData['command']]:
+		if 'Script' in self.settings.Commands[jsonData['command']] and self.settings.Commands[jsonData['command']] != "":
 			script = self.settings.pathRoot + "\\scripts\\" + self.settings.Commands[jsonData['command']]['Script']
 			if not os.path.isfile(script):
 				script = ""
 		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Commands[jsonData['command']]['Message']),
+			"message"    : random.SystemRandom().choice(self.settings.Messages[jsonData['command']]),
 			"image"      : image,
 			"script"     : script,
 			"sender"     : jsonData['display-name'],
