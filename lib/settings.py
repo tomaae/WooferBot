@@ -15,7 +15,7 @@
 import codecs
 import json
 import os
-from time import time
+import time
 
 #---------------------------
 #   Settings Handling
@@ -107,6 +107,7 @@ class Settings:
 		self.Bots              = []
 		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []
+		self.scheduleTable     = {}
 		self.CustomBits        = []
 		self.CustomSubs        = []
 		self.CustomGreets      = {}
@@ -143,6 +144,12 @@ class Settings:
 		if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
 			self.Bots.append(self.TwitchBotChannel)
 		self.Bots = [x.lower() for x in self.Bots]
+		
+		#
+		# Reset time on all ScheduledMessages
+		#
+		for action in self.ScheduledMessages:
+			self.scheduleTable[action['Name']] = int(time.time())
 		
 		self.AutofillSettings()
 		self.Verify()
@@ -654,9 +661,11 @@ class Settings:
 			del self.CurrectMascot
 		
 		#
-		# ScheduledMessages Messages v1.2
+		# ScheduledMessages Messages and remove LastShown v1.2
 		#
 		for action in self.ScheduledMessages:
+			if 'LastShown' in action:
+				del action['LastShown']
 			if 'Message' in action:
 				if action['Name'] in self.Messages:
 					print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. " + action['Name'] + " already exists in Messages.")

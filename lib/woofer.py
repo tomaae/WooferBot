@@ -47,14 +47,8 @@ class Woofer:
 		self.changedLightsNanoleaf = ""
 		self.changedLightsHue      = {}
 		
-		## Reset time on all ScheduledMessages
-		for action in self.settings.ScheduledMessages:
-			currentEpoch = int(time.time())
-			action['LastShown'] = currentEpoch
-		
 		## Start timer for ScheduledMessages
 		threading.Timer(300, self.woofer_timer).start()
-		
 		return
 		
 	#---------------------------
@@ -168,8 +162,8 @@ class Woofer:
 				continue
 			
 			currentEpoch = int(time.time())
-			if (currentEpoch - action['LastShown']) >= (action['Timer'] * 60):
-				action['LastShown'] = currentEpoch
+			if (currentEpoch - self.settings.scheduleTable[action['Name']]) >= (action['Timer'] * 60):
+				self.settings.scheduleTable[action['Name']] = currentEpoch
 				
 				if 'Command' in action:
 					self.woofer_commands({
