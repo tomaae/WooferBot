@@ -540,32 +540,24 @@ class Settings:
 				print(action)
 				exit(1)
 			
-			if 'Command' in action:
-				if action['Command'] not in self.Commands:
-					print("ScheduledMessages command not in command list: ")
-					print(action)
-					exit(1)
-			else:
-				if 'Message' not in action:
-					print("ScheduledMessages missing Message: ")
-					print(action)
-					exit(1)
-				
-				if not isinstance(action['Message'], list):
-					print("ScheduledMessages Message is not a list: ")
-					print(action)
-					exit(1)
+			if not isinstance(action['Timer'], int):
+				print("ScheduledMessages Timer value is not a number: " + action['Name'])
+				exit(1)
+			
+			if action['Timer'] == 0:
+				print("ScheduledMessages Timer value is 0: " + action['Name'])
+				exit(1)
 		
 		#
 		# Check Commands
 		#
 		for action in self.Commands:
-			if 'Message' not in self.Commands[action]:
-				print("Commands missing Message: " + action)
+			if not isinstance(self.Commands[action]['ViewerTimeout'], int):
+				print("Commands ViewerTimeout value is not a number: " + action)
 				exit(1)
 			
-			if not isinstance(self.Commands[action]['Message'], list):
-				print("Commands message is not a list: " + action)
+			if not isinstance(self.Commands[action]['GlobalTimeout'], int):
+				print("Commands GlobalTimeout value is not a number: " + action)
 				exit(1)
 		
 		#
