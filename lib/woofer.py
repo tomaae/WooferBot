@@ -398,6 +398,7 @@ class Woofer:
 			"sender"     : jsonData['display-name'],
 			"months"       : jsonData['months'],
 			"months_streak": jsonData['months_streak'],
+			"sub_tier"     : jsonData['sub_tier'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'sub'
 		})
@@ -417,6 +418,7 @@ class Woofer:
 			"sender"       : jsonData['display-name'],
 			"months"       : jsonData['months'],
 			"months_streak": jsonData['months_streak'],
+			"sub_tier"     : jsonData['sub_tier'],
 			"customtag"    : jsonData['custom-tag'],
 			"id"           : customId
 		})
@@ -432,6 +434,7 @@ class Woofer:
 		self.woofer_addtoqueue({
 			"sender"     : jsonData['display-name'],
 			"recipient"  : jsonData['msg-param-recipient-display-name'],
+			"sub_tier"     : jsonData['sub_tier'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'subgift'
 		})
