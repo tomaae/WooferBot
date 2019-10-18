@@ -188,6 +188,9 @@ class Twitch:
 					# RAID
 					if jsonData['msg-id'] == 'raid':
 						jsonData['custom-tag'] = 'raid'
+						jsonData['viewers'] = ""
+						if 'msg-param-viewerCount' in jsonData:
+							jsonData['viewers'] = jsonData['msg-param-viewerCount']
 						self.woofer.ProcessJson(jsonData)
 						continue
 					

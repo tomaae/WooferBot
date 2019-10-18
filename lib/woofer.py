@@ -466,6 +466,7 @@ class Woofer:
 		self.woofer_addtoqueue({
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
+			"viewers"    : jsonData['viewers'],
 			"id"         : 'raid'
 		})
 		
