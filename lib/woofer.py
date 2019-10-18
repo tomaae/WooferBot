@@ -517,8 +517,8 @@ class Woofer:
 		
 		## Check for custom greeting definitions
 		customMessage = ""
-		if jsonData['display-name'] in self.settings.CustomGreets:
-			customMessage = random.SystemRandom().choice(self.settings.CustomGreets[jsonData['display-name']])
+		if 'viewer_' + jsonData['display-name'] in self.settings.Messages:
+			customMessage = random.SystemRandom().choice(self.settings.Messages['viewer_' + jsonData['display-name']])
 		
 		customId = 'greet'
 		if 'viewer_' + jsonData['display-name'] in self.settings.PoseMapping:
