@@ -110,7 +110,6 @@ class Settings:
 		self.scheduleTable     = {}
 		self.CustomBits        = []
 		self.CustomSubs        = []
-		self.CustomGreets      = {}
 		self.Commands          = {}
 		
 		self.NanoleafEnabled   = False
@@ -637,14 +636,6 @@ class Settings:
 				print("CustomSubs From value is higher or equal to To: " + action['Name'])
 				exit(1)
 		
-		#
-		# CustomGreets
-		#
-		for action in self.CustomGreets:
-			if not isinstance(self.CustomGreets[action], list):
-				print("CustomGreets message is not a list: " + action)
-				exit(1)
-		
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
 			exit(1)
@@ -687,6 +678,20 @@ class Settings:
 				else:
 					self.Messages[action] = self.Commands[action]['Message']
 					del self.Commands[action]['Message']
+		
+		#
+		# CustomGreets v1.2
+		#
+		if hasattr(self, 'CustomGreets'):
+			for action in self.CustomGreets:
+				if action in self.Messages:
+					print("Upgrade: Cannot migrate CustomGreets to Messages. " + action + " already exists in Messages.")
+					exit(1)
+			
+			for action in self.CustomGreets:
+				self.Messages["viewer_" + action] = self.CustomGreets[action]
+			
+			del self.CustomGreets
 		
 		return
 		
