@@ -197,24 +197,56 @@ class Twitch:
 					# SUB
 					if jsonData['msg-id'] == 'sub':
 						jsonData['custom-tag'] = 'sub'
+						if jsonData['msg-param-sub-plan'] == "Prime":
+							jsonData['sub_tier'] = 'Prime'
+						if jsonData['msg-param-sub-plan'] == "1000":
+							jsonData['sub_tier'] = 'Tier 1'
+						if jsonData['msg-param-sub-plan'] == "2000":
+							jsonData['sub_tier'] = 'Tier 2'
+						if jsonData['msg-param-sub-plan'] == "3000":
+							jsonData['sub_tier'] = 'Tier 3'
 						self.woofer.ProcessJson(jsonData)
 						continue
 					
 					# RESUB
 					if jsonData['msg-id'] == 'resub':
 						jsonData['custom-tag'] = 'resub'
+						if jsonData['msg-param-sub-plan'] == "Prime":
+							jsonData['sub_tier'] = 'Prime'
+						if jsonData['msg-param-sub-plan'] == "1000":
+							jsonData['sub_tier'] = 'Tier 1'
+						if jsonData['msg-param-sub-plan'] == "2000":
+							jsonData['sub_tier'] = 'Tier 2'
+						if jsonData['msg-param-sub-plan'] == "3000":
+							jsonData['sub_tier'] = 'Tier 3'
 						self.woofer.ProcessJson(jsonData)
 						continue
 					
 					# SUBGIFT
 					if jsonData['msg-id'] == 'subgift':
 						jsonData['custom-tag'] = 'subgift'
+						if jsonData['msg-param-sub-plan'] == "Prime":
+							jsonData['sub_tier'] = 'Prime'
+						if jsonData['msg-param-sub-plan'] == "1000":
+							jsonData['sub_tier'] = 'Tier 1'
+						if jsonData['msg-param-sub-plan'] == "2000":
+							jsonData['sub_tier'] = 'Tier 2'
+						if jsonData['msg-param-sub-plan'] == "3000":
+							jsonData['sub_tier'] = 'Tier 3'
 						self.woofer.ProcessJson(jsonData)
 						continue
 					
 					# ANON SUBGIFT
 					if jsonData['msg-id'] == 'anonsubgift':
 						jsonData['custom-tag'] = 'anonsubgift'
+						if jsonData['msg-param-sub-plan'] == "Prime":
+							jsonData['sub_tier'] = 'Prime'
+						if jsonData['msg-param-sub-plan'] == "1000":
+							jsonData['sub_tier'] = 'Tier 1'
+						if jsonData['msg-param-sub-plan'] == "2000":
+							jsonData['sub_tier'] = 'Tier 2'
+						if jsonData['msg-param-sub-plan'] == "3000":
+							jsonData['sub_tier'] = 'Tier 3'
 						self.woofer.ProcessJson(jsonData)
 						continue
 					
@@ -246,6 +278,7 @@ class Twitch:
 			"broadcaster": "0",
 			"bits_total": "0",
 			"bits": "0",
+			"sub_tier": ""
 			"display-name": "",
 			"msg-id": "", # Valid values: sub, resub, subgift, anonsubgift, raid, ritual.
 			"msg-param-viewerCount": "", # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
