@@ -30,9 +30,9 @@ class Settings:
 		if not os.path.isfile(self.pathRoot + "wooferbot.py"):
 			print("Working directory incorrect.")
 			exit(1)
-		if not os.path.isfile(self.pathRoot + "settings.json"):
-			print("Configuration file \"settings.json\" is missing.")
-			exit(1)
+		#if not os.path.isfile(self.pathRoot + "settings.json"):
+		#	print("Configuration file \"settings.json\" is missing.")
+		#	exit(1)
 		
 		self.Reload()
 		self.ReloadMascot()
@@ -123,16 +123,17 @@ class Settings:
 		#
 		# Load config
 		#
-		try:
-			with codecs.open(self.pathRoot + "settings.json", encoding="utf-8-sig", mode="r") as f:
-				data = json.load(f, encoding="utf-8")
-				for key, value in data.items():
-						self.__dict__[key] = value 
-		except:
-			print("Unable to load settings.json")
-			exit(1)
-		
-		self.UpgradeSettingsFile()
+		if os.path.isfile(self.pathRoot + "settings.json"):
+			try:
+				with codecs.open(self.pathRoot + "settings.json", encoding="utf-8-sig", mode="r") as f:
+					data = json.load(f, encoding="utf-8")
+					for key, value in data.items():
+							self.__dict__[key] = value 
+			except:
+				print("Unable to load settings.json")
+				exit(1)
+				
+			self.UpgradeSettingsFile()
 		
 		#
 		# CONVERT
@@ -151,6 +152,12 @@ class Settings:
 			self.scheduleTable[action['Name']] = int(time.time())
 		
 		self.AutofillSettings()
+		
+		if not os.path.isfile(self.pathRoot + "settings.json"):
+			self.Save()
+			print("Default configuration file has been created.")
+			exit(0)
+		
 		self.Verify()
 		return
 		
@@ -395,7 +402,7 @@ class Settings:
 					action['From'] = 0
 				if 'To' not in action:
 					action['To'] = 0
-					
+			
 			## Autofill CustomSubs
 			for action in self.CustomSubs:
 				if 'From' not in action:
@@ -411,7 +418,7 @@ class Settings:
 							self.PoseMapping[action]['Hue'][light]['Brightness'] = 0
 						if 'Color' not in self.PoseMapping[action]['Hue'][light]:
 							self.PoseMapping[action]['Hue'][light]['Color'] = "#ffffff"
-			
+		
 		return
 		
 	#---------------------------
@@ -730,25 +737,29 @@ class Settings:
 	#   Verify
 	#---------------------------
 	def Verify(self):
+		code = 0
 		## Check user name
 		if len(self.TwitchChannel) < 1:
 			print("Twitch channel not specified")
-			exit(1)
+			code = 1
 		
 		## Check OAUTH
 		if self.TwitchOAUTH.find('oauth:') != 0:
 			print("Twitch OAUTH is invalid")
-			exit(1)
+			code = 1
 		
 		## Check chatbot
 		if self.UseChatbot:
 			if len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
 				print("Twitch Bot OAUTH is invalid")
-				exit(1)
+				code = 1
 		
 		## Check twitch client ID
 		if len(self.twitchClientID) < 1:
 			print("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
-			exit(1)
+			code = 1
 		
+		if code:
+			exit(code)
+			
 		return
