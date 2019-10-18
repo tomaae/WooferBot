@@ -396,6 +396,8 @@ class Woofer:
 		self.woofer_addtoqueue({
 			"message"    : random.SystemRandom().choice(self.settings.Messages['sub']),
 			"sender"     : jsonData['display-name'],
+			"months"       : jsonData['months'],
+			"months_streak": jsonData['months_streak'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : 'sub'
 		})
@@ -412,10 +414,11 @@ class Woofer:
 				customId = customObj['Name']
 		
 		self.woofer_addtoqueue({
-			"sender"     : jsonData['display-name'],
-			"months"     : jsonData['months'],
-			"customtag"  : jsonData['custom-tag'],
-			"id"         : customId
+			"sender"       : jsonData['display-name'],
+			"months"       : jsonData['months'],
+			"months_streak": jsonData['months_streak'],
+			"customtag"    : jsonData['custom-tag'],
+			"id"           : customId
 		})
 		return
 		
