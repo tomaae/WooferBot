@@ -118,7 +118,7 @@ class Twitch:
 		for line in data:
 			line = line.strip()
 			line = line.split(" ")
-								
+			
 			if len(line) >= 1:
 				#
 				# PING
@@ -237,6 +237,7 @@ class Twitch:
 	#---------------------------
 	def fill_tags(self):
 		result = {
+			"vip": "0",
 			"moderator": "0",
 			"subscriber": "0",
 			"broadcaster": "0",
@@ -268,12 +269,12 @@ class Twitch:
 		tags = msg.split(";")
 		for tag in tags:
 			tag = tag.split("=")
-			#"@badges": "", # Comma-separated list of chat badges and the version of each badge (each in the format <badge>/<version>. Valid badge values: admin, bits, broadcaster, global_mod, moderator, subscriber, staff, turbo.
+			#"@badges": "", # Comma-separated list of chat badges and the version of each badge (each in the format <badge>/<version>. Valid badge values: admin, bits, broadcaster, global_mod, moderator, subscriber, vip, staff, turbo.
 			if tag[0] == 'badges':
 				badges = tag[1].split(",")
 				for badge in badges:
 					badge = badge.split("/")
-					if badge[0] == 'broadcaster' or badge[0] == 'moderator' or badge[0] == 'subscriber':
+					if badge[0] == 'broadcaster' or badge[0] == 'moderator' or badge[0] == 'subscriber' or badge[0] == 'vip':
 						if badge[0] in jsonData:
 							jsonData[badge[0]] = badge[1]
 							if badge[0] == 'broadcaster':
