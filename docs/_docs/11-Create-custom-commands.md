@@ -23,7 +23,11 @@ You can create simple custom replies using "Commands".
             "ViewerOnce": false,
             "ViewerTimeout": 0,
             "GlobalTimeout": 0,
-            "Access" : ""
+            "Access" : "",
+            "Aliases": [
+                "!hi",
+                "!hey"
+            ]
         }
     }
 ```
@@ -38,6 +42,7 @@ You can create simple custom replies using "Commands".
 * <span class="icon settings">ViewerTimeout</span> Command can be used only once per viewer within X number of seconds (0 - disabled).
 * <span class="icon settings">GlobalTimeout</span> Command can be used only once within X number of seconds (0 - disabled).
 * <span class="icon settings">Enabled</span> (true/false)
+* <span class="icon settings">Aliases</span> List of aliases for this comands.
 
 <br><span class="icon info">To add text messages to custom commands, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
 
