@@ -176,7 +176,7 @@ class Woofer:
 					self.woofer_commands({
 						"command"      : action['Command'],
 						"broadcaster"  : 1,
-						"sender" : self.settings.TwitchChannel.lower(),
+						"sender"       : self.settings.TwitchChannel.lower(),
 						"display-name" : self.settings.TwitchChannel,
 						"custom-tag"   : 'command'
 					})
