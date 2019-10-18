@@ -39,7 +39,7 @@ You can create simple custom replies using "Commands".
   * "sub" - Only subs, vips, mods or broadcaster can use the commands
   * "vip" - Only vips, mods or broadcaster can use the commands
   * "mod" - Only mods or broadcaster can use the commands
-  * "broadcasted" - Only broadcaster can use the commands
+  * "broadcaster" - Only broadcaster can use the commands
 * <span class="icon settings">ViewerOnce</span> (true/false) Command can be used only once per viewer during a session.
 * <span class="icon settings">ViewerTimeout</span> Command can be used only once per viewer within X number of seconds (0 - disabled).
 * <span class="icon settings">GlobalTimeout</span> Command can be used only once within X number of seconds (0 - disabled).
