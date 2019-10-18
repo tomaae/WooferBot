@@ -19,6 +19,7 @@ import random
 import threading
 import time
 import os
+from pynput.keyboard import Key, Controller
 
 #---------------------------
 #   Woofer logic
@@ -30,6 +31,8 @@ class Woofer:
 		self.nanoleaf       = nanoleaf
 		self.hue            = hue
 		self.chatbot        = chatbot
+		
+		self.keyboard = Controller()
 		
 		self.queue          = []
 		self.greetedUsers   = []
@@ -230,6 +233,38 @@ class Woofer:
 		#
 		if 'script' in jsonData and jsonData['script'] != "":
 			os.system("\"" + jsonData['script'] + "\"")
+		
+		#
+		# Execute hotkey
+		#
+		if 'hotkey' in jsonData and jsonData['hotkey'] != "":
+			keylist = {'space': Key.space, 'alt': Key.alt, 'ctrl': Key.ctrl, 'shift': Key.shift, 'f1': Key.f1, 'f2': Key.f2, 'f3': Key.f3, 'f4': Key.f4, 'f5': Key.f5, 'f6': Key.f6, 'f7': Key.f7, 'f8': Key.f8, 'f9': Key.f9, 'f10': Key.f10, 'f11': Key.f11, 'f12': Key.f12, 'left': Key.left, 'right': Key.right, 'up': Key.up, 'down': Key.down, 'backspace': Key.backspace, 'cmd': Key.cmd, 'delete': Key.delete, 'end': Key.end, 'enter': Key.enter, 'esc': Key.esc, 'home': Key.home, 'insert': Key.insert, 'page_down': Key.page_down, 'page_up': Key.page_up, 'pause': Key.pause, 'print_screen': Key.print_screen, 'tab': Key.tab}
+			
+			for key in jsonData['hotkey']:
+				if key in keylist:
+					try:
+						self.keyboard.press(keylist[key])
+					except:
+						print("Invalid hotkey in " + jsonData['id'])
+				else:
+					try:
+						self.keyboard.press(key)
+					except:
+						print("Invalid hotkey in " + jsonData['id'])
+			
+			time.sleep(0.05)
+			
+			for key in reversed(jsonData['hotkey']):
+				if key in keylist:
+					try:
+						self.keyboard.release(keylist[key])
+					except:
+						print("Invalid hotkey in " + jsonData['id'])
+				else:
+					try:
+						self.keyboard.release(key)
+					except:
+						print("Invalid hotkey in " + jsonData['id'])
 		
 		#
 		# Turn on Nanoleaf
@@ -625,6 +660,7 @@ class Woofer:
 		self.woofer_addtoqueue({
 			"image"      : image,
 			"script"     : script,
+			"hotkey"     : self.settings.Commands[jsonData['command']]['Hotkey'],
 			"sender"     : jsonData['display-name'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : jsonData['command']

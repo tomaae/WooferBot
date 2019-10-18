@@ -144,6 +144,8 @@ class Settings:
 		if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
 			self.Bots.append(self.TwitchBotChannel)
 		self.Bots = [x.lower() for x in self.Bots]
+		for action in self.Commands:
+			self.Commands[action]['Hotkey'] = [key.lower() for key in self.Commands[action]['Hotkey']]
 		
 		#
 		# Reset time on all ScheduledMessages
@@ -395,6 +397,8 @@ class Settings:
 				self.Commands[action]['GlobalTimeout'] = 0
 			if 'Aliases' not in self.Commands[action]:
 				self.Commands[action]['Aliases'] = []
+			if 'Hotkey' not in self.Commands[action]:
+				self.Commands[action]['Hotkey'] = []
 			
 			## Autofill CustomBits
 			for action in self.CustomBits:
