@@ -47,6 +47,7 @@ Inline randomizer will allow you to randomize a message further by substituting 
 - `{bits}` - Number of bits
 - `{months}` - Number of months (Used in resub)
 - `{activity}` - Activity (Used in shoutout for stream category)
+- `{viewers}` - Number of viewers (Used in raid)
 
 ### Customize user activities
 "Activities" are used for shoutout command to append customized stream category text.
