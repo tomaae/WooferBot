@@ -408,12 +408,12 @@ class Woofer:
 		## Check for custom sub definitions
 		customId = 'resub'
 		for customObj in self.settings.CustomSubs:
-			if int(jsonData['msg-param-cumulative-months']) >= int(customObj['From']) and int(jsonData['msg-param-cumulative-months']) <= int(customObj['To']):
+			if int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
 				customId = customObj['Name']
 		
 		self.woofer_addtoqueue({
 			"sender"     : jsonData['display-name'],
-			"months"     : jsonData['msg-param-cumulative-months'],
+			"months"     : jsonData['months'],
 			"customtag"  : jsonData['custom-tag'],
 			"id"         : customId
 		})

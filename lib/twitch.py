@@ -205,6 +205,8 @@ class Twitch:
 							jsonData['sub_tier'] = 'Tier 2'
 						if jsonData['msg-param-sub-plan'] == "3000":
 							jsonData['sub_tier'] = 'Tier 3'
+							
+						jsonData['months'] = jsonData['msg-param-cumulative-months']
 						self.woofer.ProcessJson(jsonData)
 						continue
 					
@@ -278,7 +280,8 @@ class Twitch:
 			"broadcaster": "0",
 			"bits_total": "0",
 			"bits": "0",
-			"sub_tier": ""
+			"sub_tier": "0",
+			"months": "0",
 			"display-name": "",
 			"msg-id": "", # Valid values: sub, resub, subgift, anonsubgift, raid, ritual.
 			"msg-param-viewerCount": "", # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
