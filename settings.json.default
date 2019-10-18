@@ -167,9 +167,5 @@
     ],
     "Commands": {
     },
-    "CustomGreets": {
-    },
-    "NanoleafEnabled": false,
-    "CustomBits": [
-    ]
+    "NanoleafEnabled": false
 }
