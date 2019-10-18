@@ -30,9 +30,8 @@ class Settings:
 		if not os.path.isfile(self.pathRoot + "wooferbot.py"):
 			print("Working directory incorrect.")
 			exit(1)
-		#if not os.path.isfile(self.pathRoot + "settings.json"):
-		#	print("Configuration file \"settings.json\" is missing.")
-		#	exit(1)
+		if not os.path.isfile(self.pathRoot + "settings.json"):
+			print("Configuration file is missing, recreating with defaults.")
 		
 		self.Reload()
 		self.ReloadMascot()
