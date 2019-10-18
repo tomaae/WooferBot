@@ -36,6 +36,8 @@ You can create simple custom replies using "Commands".
 * <span class="icon settings">Script</span> Execute a script (has to be placed into "scripts" directory)
 * <span class="icon settings">Access</span>
   * "" - Everyone can use the command if left empty
+  * "sub" - Only subs, vips, mods or broadcaster can use the commands
+  * "vip" - Only vips, mods or broadcaster can use the commands
   * "mod" - Only mods or broadcaster can use the commands
   * "broadcasted" - Only broadcaster can use the commands
 * <span class="icon settings">ViewerOnce</span> (true/false) Command can be used only once per viewer during a session.
