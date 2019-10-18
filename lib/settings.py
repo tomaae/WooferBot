@@ -103,6 +103,7 @@ class Settings:
 		self.MinBits           = 0
 		self.AutoShoutout      = False
 		self.AutoShoutoutTime  = 10
+		self.ShoutoutAccess    = "mod"
 		self.Bots              = []
 		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []

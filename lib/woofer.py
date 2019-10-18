@@ -681,8 +681,21 @@ class Woofer:
 		#
 		# Check access rights
 		#
-		if jsonData['moderator'] != '1':
-			return
+		if self.settings.ShoutoutAccess != "":
+			if int(jsonData['broadcaster']) == 1:
+				if self.settings.ShoutoutAccess not in ['sub', 'subs', 'subscriber', 'subscribers', 'vip', 'vips', 'mod', 'mods', 'moderator', 'moderators', 'broadcaster']:
+					return
+			elif int(jsonData['moderator']) == 1:
+				if self.settings.ShoutoutAccess not in ['sub', 'subs', 'subscriber', 'subscribers', 'vip', 'vips', 'mod', 'mods', 'moderator', 'moderators']:
+					return
+			elif int(jsonData['vip']) == 1:
+				if self.settings.ShoutoutAccess not in ['sub', 'subs', 'subscriber', 'subscribers', 'vip', 'vips']:
+					return
+			elif int(jsonData['subscriber']) == 1:
+				if self.settings.ShoutoutAccess not in ['sub', 'subs', 'subscriber', 'subscribers']:
+					return
+			else:
+				return
 		
 		#
 		# Check if channel parameter was specified
