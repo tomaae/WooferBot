@@ -16,7 +16,7 @@ This section explains installation process, broadcasting software setup and firs
 ### Download and prepare files
 1. Download and extract <a class="icon download" href="{{ site.github.latest_release.zipball_url }}">latest WooferBot release</a>.  
 2. Download and extract <a class="icon download" href="{{ site.github.url }}/assets/files/python37.zip">Embedded Python 3.7</a> into WooferBot main directory.
-3. Rename "settings.json.default" to "settings.json".
+3. Start WooferBot using <span class="icon file">wooferbot.cmd</span> to create default configuration file.
 
 ### Configure your login information
 Edit "settings.json" file and change login information for your <a class="icon website" href="https://www.twitch.tv" target="_blank">twitch.tv</a> account. These parameters are **mandatory** for bot to work.
