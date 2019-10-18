@@ -45,7 +45,7 @@ Inline randomizer will allow you to randomize a message further by substituting 
 - `{sender}` - Message sender / Notification initiator
 - `{recipient}` - Recipient (Used in gift sub and shoutout)
 - `{bits}` - Number of bits
-- `{sub_tier}` - sub tier (Used in sub, resub, subgift and anonsubgift)
+- `{sub_tier}` - sub tier (Used in sub, resub, subgift and anonsubgift. Messages: Tier 1, Tier 2, Tier 3, Prime)
 - `{months}` - Number of months (cumulative, used in sub and resub)
 - `{months_streak}` - Number of months in a row (used in sub and resub)
 - `{activity}` - Activity (Used in shoutout for stream category)
