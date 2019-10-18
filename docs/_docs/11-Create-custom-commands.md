@@ -27,6 +27,11 @@ You can create simple custom replies using "Commands".
             "Aliases": [
                 "!hi",
                 "!hey"
+            ],
+            "Hotkey": [
+                "ctrl",
+                "alt",
+                "f12"
             ]
         }
     }
@@ -45,6 +50,15 @@ You can create simple custom replies using "Commands".
 * <span class="icon settings">GlobalTimeout</span> Command can be used only once within X number of seconds (0 - disabled).
 * <span class="icon settings">Enabled</span> (true/false)
 * <span class="icon settings">Aliases</span> List of aliases for this comands.
+* <span class="icon settings">Hotkey</span> Execute global hotkey. Supported keys:
+  * all printable characters and numbers
+  * ctrl, alt, shift
+  * f1 - f12
+  * arrow buttons (up, down, left, right)
+  * print_screen, pause
+  * insert, delete, home, end, page_up, page_down
+  * enter, esc, tab, backspace
+  * cmd (Mac keyboard)
 
 <br><span class="icon info">To add text messages to custom commands, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
 
