@@ -19,10 +19,12 @@ Miscellaneous configurable parameters.
     "MinBits": 0,
     "AutoShoutout": false,
     "AutoShoutoutTime": 10,
+    "ShoutoutAccess": "mod"
     "Bots": []
 }
 ```
 * <span class="icon settings">CurrentMascot</span> Set active mascot.
+  * <a target="_blank" href="{{ site.github.url }}/mascots#apricot">apricot</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#beatrice">beatrice</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#cat-ragdoll">cat_ragdoll</a>
   * <a target="_blank" href="{{ site.github.url }}/mascots#cat-russian-blue">cat_russianblue</a>
@@ -38,6 +40,12 @@ Miscellaneous configurable parameters.
 * <span class="icon settings">MinBits</span> Minimum amount of bits to trigger a bit notification.
 * <span class="icon settings">AutoShoutout</span> (true/false) Enable automatic shoutout after raid and host.
 * <span class="icon settings">AutoShoutoutTime</span> Number of seconds between raid/host and automatic shoutout.
+* <span class="icon settings">ShoutoutAccess</span> Access rights for shoutout command:
+  * "" - Everyone can use the command if left empty
+  * "sub" - Only subs, vips, mods or broadcaster can use the command
+  * "vip" - Only vips, mods or broadcaster can use the command
+  * "mod" - Only mods or broadcaster can use the command
+  * "broadcaster" - Only broadcaster can use the command
 * <span class="icon settings">Bots</span> List of bots on your channel. This parameter is used for ignoring greetings and parse specific messages.
 
 Syntax:

@@ -4,8 +4,8 @@ anchor: configure-nanoleaf
 toc: 
  - name: Initial configuration
    anchor: initial-configuration
- - name: Setting Nanoleaf motions for mascot poses
-   anchor: setting-nanoleaf-motions-for-mascot-poses
+ - name: Configuring Nanoleaf motions for mascot poses
+   anchor: configuring-nanoleaf-motions-for-mascot-poses
 ---
 This section explains how to integrate Nanoleaf and use light scenes for notifications.
 
@@ -18,18 +18,19 @@ Enable Nanoleaf in the configuration file. IP will be automatically detected and
     "NanoleafToken": "qwertyuiopasdfghjklzxcvbnm"
 }
 ```
-* <span class="icon settings">NanoleafEnabled</span> Enable nanoleaf integration: true/false
+* <span class="icon settings">NanoleafEnabled</span> (true/false) Enable/disable nanoleaf integration
 
 <span class="icon idea">Note: Variables <span class="icon settings">NanoleafIP</span> and <span class="icon settings">NanoleafToken</span> are configured automatically.</span>
 
-### Setting Nanoleaf motions for mascot poses
+### Configuring Nanoleaf motions for mascot poses
 Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value.
 ```
     "PoseMapping": {
         "follow": {
             "Image": "Wave",
             "Audio": "Wave",
-            "Nanoleaf": "Nemo"
+            "Nanoleaf": "Nemo",
+            "NanoleafPersistent": false
         },
         "sub": {
             "Image": "Sub",
@@ -38,3 +39,5 @@ Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value
         }
     }
 ```
+
+* <span class="icon settings">NanoleafPersistent</span> (true/false) Apply light settings persistently. This will also replace Idle light mapping until bot is restarted.

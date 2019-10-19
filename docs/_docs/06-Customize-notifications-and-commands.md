@@ -45,8 +45,11 @@ Inline randomizer will allow you to randomize a message further by substituting 
 - `{sender}` - Message sender / Notification initiator
 - `{recipient}` - Recipient (Used in gift sub and shoutout)
 - `{bits}` - Number of bits
-- `{months}` - Number of months (Used in resub)
+- `{sub_tier}` - sub tier (Used in sub, resub, subgift and anonsubgift. Messages: Tier 1, Tier 2, Tier 3, Prime)
+- `{months}` - Number of months (cumulative, used in sub and resub)
+- `{months_streak}` - Number of months in a row (used in sub and resub)
 - `{activity}` - Activity (Used in shoutout for stream category)
+- `{viewers}` - Number of viewers (Used in raid)
 
 ### Customize user activities
 "Activities" are used for shoutout command to append customized stream category text.
@@ -88,12 +91,11 @@ By default, all notifications and commands are enabled.
 *Example:*
 ```
     "Enabled": {
-        "new_chatter": 0,
-        "greet": 1
+        "new_chatter": false,
+        "greet": true
     }
 ```
-* 1 - Enabled
-* 0 - Disabled
+* (true/false)
 
 <span class="icon info">See <a class="icon doc" href="{{ site.github.url }}/documentation#list-of-predefined-notification-and-commands">List of predefined notification and commands</a> section for all available notifications and commands.</span>
 
