@@ -18,10 +18,13 @@ import random
 #   CLI Handling
 #---------------------------
 class Cli:
-	def __init__(self, settings, woofer):
+	def __init__(self, settings, woofer, twitch, twitchBot):
 		self.woofer   = woofer
 		self.settings = settings
-
+		self.twitch = twitch
+		self.twitchBot = twitchBot
+		return
+	
 	def Start(self):
 		print("Starting cli...")
 		while True:
@@ -42,7 +45,8 @@ class Cli:
 				print(" 9 - Sub")
 				print("10 - Resub")
 				print("11 - Subgift")
-
+				print("r  - Reconnect to twitch")
+			
 			#
 			# Start
 			#
@@ -54,7 +58,7 @@ class Cli:
 						"command"      : "!start",
 						"custom-tag"   : "!start"
 				})
-				
+			
 			#
 			# Follow
 			#
@@ -63,7 +67,7 @@ class Cli:
 						"display-name" : "testname",
 						"custom-tag"   : "follow"
 				})
-					
+			
 			#
 			# Greet
 			#
@@ -73,7 +77,7 @@ class Cli:
 						"sender"       : "testname",
 						"custom-tag"   : "greet"
 				})
-					
+			
 			#
 			# Shoutout
 			#
@@ -85,7 +89,7 @@ class Cli:
 						"command_parameter" : "testname",
 						"custom-tag"   : "shoutout"
 				})
-				
+			
 			#
 			# Lurk
 			#
@@ -95,7 +99,7 @@ class Cli:
 						"sender"       : "testname",
 						"custom-tag"   : "lurk"
 				})
-					
+			
 			#
 			# Bits
 			#
@@ -105,7 +109,7 @@ class Cli:
 						"bits"         : "1000",
 						"custom-tag"   : "bits"
 				})
-					
+			
 			#
 			# New chatter
 			#
@@ -115,7 +119,7 @@ class Cli:
 						"sender"       : "testname",
 						"custom-tag"   : "new_chatter"
 				})
-				
+			
 			#
 			# Raid
 			#
@@ -125,7 +129,7 @@ class Cli:
 						"sender"       : "testname",
 						"custom-tag"   : "raid"
 				})
-				
+			
 			#
 			# Host
 			#
@@ -135,7 +139,7 @@ class Cli:
 						"sender"       : "testname",
 						"custom-tag"   : "host"
 				})
-					
+			
 			#
 			# Sub
 			#
@@ -145,7 +149,7 @@ class Cli:
 						"sender"       : "testname",
 						"custom-tag"   : "sub"
 				})
-				
+			
 			#
 			# Resub
 			#
@@ -156,7 +160,7 @@ class Cli:
 						"msg-param-cumulative-months" : "3",
 						"custom-tag"   : "resub"
 				})
-					
+			
 			#
 			# Subgift
 			#
@@ -167,6 +171,15 @@ class Cli:
 						"msg-param-recipient-display-name" : "testname2",
 						"custom-tag"   : "subgift"
 				})
+			
+			#
+			# Reconnect to twitch
+			#
+			if cmd == "r":
+				if self.twitch.connected:
+					self.twitch.Disconnect()
+				if self.twitchBot.connected:
+					self.twitchBot.Disconnect()
 			
 			#print(cmd)
 		return

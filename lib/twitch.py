@@ -13,31 +13,62 @@
 ##########################################################################
 
 import socket
-import threading
+from threading import Timer, Thread
 import json
 import re
+import time
 
 #---------------------------
 #   Twitch API
 #---------------------------
 class Twitch:
 	def __init__(self, settings, woofer, bot = False):
-		self.bot        = bot
-		self.settings   = settings
-		self.woofer     = woofer
-		self.host       = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
-		self.port       = 6667                                      # Default IRC-Port
-		self.chrset     = 'UTF-8'
-		self.con        = socket.socket()
-		self.connected  = False
-		self.linkTwitch = False
+		self.bot           = bot
+		self.settings      = settings
+		self.woofer        = woofer
+		self.host          = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
+		self.port          = 6667                                      # Default IRC-Port
+		self.chrset        = 'UTF-8'
+		self.con           = socket.socket()
+		self.conCheckTimer = Timer(30, self.ConnectionChecker)
+		self.lastPing      = 0
+		self.connected     = False
+		self.linkTwitch    = False
+		self.TwitchLogin   = ""
 		return
 		
 	#---------------------------
 	#   Connect
 	#---------------------------
 	def Connect(self):
-		threading.Thread(target=self.Connection).start()
+		Thread(target=self.Connection).start()
+		return
+		
+	#---------------------------
+	#   Disconnect
+	#---------------------------
+	def Disconnect(self):
+		self.connected = False
+		if self.conCheckTimer.is_alive():
+			self.conCheckTimer.cancel()
+		self.con.close()
+		return
+		
+	#---------------------------
+	#   ConnectionChecker
+	#---------------------------
+	def ConnectionChecker(self):
+		if not self.connected:
+			return
+		
+		if int(time.time()) > (self.lastPing + 400):
+			print("Connection " + self.TwitchLogin + " to Twitch not responding, reconnecting...")
+			self.connected = False
+			self.Disconnect()
+			return
+		
+		self.conCheckTimer = Timer(30, self.ConnectionChecker)
+		self.conCheckTimer.start()
 		return
 		
 	#---------------------------
@@ -74,6 +105,7 @@ class Twitch:
 		else:
 			TwitchLogin = self.settings.TwitchChannel
 			TwitchOAUTH = self.settings.TwitchOAUTH
+		self.TwitchLogin = TwitchLogin
 		
 		print("Connecting " + TwitchLogin + " to Twitch...")
 		
@@ -94,6 +126,11 @@ class Twitch:
 			return 1
 		print("Connected " + TwitchLogin + " to Twitch...")
 		self.connected = True
+		self.lastPing = int(time.time())
+		if self.conCheckTimer.is_alive():
+			self.conCheckTimer.cancel()
+		self.conCheckTimer = Timer(30, self.ConnectionChecker)
+		self.conCheckTimer.start()
 		
 		#
 		# Twitch loop
@@ -104,11 +141,19 @@ class Twitch:
 				data = data+self.con.recv(1024).decode(self.chrset)
 				data_split = re.split(r"[~\r\n]+", data)
 				data = data_split.pop()
-				threading.Thread(target=self.ProcessData, args=(data_split,)).start()
+				Thread(target=self.ProcessData, args=(data_split,)).start()
 			except socket.error:
 				print("Twitch " + TwitchLogin + " socket error")
+				self.connected = False
+				self.Connect()
+				break
 			except socket.timeout:
 				print("Twitch " + TwitchLogin + " socket timeout")
+				self.connected = False
+				self.Connect()
+				break
+				
+		self.Disconnect()
 		return
 		
 	#---------------------------
@@ -124,6 +169,7 @@ class Twitch:
 				# PING
 				#
 				if line[0] == 'PING':
+					self.lastPing = int(time.time())
 					self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
 					continue
 				

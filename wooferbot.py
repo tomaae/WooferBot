@@ -69,7 +69,7 @@ if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.Twitc
 	twitchBot.LinkTwitch(twitch)
 
 # Start CLI
-cli = Cli(settings=settings, woofer=woofer)
+cli = Cli(settings=settings, woofer=woofer, twitch=twitch, twitchBot=twitchBot)
 cli.Start()
 
 # Cleanup and exit
