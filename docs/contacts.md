@@ -28,9 +28,9 @@ tags:
 ## Team
 {% for member in site.team %}
 ### {{ member.name }}
-<div class="mascot"><div>
+<div class="team"><div>
 <img src="{{ site.github.url }}/assets/images/team/{{ member.anchor }}.png">
-</div><div><div>
+</div><div>
 {% if member.description %}
 <b>Description:</b> {{ member.description }}<br>
 {% if member.web -%}
@@ -41,7 +41,7 @@ tags:
 <a class="icon twitch" href="https://www.twitch.tv/{{ member.twitch }}" target="_blank">{{ member.twitch }}</a><br>
 {%- endif %}
 {% endif %}
-</div></div></div>
+</div></div>
 {% endfor %}
 
 ## Resources
