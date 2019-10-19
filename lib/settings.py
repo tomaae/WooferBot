@@ -413,6 +413,8 @@ class Settings:
 					action['From'] = 0
 				if 'To' not in action:
 					action['To'] = 0
+				if 'Tier' not in action:
+					action['Tier'] = ""
 			
 			## Autofill PoseMapping
 			for action in self.PoseMapping:

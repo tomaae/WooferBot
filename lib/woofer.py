@@ -428,14 +428,32 @@ class Woofer:
 	#   woofer_sub
 	#---------------------------
 	def woofer_sub(self,jsonData):
+		customId = 'sub'
+		for customObj in self.settings.CustomSubs:
+			if customObj['Tier'] == "" and int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
+				customId = customObj['Name']
+		
+		sub_tier = ""
+		if jsonData['sub_tier'] == "Tier 1":
+			sub_tier = "1"
+		if jsonData['sub_tier'] == "Tier 2":
+			sub_tier = "2"
+		if jsonData['sub_tier'] == "Tier 3":
+			sub_tier = "3"
+		if jsonData['sub_tier'] == "Prime":
+			sub_tier = "prime"
+		
+		for customObj in self.settings.CustomSubs:
+			if sub_tier == customObj['Tier'] and int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
+				customId = customObj['Name']
+		
 		self.woofer_addtoqueue({
-			"message"    : random.SystemRandom().choice(self.settings.Messages['sub']),
 			"sender"     : jsonData['display-name'],
 			"months"       : jsonData['months'],
 			"months_streak": jsonData['months_streak'],
 			"sub_tier"     : jsonData['sub_tier'],
 			"customtag"  : jsonData['custom-tag'],
-			"id"         : 'sub'
+			"id"         : customId
 		})
 		return
 		
@@ -446,7 +464,21 @@ class Woofer:
 		## Check for custom sub definitions
 		customId = 'resub'
 		for customObj in self.settings.CustomSubs:
-			if int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
+			if customObj['Tier'] == "" and int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
+				customId = customObj['Name']
+		
+		sub_tier = ""
+		if jsonData['sub_tier'] == "Tier 1":
+			sub_tier = "1"
+		if jsonData['sub_tier'] == "Tier 2":
+			sub_tier = "2"
+		if jsonData['sub_tier'] == "Tier 3":
+			sub_tier = "3"
+		if jsonData['sub_tier'] == "Prime":
+			sub_tier = "prime"
+		
+		for customObj in self.settings.CustomSubs:
+			if sub_tier == customObj['Tier'] and int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
 				customId = customObj['Name']
 		
 		self.woofer_addtoqueue({

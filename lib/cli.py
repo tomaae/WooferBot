@@ -83,11 +83,14 @@ class Cli:
 			#
 			if cmd == "3":
 				self.woofer.woofer_shoutout({
-						"moderator"    : "1",
-						"display-name" : "testname",
-						"sender"       : "testname",
+						"subscriber"        : "1",
+						"vip"               : "1",
+						"moderator"         : "1",
+						"broadcaster"       : "1",
+						"display-name"      : "testname",
+						"sender"            : "testname",
 						"command_parameter" : "testname",
-						"custom-tag"   : "shoutout"
+						"custom-tag"        : "shoutout"
 				})
 			
 			#
@@ -127,6 +130,7 @@ class Cli:
 				self.woofer.woofer_raid({
 						"display-name" : "testname",
 						"sender"       : "testname",
+						"viewers"      : "1",
 						"custom-tag"   : "raid"
 				})
 			
@@ -147,6 +151,9 @@ class Cli:
 				self.woofer.woofer_sub({
 						"display-name" : "testname",
 						"sender"       : "testname",
+						"sub_tier"     : "Tier 2",
+						"months"       : "4",
+						"months_streak": "4",
 						"custom-tag"   : "sub"
 				})
 			
@@ -157,7 +164,9 @@ class Cli:
 				self.woofer.woofer_resub({
 						"display-name" : "testname",
 						"sender"       : "testname",
-						"msg-param-cumulative-months" : "3",
+						"sub_tier"     : "Tier 2",
+						"months"       : "4",
+						"months_streak": "4",
 						"custom-tag"   : "resub"
 				})
 			
