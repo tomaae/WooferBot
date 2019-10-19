@@ -325,6 +325,36 @@ section.mascots .mascot b {
 	font-weight:bold;
 }
 
+section.contacts .team div {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width:400px;
+}
+
+section.contacts .team>div:first-child {
+	width:200px;
+}
+
+section.contacts .team>div:first-child img {
+	margin:0;
+	padding:0;
+	border:none;
+	display: block;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+section.contacts .team div {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 10px 0 0;
+}
+
+section.contacts .team b {
+	font-weight:bold;
+}
+
 /* Code blocks */
 
 code, pre {
