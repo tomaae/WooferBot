@@ -545,7 +545,10 @@ class Woofer:
 		
 		## Automatic shoutout
 		if self.settings.AutoShoutout:
+			jsonData['subscriber'] = '1'
+			jsonData['vip'] = '1'
 			jsonData['moderator'] = '1'
+			jsonData['broadcaster'] = '1'
 			jsonData['command_parameter'] = jsonData['display-name']
 			jsonData['custom-tag'] = 'shoutout'
 			threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
@@ -571,7 +574,10 @@ class Woofer:
 		
 		## Automatic shoutout
 		if self.settings.AutoShoutout:
+			jsonData['subscriber'] = '1'
+			jsonData['vip'] = '1'
 			jsonData['moderator'] = '1'
+			jsonData['broadcaster'] = '1'
 			jsonData['command_parameter'] = jsonData['display-name']
 			jsonData['custom-tag'] = 'shoutout'
 			threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()

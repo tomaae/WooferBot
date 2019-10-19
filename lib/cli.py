@@ -177,6 +177,7 @@ class Cli:
 				self.woofer.woofer_subgift({
 						"display-name" : "testname",
 						"sender"       : "testname",
+						"sub_tier"     : "Tier 2",
 						"msg-param-recipient-display-name" : "testname2",
 						"custom-tag"   : "subgift"
 				})
