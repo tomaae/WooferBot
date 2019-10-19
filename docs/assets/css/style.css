@@ -512,8 +512,12 @@ a.buttons.home {
 	background: url(../images/icons/home-sw.png) no-repeat 1px;
 }
 
-a.buttons.list {
+a.buttons.features {
 	background: url(../images/icons/checklist-sw.png) no-repeat 1px;
+}
+
+a.buttons.changelog {
+	background: url(../images/icons/versions-sw.png) no-repeat 1px;
 }
 
 a.buttons.paw {

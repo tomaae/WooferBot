@@ -20,9 +20,10 @@
 				<h1 class="header">{{ site.title | default: site.github.repository_name }}</h1>
 				<ul>
 					<li{% if page.url == "/" %} class="active"{% endif %}><a class="buttons home" href="{{ site.github.url }}/">Home</a></li>
+					<li{% if page.url == "/features.html" %} class="active"{% endif %}><a class="buttons features" href="{{ site.github.url }}/features">Features</a></li>
 					<li{% if page.url == "/mascots.html" %} class="active"{% endif %}><a class="buttons paw" href="{{ site.github.url }}/mascots">Mascots</a></li>
 					<li{% if page.url == "/documentation.html" %} class="active"{% endif %}><a class="buttons doc" href="{{ site.github.url }}/documentation">Documentation</a></li>
-					<li{% if page.url == "/changelog.html" %} class="active"{% endif %}><a class="buttons list" href="{{ site.github.url }}/changelog">Changelog</a></li>
+					<li{% if page.url == "/changelog.html" %} class="active"{% endif %}><a class="buttons changelog" href="{{ site.github.url }}/changelog">Changelog</a></li>
 					<li{% if page.url == "/contacts.html" %} class="active"{% endif %}><a class="buttons contacts" href="{{ site.github.url }}/contacts">Contacts</a></li>
 					<li{% if page.url == "/license.html" %} class="active"{% endif %}><a class="buttons license" href="{{ site.github.url }}/license">License</a></li>
 				</ul>
