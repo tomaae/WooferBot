@@ -8,7 +8,8 @@ tags:
   - panels
   - panel
   - banners
-  - banner  
+  - banner
+  - team
 ---
 ## Contacts
 
@@ -23,7 +24,26 @@ tags:
 **Bug report on Github**
 
 <a class="icon github" href="https://github.com/tomaae/WooferBot/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBug%5D" target="_blank">Report an issue</a>
- 
+
+## Team
+{% for member in site.team %}
+### {{ member.name }}
+<div class="mascot"><div>
+<img src="{{ site.github.url }}/assets/images/team/{{ member.anchor }}.png">
+</div><div><div>
+{% if member.description %}
+<b>Description:</b> {{ member.description }}<br>
+{% if member.web -%}
+<a class="icon website" href="{{ member.web }}" title="{{ member.web }}" target="_blank">{{ member.web }}</a><br>
+{%- endif %}{% if member.twitter -%}
+<a class="icon tweet" href="https://twitter.com/{{ member.twitter }}" target="_blank">@{{ member.twitter }}</a><br>
+{%- endif %}{% if member.twitch -%}
+<a class="icon twitch" href="https://www.twitch.tv/{{ member.twitch }}" target="_blank">{{ member.twitch }}</a><br>
+{%- endif %}
+{% endif %}
+</div></div></div>
+{% endfor %}
+
 ## Resources
 Do you want a WooferBot panel for your twitch profile or website?
 ![Twitch Panel](/assets/images/panels/apricot.png)
