@@ -40,4 +40,5 @@ Add "Nanoleaf" variable into pose mapping and enter Nanoleaf motion as its value
     }
 ```
 
+* <span class="icon settings">Nanoleaf</span> Nanoleaf motion name (See Nanoleaf app).
 * <span class="icon settings">NanoleafPersistent</span> (true/false) Apply light settings persistently. This will also replace Idle light mapping until bot is restarted.
