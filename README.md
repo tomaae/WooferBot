@@ -28,11 +28,13 @@ Installation and configuration instruction available on [WooferBot website](http
 - Custom
   - Create custom timers
   - Create custom commands
+    - Execute scripts or hotkeys to interact with other software
   - Create custom greeting for individual viewers
-  - Create custom sub notification for different sub lengths or ranges
+  - Create custom sub notification for different sub lengths, ranges and tiers
   - Create custom bit notification for different bit amounts or ranges
   
 - Other
+  - Optional Chatbot, can use secondary account to reply in chat
   - Fully customizable replies
   - Can pick from multiple replies for better diversity
   - Each type of bot interaction can be disabled individually
