@@ -328,7 +328,7 @@ class Woofer:
 			if self.changedLightsNanoleaf:
 				self.nanoleaf.Scene(self.changedLightsNanoleaf)
 			## Reset to Idle lights
-			elif 'Nanoleaf' in self.settings.PoseMapping['Idle']:
+			elif 'Idle' in self.settings.PoseMapping and 'Nanoleaf' in self.settings.PoseMapping['Idle']:
 				self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
 			## Turn off lights
 			else:
@@ -350,7 +350,7 @@ class Woofer:
 							self.hue.state(device = device)
 			
 			## Reset to Idle lights
-			elif 'Hue' in self.settings.PoseMapping['Idle']:
+			elif 'Idle' in self.settings.PoseMapping and 'Hue' in self.settings.PoseMapping['Idle']:
 				for device in self.settings.PoseMapping['Idle']['Hue']:
 					if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
 						self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
