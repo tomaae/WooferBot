@@ -60,7 +60,8 @@ You can create simple custom replies using "Commands".
   * enter, esc, tab, backspace
   * cmd (Mac keyboard)
 
-<br><span class="icon info">To add text messages to custom commands, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
+<br>
+<span class="icon info">To add text messages to custom commands, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
 
 ### Mapping mascot poses to custom commands
 PoseMapping allows you to map available mascot poses to your custom commands.

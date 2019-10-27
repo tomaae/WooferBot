@@ -12,6 +12,7 @@ This section explains how to create and edit timers.
 ### Configuring custom timers/scheduled messages
 Allows you to schedule a message to appear every X minutes.
 
+<br>
 *Example:*
 ```
     "ScheduledMessages": [
@@ -31,7 +32,8 @@ Allows you to schedule a message to appear every X minutes.
 * <span class="icon settings">Command</span> Name of a custom command. This will execute custom command (Image and Message values in this scheduled message will be ignored).
 * <span class="icon settings">Image</span> Optional image (has to be placed into "images" directory)
 
-<br><span class="icon info">To add text messages to timers, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
+<br>
+<span class="icon info">To add text messages to timers, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
 
 ### Mapping mascot poses to timed messages
 PoseMapping allows you to map available mascot poses to timed messages.

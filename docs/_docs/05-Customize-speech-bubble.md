@@ -36,4 +36,4 @@ You can use styles to customize a speech bubble.
 
 <span class="icon idea">Note: All colors are defined with hashtag, followed by 6-digit hexidecimal number.
 You can use web based <a class="icon website" href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">color picker</a> to choose or convert colors.</span>
-<br><span class="icon idea">Note: Size, width, radius, spacing and offset are defined in pixels.</span>
+<span class="icon idea">Note: Size, width, radius, spacing and offset are defined in pixels.</span>

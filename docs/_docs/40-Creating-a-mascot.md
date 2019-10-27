@@ -17,6 +17,7 @@ For smooth looking transitions, all mascot images should follow these guidelines
 * Mascot should be centered vertically in the image
 * Mascot's "feet" should be at same position from bottom
 
+<br>
 Recommended poses:
 * Default idle pose
 * Greeting pose (commonly used for greeting new chatters)
@@ -28,6 +29,7 @@ Recommended poses:
 2. Create following subdirectories within your mascot directory: "images", "audio"
 3. Create an empty configuration file within your mascot directory: "mascot.json"
 
+<br>
 *Example directory structure:*
 ```
 \mascots\mymascot\
@@ -39,6 +41,7 @@ Recommended poses:
 ### Configure mascot
 Mascot configuration file is used to map mascot pose names to custom images and their parameters.
 
+<br>
 Example:
 ```
 {
@@ -92,20 +95,24 @@ Example:
 * You can also create additional poses with custom names
 * Custom Images and Audio pose names do not have to match
 
+<br>
 **List of recommended poses**
 * Idle
 * Wave
 * Happy
 * Snack
 
+<br>
 **List of image parameters**
 * <span class="icon settings">Image</span> Image file name (preferred: png for static, gif for animated)
 * <span class="icon settings">MouthHeight</span> Height of mascot's mouth in this image. Message bubble arrow will be set to this height.
 * <span class="icon settings">Time</span> Duration in miliseconds (also used for timing in case of animated files)
 
+<br>
 **List of audio parameters**
 * <span class="icon settings">Audio</span> Audio file name (preferred: mp3)
 * <span class="icon settings">Volume</span> Audio volume level 0-1 (Accepts decimal values)
 
+<br>
 **List of styles**
 * <span class="icon settings">MascotMaxWidth</span> Width of widest pose image

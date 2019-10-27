@@ -31,7 +31,9 @@ It is possible to define multiple replies for each message and have bot pick one
         ]
     }
 ```
+
 <span class="icon info">See <a class="icon doc" href="{{ site.github.url }}/documentation#list-of-predefined-notification-and-commands">List of predefined notification and commands</a> section for all available notifications and commands.</span>
+<br><br>
 
 **Inline randomizer**
 
@@ -39,6 +41,7 @@ Inline randomizer will allow you to randomize a message further by substituting 
 ```
 [Hello;Hi;Hey;Hewwo;Ello]
 ```
+
 <span class="icon idea">Note: Inline randomizers can be used multiple times in one message.</span>
 
 **List of substitutes**
@@ -68,6 +71,7 @@ Blank space at the beginning of activity text is **required**.
 **List of substitutes**
 - `{activity}` - Game name or stream category
 
+<br>
 **List of activities**
 - Game
 - Art
@@ -97,6 +101,7 @@ By default, all notifications and commands are enabled.
 ```
 * (true/false)
 
+<br>
 <span class="icon info">See <a class="icon doc" href="{{ site.github.url }}/documentation#list-of-predefined-notification-and-commands">List of predefined notification and commands</a> section for all available notifications and commands.</span>
 
 ### Mapping mascot poses to notifications

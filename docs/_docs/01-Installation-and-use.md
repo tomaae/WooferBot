@@ -29,15 +29,15 @@ Edit "settings.json" file and change login information for your <a class="icon w
 * <span class="icon settings">TwitchChannel</span> Channel name.
 * <span class="icon settings">TwitchOAUTH</span> How to obtain a Twitch OAUTH: <a class="icon twitch" href="https://www.twitchapps.com/tmi/" target="_blank">www.twitchapps.com/tmi/</a>
 
-<br><span class="icon idea">Never share your Twitch OAUTH with anyone. If someone has seen your OAUTH, generate a new one as soon as possible.</span>
+<span class="icon idea">Never share your Twitch OAUTH with anyone. If someone has seen your OAUTH, generate a new one as soon as possible.</span>
 
 ### Add overlay
 Add <span class="icon file">overlay.html</span> as <a class="icon website" href="https://obsproject.com/wiki/Sources-Guide#browsersource" target="_blank">browser source</a> into your broadcasting software (<a class="icon website" href="https://obsproject.com" target="_blank">OBS</a>, etc...).
 
 <span class="icon idea">Note: <a class="icon website" href="https://obsproject.com" target="_blank">OBS</a> seems to have an issue with "local file" option. If "local file" option does not work for you, open <span class="icon file">overlay.html</span> in your browser and copy URL instead.</span>
-<br><span class="icon info">Recommended width: 1000px</span>
-<br><span class="icon info">Recommended height: 500px</span>
-
+<span class="icon info">Recommended width: 1000px</span><br>
+<span class="icon info">Recommended height: 500px</span><br>
+<br>
 **Best practices**
 * Do not use "Shutdown source when not visible".
 * Add WooferBot browser source into a dedicated scene.

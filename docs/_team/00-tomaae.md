@@ -1,5 +1,5 @@
 ---
-name: Tomaae
+name: TOMAAE
 anchor: tomaae
 description: Developer
 twitter: Tomaae_

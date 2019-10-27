@@ -13,6 +13,7 @@ You can define separate notification for specific amount or ranges.
 * <span class="icon settings">CustomBits</span> Array of bit notification ranges
 * <span class="icon settings">CustomSubs</span> Array of subscription notification ranges
 
+<br>
 *Example:*
 ```
     "CustomBits": [
@@ -47,6 +48,5 @@ You can define separate notification for specific amount or ranges.
   * "2" - Tier 2
   * "3" - Tier 3
 
-
-<br><span class="icon idea">Note: You do not have to create a custom message for CustomBits/CustomSubs range. In that case, default bit message will be used.</span>
-<br><span class="icon info">To add text messages to custom bit range, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>
+<span class="icon idea">Note: You do not have to create a custom message for CustomBits/CustomSubs range. In that case, default bit message will be used.</span>
+<span class="icon info">To add text messages to custom bit range, see <a class="icon doc" href="{{ site.github.url }}/documentation#customize-notifications-and-commands">Customize notifications and commands</a>.</span>

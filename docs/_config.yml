@@ -1,7 +1,7 @@
 title: WooferBot
-show_downloads: true
 google_analytics: UA-149401054-1
 collections:
   - docs
-  - mascots
+  - mascots_human
+  - mascots_animal
   - team

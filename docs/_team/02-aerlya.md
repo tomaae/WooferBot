@@ -1,5 +1,5 @@
 ---
-name: Aerlya
+name: AERLYA
 anchor: aerlya
 description: Web Designer
 twitter: AerlyaTV

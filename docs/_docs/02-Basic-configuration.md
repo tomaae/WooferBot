@@ -48,10 +48,12 @@ Miscellaneous configurable parameters.
   * "broadcaster" - Only broadcaster can use the command
 * <span class="icon settings">Bots</span> List of bots on your channel. This parameter is used for ignoring greetings and parse specific messages.
 
+<br>
 Syntax:
 ```
 "Bots": ["mybot1", "mybot2"]
 ```
+
 <span class="icon idea">Note: Following bots are already included: nightbot, streamlabs, streamelements, stay_hydrated_bot, botisimo, wizebot, moobot</span>
 
 ### Chat parser configuration

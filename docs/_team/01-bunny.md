@@ -1,7 +1,7 @@
 ---
-name: Bunny
+name: BUNNY
 anchor: bunny
-description: GUI Designer
+description: UI Designer
 twitter: engineerbun
 twitch: engineerbunny
 web: 
