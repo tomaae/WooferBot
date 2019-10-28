@@ -38,9 +38,9 @@ mascotFilter = function(filter) {
 }
 
 function mascotHover(mascot) {
-	document.getElementById("m_" + mascot).getElementsByTagName('img')[0].setAttribute('src', mascot + '-wave.png');
+	document.getElementById("m_" + mascot).getElementsByTagName('img')[0].setAttribute('src', 'assets/images/mascots/' + mascot + '-wave.png');
 }
 
 function mascotUnhover(mascot) {
-	document.getElementById("m_" + mascot).getElementsByTagName('img')[0].setAttribute('src', mascot + '.png');
+	document.getElementById("m_" + mascot).getElementsByTagName('img')[0].setAttribute('src', 'assets/images/mascots/' + mascot + '.png');
 }
