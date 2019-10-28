@@ -36,3 +36,11 @@ mascotFilter = function(filter) {
 			break;
 	}
 }
+
+function mascotHover(mascot) {
+	document.getElementById("m_" + mascot).getElementsByTagName('img')[0].setAttribute('src', mascot + '-wave.png');
+}
+
+function mascotUnhover(mascot) {
+	document.getElementById("m_" + mascot).getElementsByTagName('img')[0].setAttribute('src', mascot + '.png');
+}

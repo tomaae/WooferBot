@@ -17,7 +17,7 @@ tags:
 <div>
 <div id="f_humanoid"><span class="caption">HUMAN, HUMANOID</span>
 {% for mascot in site.mascots_human %}
-<div class="list_m" id="m_{{ mascot.anchor }}">
+<div class="list_m" id="m_{{ mascot.anchor }}" onmouseover="mascotHover('{{ mascot.anchor }}')" onmouseout="mascotUnhover('{{ mascot.anchor }}')">
 	<div><img src="{{ site.github.url }}/assets/images/mascots/{{ mascot.anchor }}.png"></div>
 	<div>
 		<div>{{ mascot.name }}</div>
@@ -48,7 +48,7 @@ tags:
 </div>
 <div id="f_animal"><span class="caption">ANIMAL, CREATURE</span>
 {% for mascot in site.mascots_animal %}
-<div class="list_m" id="m_{{ mascot.anchor }}">
+<div class="list_m" id="m_{{ mascot.anchor }}" onmouseover="mascotHover('{{ mascot.anchor }}')" onmouseout="mascotUnhover('{{ mascot.anchor }}')">
 	<div><img src="{{ site.github.url }}/assets/images/mascots/{{ mascot.anchor }}.png"></div>
 	<div>
 		<div>{{ mascot.name }}</div>
