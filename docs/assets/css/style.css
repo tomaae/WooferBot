@@ -472,6 +472,7 @@ section.mascots .list_m>div:first-of-type, section.contacts .list_t>div:first-of
 	padding-right:20px;
 	width: 116px;
 	vertical-align:bottom;
+	text-align: center;
 }
 
 section.mascots .list_m>div:first-of-type img, section.contacts .list_t>div:first-of-type img {
