@@ -25,11 +25,12 @@ from pynput.keyboard import Key, Controller
 #   Woofer logic
 #---------------------------
 class Woofer:
-	def __init__(self, settings, overlay, nanoleaf, hue, chatbot):
+	def __init__(self, settings, overlay, nanoleaf, hue, yeelight, chatbot):
 		self.settings       = settings
 		self.overlay        = overlay
 		self.nanoleaf       = nanoleaf
 		self.hue            = hue
+		self.yeelight       = yeelight
 		self.chatbot        = chatbot
 		
 		self.keyboard = Controller()
@@ -49,6 +50,7 @@ class Woofer:
 		
 		self.changedLightsNanoleaf = ""
 		self.changedLightsHue      = {}
+		self.changedLightsYeelight = {}
 		
 		## Start timer for ScheduledMessages
 		threading.Timer(300, self.woofer_timer).start()

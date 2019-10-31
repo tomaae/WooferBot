@@ -23,7 +23,7 @@ import random
 #   Overlay Handling
 #---------------------------
 class Overlay:
-	def __init__(self, settings, nanoleaf, hue, chatbot):
+	def __init__(self, settings, nanoleaf, hue, yeelight, chatbot):
 		self.bindIP       = '127.0.0.1'
 		self.bindPort     = 3339
 		self.active       = 0
@@ -35,6 +35,7 @@ class Overlay:
 		self.chatbot      = chatbot
 		self.nanoleaf     = nanoleaf
 		self.hue          = hue
+		self.yeelight     = yeelight
 		
 	#---------------------------
 	#   Start
