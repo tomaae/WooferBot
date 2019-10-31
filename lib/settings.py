@@ -120,6 +120,8 @@ class Settings:
 		self.HueIP             = ""
 		self.HueToken          = ""
 		
+		self.YeelightEnabled   = False
+		
 		#
 		# Load config
 		#
@@ -424,6 +426,17 @@ class Settings:
 							self.PoseMapping[action]['Hue'][light]['Brightness'] = 0
 						if 'Color' not in self.PoseMapping[action]['Hue'][light]:
 							self.PoseMapping[action]['Hue'][light]['Color'] = "#ffffff"
+							
+				if 'Yeelight' in self.PoseMapping[action]:
+					for light in self.PoseMapping[action]['Yeelight']:
+						if 'Brightness' not in self.PoseMapping[action]['Yeelight'][light]:
+							self.PoseMapping[action]['Yeelight'][light]['Brightness'] = 0
+						if 'Color' not in self.PoseMapping[action]['Yeelight'][light]:
+							self.PoseMapping[action]['Yeelight'][light]['Color'] = "#ffffff"
+						if 'Transition' not in self.PoseMapping[action]['Yeelight'][light]:
+							self.PoseMapping[action]['Yeelight'][light]['Transition'] = True
+						if 'TransitionTime' not in self.PoseMapping[action]['Yeelight'][light]:
+							self.PoseMapping[action]['Yeelight'][light]['TransitionTime'] = 1000		
 		
 		return
 		
