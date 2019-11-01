@@ -132,6 +132,12 @@ class Overlay:
 					for device in self.settings.PoseMapping['Idle']['Hue']:
 						if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
 							self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+				
+				## Reset Yeelight to Idle
+				if 'Yeelight' in self.settings.PoseMapping['Idle']:
+					for device in self.settings.PoseMapping['Idle']['Yeelight']:
+						if 'Brightness' in self.settings.PoseMapping['Idle']['Yeelight'][device] and self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Yeelight'][device] and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) <= 7 and isinstance(self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'], int):
+							self.yeelight.state(device = device, brightness = self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'], color = self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'], transition = self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'], transitionTime = self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
 			
 			## Send Idle payload
 			jsonData = {
