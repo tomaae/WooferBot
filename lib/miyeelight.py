@@ -46,7 +46,7 @@ class Yeelight:
 	#---------------------------
 	#   state
 	#---------------------------
-	def state(self, device, color = "", brightness = 100, transition = True, transitionTime = 1500):
+	def state(self, device, color = "", brightness = 100, transition = True, transitionTime = 1000):
 		## Check if yeelight is active
 		if not self.active:
 			return

@@ -436,7 +436,7 @@ class Settings:
 						if 'Transition' not in self.PoseMapping[action]['Yeelight'][light]:
 							self.PoseMapping[action]['Yeelight'][light]['Transition'] = True
 						if 'TransitionTime' not in self.PoseMapping[action]['Yeelight'][light]:
-							self.PoseMapping[action]['Yeelight'][light]['TransitionTime'] = 1500
+							self.PoseMapping[action]['Yeelight'][light]['TransitionTime'] = 1000
 		
 		return
 		
