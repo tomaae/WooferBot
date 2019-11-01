@@ -26,6 +26,7 @@ from twitch import Twitch
 from cli import Cli
 from nanoleaf import Nanoleaf
 from hue import Hue
+from miyeelight import Yeelight
 
 #---------------------------
 #   Main
@@ -47,6 +48,9 @@ nanoleaf = Nanoleaf(settings=settings)
 # Initialize Philips HUE
 hue = Hue(settings=settings)
 
+# Initialize Philips HUE
+yeelight = Yeelight(settings=settings)
+
 settings.Save()
 
 # Initialize twitch chatbot
@@ -55,12 +59,12 @@ if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.Twitc
 	twitchBot.Connect()
 
 # Initialize overlay
-overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, chatbot=twitchBot)
+overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchBot)
 overlay.Start()
 
 
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, chatbot=twitchBot)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchBot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
