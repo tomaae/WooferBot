@@ -370,7 +370,7 @@ class Woofer:
 				
 				for device in old_jsonData['hue']:
 					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
-						if device not in self.settings.PoseMapping['Idle']:
+						if device not in self.settings.PoseMapping['Idle']['Hue']:
 							self.hue.state(device = device)
 			
 			## Turn off lights
