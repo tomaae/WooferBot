@@ -286,6 +286,17 @@ class Woofer:
 			
 			if 'huepersistent' in jsonData and jsonData['huepersistent']:
 				self.changedLightsHue = jsonData['hue']
+				
+		#
+		# Turn on Yeelight
+		#
+		if 'yeelight' in jsonData:
+			for device in jsonData['yeelight']:
+				if 'Brightness' in jsonData['yeelight'][device] and jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in jsonData['yeelight'][device] and len(jsonData['yeelight'][device]['Color']) >= 6 and len(jsonData['yeelight'][device]['Color']) <= 7:
+					self.yeelight.state(device = device, brightness = jsonData['yeelight'][device]['Brightness'], color = jsonData['yeelight'][device]['Color'], transition = jsonData['yeelight'][device]['Transition'], transitionTime = jsonData['yeelight'][device]['TransitionTime'])
+			
+			if 'yeelightpersistent' in jsonData and jsonData['yeelightpersistent']:
+				self.changedLightsYeelight = jsonData['yeelight']
 		
 		#
 		# Reset to default after X seconds
@@ -369,6 +380,38 @@ class Woofer:
 						self.hue.state(device = device)
 		
 		#
+		# Reset Yeelight to Idle
+		#
+		if 'yeelight' in old_jsonData:
+			## Reset to persistent lights
+			if self.changedLightsYeelight:
+				for device in self.changedLightsYeelight:
+					if 'Brightness' in self.changedLightsYeelight[device] and self.changedLightsYeelight[device]['Brightness'] >= 1 and 'Color' in self.changedLightsYeelight[device] and len(self.changedLightsYeelight[device]['Color']) >= 6 and len(self.changedLightsYeelight[device]['Color']) <= 7:
+						self.yeelight.state(device = device, brightness = self.changedLightsYeelight[device]['Brightness'], color = self.changedLightsYeelight[device]['Color'], transition = self.changedLightsYeelight[device]['Transition'], transitionTime = self.changedLightsYeelight[device]['TransitionTime'])
+				
+				for device in old_jsonData['yeelight']:
+					if 'Brightness' in old_jsonData['yeelight'][device] and old_jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['yeelight'][device] and len(old_jsonData['yeelight'][device]['Color']) >= 6 and len(old_jsonData['yeelight'][device]['Color']) <= 7:
+						if device not in self.changedLightsYeelight:
+							self.yeelight.state(device = device)
+			
+			## Reset to Idle lights
+			elif 'Idle' in self.settings.PoseMapping and 'Yeelight' in self.settings.PoseMapping['Idle']:
+				for device in self.settings.PoseMapping['Idle']['Yeelight']:
+					if 'Brightness' in self.settings.PoseMapping['Idle']['Yeelight'][device] and self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Yeelight'][device] and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) <= 7:
+						self.yeelight.state(device = device, brightness = self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'], color = self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'], transition = self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'], transitionTime = self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
+				
+				for device in old_jsonData['yeelight']:
+					if 'Brightness' in old_jsonData['yeelight'][device] and old_jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['yeelight'][device] and len(old_jsonData['yeelight'][device]['Color']) >= 6 and len(old_jsonData['yeelight'][device]['Color']) <= 7:
+						if device not in self.settings.PoseMapping['Idle']['Yeelight']:
+							self.yeelight.state(device = device)
+			
+			## Turn off lights
+			else:
+				for device in old_jsonData['yeelight']:
+					if 'Brightness' in old_jsonData['yeelight'][device] and old_jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['yeelight'][device] and len(old_jsonData['yeelight'][device]['Color']) >= 6 and len(old_jsonData['yeelight'][device]['Color']) <= 7:
+						self.yeelight.state(device = device)
+		
+		#
 		# Remove notification from queue
 		#
 		if self.queue:
@@ -397,6 +440,8 @@ class Woofer:
 		jsonResponse["nanoleafpersistent"] = self.mascotNanoleafPersistent(jsonResponse["id"])
 		jsonResponse["hue"]                = self.mascotHueDevices(jsonResponse["id"])
 		jsonResponse["huepersistent"]      = self.mascotHuePersistent(jsonResponse["id"])
+		jsonResponse["yeelight"]           = self.mascotYeelightDevices(jsonResponse["id"])
+		jsonResponse["yeelightpersistent"] = self.mascotYeelightPersistent(jsonResponse["id"])
 		
 		## Add to queue
 		queue_id = uuid.uuid4()
@@ -963,5 +1008,29 @@ class Woofer:
 		
 		if 'HuePersistent' in self.settings.PoseMapping['DEFAULT']:
 			return self.settings.PoseMapping['DEFAULT']['HuePersistent']
+		
+		return ""
+		
+	#---------------------------
+	#   mascotYeelightDevices
+	#---------------------------
+	def mascotYeelightDevices(self, action):
+		if action in self.settings.PoseMapping and 'Yeelight' in self.settings.PoseMapping[action]:
+			return self.settings.PoseMapping[action]['Yeelight']
+		
+		if 'Yeelight' in self.settings.PoseMapping['DEFAULT']:
+			return self.settings.PoseMapping['DEFAULT']['Yeelight']
+		
+		return ""
+		
+	#---------------------------
+	#   mascotYeelightPersistent
+	#---------------------------
+	def mascotYeelightPersistent(self, action):
+		if action in self.settings.PoseMapping and 'YeelightPersistent' in self.settings.PoseMapping[action]:
+			return self.settings.PoseMapping[action]['YeelightPersistent']
+		
+		if 'YeelightPersistent' in self.settings.PoseMapping['DEFAULT']:
+			return self.settings.PoseMapping['DEFAULT']['YeelightPersistent']
 		
 		return ""
