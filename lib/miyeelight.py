@@ -46,20 +46,24 @@ class Yeelight:
 	#---------------------------
 	#   state
 	#---------------------------
-	def state(self, device, color = "", brightness = 100, effect = "smooth", duration = 1500):
+	def state(self, device, color = "", brightness = 100, transition = True, transitionTime = 1500):
 		## Check if yeelight is active
 		if not self.active:
 			return
 		
 		## Check if light has been detected on startup
 		if device not in self.lights:
-			print("Yeelight Device \"" + device + "\" does not detected")
+			print("Yeelight Device \"" + device + "\" does not detected1")
 			return
 		
-		## Set light transition effect
+		## Set light transition transition
 		try:
-			self.lights[device].effect = effect
-			self.lights[device].duration = duration
+			if transition:
+				self.lights[device].transition = "smooth"
+				self.lights[device].duration = transitionTime
+			else:
+				self.lights[device].effect = "sudden"
+				
 		except:
 			print("Communication failed with Yeelight " + device + ", light disabled")
 			del self.lights[device]
