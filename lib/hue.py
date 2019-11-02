@@ -83,6 +83,23 @@ class Hue:
 		if result.status_code == 200 and 'config' in output_json and 'bridgeid' in output_json['config'] and len(output_json['config']['bridgeid']) > 2:
 			self.detect_lights()
 			self.active = True
+			self.check_mappings()
+		
+		return
+		
+	#---------------------------
+	#   check_mappings
+	#---------------------------
+	def check_mappings(self):
+		## Check if hue is active
+		if not self.active:
+			return
+		
+		for action in self.settings.PoseMapping:
+			if 'Hue' in self.settings.PoseMapping[action]:
+				for light in self.settings.PoseMapping[action]['Hue']:
+					if light not in self.lights:
+						print("Error: Philips Hue light \"" + light + "\" defined in PoseMapping \"" + action + "\" has not been detected.")
 		
 		return
 		
