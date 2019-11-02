@@ -2,21 +2,12 @@
 name: Configure Yeelight
 anchor: configure-yeelight
 toc: 
- - name: Supported hardware
-   anchor: supported-hardware
  - name: Initial configuration
    anchor: initial-configuration
  - name: Configuring Yeelight lights for mascot poses
    anchor: configuring-yeelight-lights-for-mascot-poses
 ---
 This section explains how to integrate your Yeelight lights and use them for notifications.
-
-### Supported hardware
-Only Yeelight Smart lights can be controlled by WooferBot.
-Current list of Yeelight Smart lights:
-* <a class="icon website" href="https://www.yeelight.com/en_US/product/lemon-color" target="_blank">Yeelight Smart LED Bulb (Color)</a>
-* <a class="icon website" href="https://www.yeelight.com/en_US/product/lemon-ct" target="_blank">Yeelight Smart LED Bulb (Tunable White)</a>
-* <a class="icon website" href="https://www.yeelight.com/en_US/product/pitaya-plus" target="_blank">Yeelight Aurora Lightstrip Plus</a>
 
 ### Initial configuration
 <a class="icon website" href="https://www.yeelight.com/faqs/lan_control" target="_blank">Enable LAN Control</a> for each Yeelight device you want to control using Yeelight APP.
