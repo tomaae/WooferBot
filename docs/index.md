@@ -57,7 +57,7 @@ tags:
 				<b>HARDWARE SUPPORT</b><br>
 				<ul>
 					<li>Philips Hue</li>
-					<li>Yeelight Smart Lights</li>
+					<li>Yeelight</li>
 					<li>Nanoleaf</li>
 				</ul>
 			</span>
@@ -66,7 +66,7 @@ tags:
 	<div>
 		<span>ABOUT WOOFERBOT</span>
 		<span>Multiple <a class="icon doc" href="{{ site.github.url }}/mascots">mascots</a> are available immediately, or you can draw and <a class="icon doc" href="{{ site.github.url }}/documentation#creating-a-mascot">create your own mascot</a>. Animated mascots are fully supported.
-			<br>Light effects for alerts are also available for streamers with webcams.<br>Currently supporting <a class="icon website" href="https://nanoleaf.me/en/" target="_blank">Nanoleaf</a>, <a class="icon website" href="https://www2.meethue.com/en-us" target="_blank">Philips Hue</a> and <a class="icon website" href="https://www.yeelight.com/" target="_blank">Yeelight Smart Lights</a>.
+			<br>Light effects for alerts are also available for streamers with webcams.<br>Currently supporting <a class="icon website" href="https://nanoleaf.me/en/" target="_blank">Nanoleaf</a>, <a class="icon website" href="https://www2.meethue.com/en-us" target="_blank">Philips Hue</a> and <a class="icon website" href="https://www.yeelight.com/" target="_blank">Yeelight</a>.
 			<br><b>Supported platforms:</b><br>
 			<a class="icon twitch" href="https://twitch.tv" target="_blank">twitch.tv</a>
 		</span><br>
