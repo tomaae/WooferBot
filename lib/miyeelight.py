@@ -41,6 +41,23 @@ class Yeelight:
 					return
 		
 		self.active = True
+		self.check_mappings()
+		return
+	
+	#---------------------------
+	#   check_mappings
+	#---------------------------
+	def check_mappings(self):
+		## Check if hue is active
+		if not self.active:
+			return
+		
+		for action in self.settings.PoseMapping:
+			if 'Yeelight' in self.settings.PoseMapping[action]:
+				for light in self.settings.PoseMapping[action]['Yeelight']:
+					if light not in self.lights:
+						print("Error: Yeelight \"" + light + "\" defined in PoseMapping \"" + action + "\" has not been detected.")
+		
 		return
 	
 	#---------------------------
