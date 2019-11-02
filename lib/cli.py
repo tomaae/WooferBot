@@ -63,7 +63,7 @@ class Cli:
 			# Follow
 			#
 			if cmd == "1":
-				self.woofer.woofer_follow({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"custom-tag"   : "follow"
 				})
@@ -72,7 +72,7 @@ class Cli:
 			# Greet
 			#
 			if cmd == "2":
-				self.woofer.woofer_greet({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"custom-tag"   : "greet"
@@ -107,7 +107,7 @@ class Cli:
 			# Bits
 			#
 			if cmd == "5":
-				self.woofer.woofer_bits({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"bits"         : "1000",
 						"custom-tag"   : "bits"
@@ -117,7 +117,7 @@ class Cli:
 			# New chatter
 			#
 			if cmd == "6":
-				self.woofer.woofer_new_chatter({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"custom-tag"   : "new_chatter"
@@ -127,7 +127,7 @@ class Cli:
 			# Raid
 			#
 			if cmd == "7":
-				self.woofer.woofer_raid({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"viewers"      : "1",
@@ -138,7 +138,7 @@ class Cli:
 			# Host
 			#
 			if cmd == "8":
-				self.woofer.woofer_host({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"custom-tag"   : "host"
@@ -148,7 +148,7 @@ class Cli:
 			# Sub
 			#
 			if cmd == "9":
-				self.woofer.woofer_sub({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"sub_tier"     : "Tier 2",
@@ -161,7 +161,7 @@ class Cli:
 			# Resub
 			#
 			if cmd == "10":
-				self.woofer.woofer_resub({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"sub_tier"     : "Tier 2",
@@ -174,7 +174,7 @@ class Cli:
 			# Subgift
 			#
 			if cmd == "11":
-				self.woofer.woofer_subgift({
+				self.woofer.woofer_alert({
 						"display-name" : "testname",
 						"sender"       : "testname",
 						"sub_tier"     : "Tier 2",
