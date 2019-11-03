@@ -115,7 +115,7 @@ class Woofer:
 			
 			## Greeting
 			if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData['sender'] not in customBots:
-				self.woofer_alert(jsonData)
+				self.woofer_greet(jsonData)
 			
 			return
 		
@@ -486,27 +486,6 @@ class Woofer:
 				jsonFeed['viewers'] = jsonData['viewers']
 		
 		#
-		# greet
-		#
-		if customId == 'greet':
-			## Check if user was already greeted
-			s = set(self.greetedUsers)
-			if jsonData['sender'] in s:
-				return
-			
-			self.greetedUsers.append(jsonData['sender'])
-			
-			## Check for custom greeting definitions
-			customMessage = ""
-			if 'viewer_' + jsonData['display-name'] in self.settings.Messages:
-				customMessage = random.SystemRandom().choice(self.settings.Messages['viewer_' + jsonData['display-name']])
-			
-			if 'viewer_' + jsonData['display-name'] in self.settings.PoseMapping:
-				customId = 'viewer_' + jsonData['display-name']
-			
-			jsonFeed['message'] = customMessage
-		
-		#
 		# Send data
 		#
 		jsonFeed['id'] = customId
@@ -652,6 +631,33 @@ class Woofer:
 			"hotkey"     : self.settings.Commands[jsonData['command']]['Hotkey'],
 			"sender"     : jsonData['display-name'],
 			"id"         : jsonData['command']
+		})
+		return
+	
+	#---------------------------
+	#   woofer_greet
+	#---------------------------
+	def woofer_greet(self,jsonData):
+		## Check if user was already greeted
+		s = set(self.greetedUsers)
+		if jsonData['sender'] in s:
+			return
+		
+		self.greetedUsers.append(jsonData['sender'])
+		
+		## Check for custom greeting definitions
+		customMessage = ""
+		if 'viewer_' + jsonData['display-name'] in self.settings.Messages:
+			customMessage = random.SystemRandom().choice(self.settings.Messages['viewer_' + jsonData['display-name']])
+		
+		customId = 'greet'
+		if 'viewer_' + jsonData['display-name'] in self.settings.PoseMapping:
+			customId = 'viewer_' + jsonData['display-name']
+		
+		self.woofer_addtoqueue({
+			"message"    : customMessage,
+			"sender"     : jsonData['display-name'],
+			"id"         : customId
 		})
 		return
 	
