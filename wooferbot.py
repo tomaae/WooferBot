@@ -23,6 +23,7 @@ from settings import Settings
 from overlay import Overlay
 from woofer import Woofer
 from twitch import Twitch
+from filewatchdog import Watchdog
 from cli import Cli
 from nanoleaf import Nanoleaf
 from hue import Hue
@@ -71,6 +72,9 @@ twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
 	twitchBot.LinkTwitch(twitch)
+
+# Start Watchdog
+watchdog = Watchdog(settings=settings, woofer=woofer)
 
 # Start CLI
 cli = Cli(settings=settings, woofer=woofer, twitch=twitch, twitchBot=twitchBot)
