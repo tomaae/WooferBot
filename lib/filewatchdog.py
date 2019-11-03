@@ -58,12 +58,22 @@ class _WatchdogCustomHandler(FileSystemEventHandler):
 			for action in self.settings.Watchdog:
 				if action['Name'] == self.WatchdogName:
 					f = open(self.filename, "r")
-					self.woofer.woofer_addtoqueue({
-						"image"      : action['Image'],
-						"message"    : action['Message'] + f.read(),
-						"sender"     : action['Name'],
-						"id"         : "watchdog"
-					})
+					
+					if 'Command' in action:
+						self.woofer_commands({
+							"command"      : action['Command'],
+							"broadcaster"  : 1,
+							"sender"       : action['Name'],
+							"display-name" : action['Name'],
+							"custom-tag"   : 'watchdog'
+						})
+					else:
+						self.woofer.woofer_addtoqueue({
+							"image"      : action['Image'],
+							"message"    : action['Message'] + f.read(),
+							"sender"     : action['Name'],
+							"id"         : "watchdog"
+						})
 		
 		return
 
