@@ -104,18 +104,20 @@ class Woofer:
 				if jsonData['message'].find(self.settings.FollowMessage) > 0 and self.settings.Enabled["follow"]:
 					line = jsonData['message'].split(" ")
 					jsonData['display-name'] = line[0].rstrip(',')
+					jsonData['custom-tag'] = 'follow'
 					self.woofer_alert(jsonData)
 					return
-				return
-			
-			## Bits
-			if int(jsonData['bits']) > 0 and int(jsonData['bits']) >= self.settings.MinBits and self.settings.Enabled["bits"]:
-				self.woofer_alert(jsonData)
 				return
 			
 			## Greeting
 			if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData['sender'] not in customBots:
 				self.woofer_greet(jsonData)
+			
+			## Bits
+			if int(jsonData['bits']) > 0 and int(jsonData['bits']) >= self.settings.MinBits and self.settings.Enabled["bits"]:
+				jsonData['custom-tag'] = 'bits'
+				self.woofer_alert(jsonData)
+				return
 			
 			return
 		
