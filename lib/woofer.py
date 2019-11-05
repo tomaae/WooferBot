@@ -53,7 +53,7 @@ class Woofer:
 		self.changedLightsYeelight = {}
 		
 		## Start timer for ScheduledMessages
-		threading.Timer(300, self.woofer_timer).start()
+		threading.Timer(300, self.woofer_timers).start()
 		return
 	
 	#---------------------------
@@ -108,6 +108,9 @@ class Woofer:
 					self.woofer_alert(jsonData)
 					return
 				return
+			
+			## MinLines increase for timers
+			self.settings.scheduleLines += 1
 			
 			## Greeting
 			if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData['sender'] not in customBots:
@@ -506,23 +509,60 @@ class Woofer:
 		return
 	
 	#---------------------------
-	#   woofer_timer
+	#   woofer_timers
 	#---------------------------
-	def woofer_timer(self):
+	def woofer_timers(self):
 		## Check if overlay is connected
 		if self.overlay.active < 1:
-			threading.Timer(30, self.woofer_timer).start()
+			threading.Timer(30, self.woofer_timers).start()
 			return
 		
 		## Check if timer is enabled
+		MinLinesTimer = ""
 		for action in self.settings.ScheduledMessages:
 			if not action['Enabled']:
 				continue
 			
 			currentEpoch = int(time.time())
 			if (currentEpoch - self.settings.scheduleTable[action['Name']]) >= (action['Timer'] * 60):
-				self.settings.scheduleTable[action['Name']] = currentEpoch
 				
+				## Timers without MinLines limits
+				if action['MinLines'] == 0:
+					self.settings.scheduleTable[action['Name']] = currentEpoch
+					
+					if 'Command' in action:
+						self.woofer_commands({
+							"command"      : action['Command'],
+							"broadcaster"  : 1,
+							"sender"       : self.settings.TwitchChannel.lower(),
+							"display-name" : self.settings.TwitchChannel,
+							"custom-tag"   : 'command'
+						})
+					else:
+						self.woofer_addtoqueue({
+							"message"    : random.SystemRandom().choice(self.settings.Messages[action['Name']]),
+							"image"      : self.settings.pathRoot + "\\images\\" + action['Image'],
+							"sender"     : "",
+							"customtag"  : "ScheduledMessage",
+							"id"         : action['Name']
+						})
+				
+				## Check if timer with MinLines limits is executable
+				if action['MinLines'] > 0:
+					if self.settings.scheduleLines < action['MinLines']:
+						continue
+					
+					if MinLinesTimer == "" or self.settings.scheduleTable[action['Name']] < self.settings.scheduleTable[MinLinesTimer]:
+						MinLinesTimer = action['Name']
+		
+		## Timers with MinLines limits
+		if MinLinesTimer != "":
+			for action in self.settings.ScheduledMessages:
+				if action['Name'] != MinLinesTimer:
+					continue
+				
+				self.settings.scheduleLines = 0
+				self.settings.scheduleTable[action['Name']] = currentEpoch
 				if 'Command' in action:
 					self.woofer_commands({
 						"command"      : action['Command'],
@@ -541,7 +581,7 @@ class Woofer:
 					})
 		
 		## Reset to default after X seconds
-		threading.Timer(60, self.woofer_timer).start()
+		threading.Timer(30, self.woofer_timers).start()
 		return
 	
 	#---------------------------

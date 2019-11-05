@@ -108,6 +108,7 @@ class Settings:
 		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []
 		self.scheduleTable     = {}
+		self.scheduleLines     = 0
 		self.CustomBits        = []
 		self.CustomSubs        = []
 		self.Commands          = {}
@@ -376,6 +377,8 @@ class Settings:
 		for action in self.ScheduledMessages:
 			if 'Timer' not in action:
 				action['Timer'] = 30
+			if 'MinLines' not in action:
+				action['MinLines'] = 0
 			if 'Enabled' not in action:
 				action['Enabled'] = False
 			if 'Command' not in action:
