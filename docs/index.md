@@ -50,7 +50,7 @@ tags:
 				<ul>
 					<li>Optional Chatbot, can use secondary account to reply in chat</li>
 					<li>Fully customizable replies</li>
-					<li>File watchdog</li>
+					<li>Watch file for changes, use its content for notification</li>
 					<li>Can pick from multiple replies for better diversity</li>
 					<li>Each type of bot interaction can be disabled individually</li>
 					<li>Supports animated mascots</li>
