@@ -29,6 +29,7 @@ Installation and configuration instruction available on [WooferBot website](http
   - Create custom timers
   - Create custom commands
     - Execute scripts or hotkeys to interact with other software
+  - Watch files for changes, use file content for notifications
   - Create custom greeting for individual viewers
   - Create custom sub notification for different sub lengths, ranges and tiers
   - Create custom bit notification for different bit amounts or ranges
@@ -43,3 +44,4 @@ Installation and configuration instruction available on [WooferBot website](http
 - Hardware support
   - Philips Hue
   - Nanoleaf
+  - Yeelight
