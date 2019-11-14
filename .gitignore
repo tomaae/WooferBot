@@ -8,3 +8,5 @@
 /mascots/tomaae/
 !/mascots/__place_mascots.txt
 /lib/__pycache__/
+/tests/__pycache__/
+/__pycache__/
