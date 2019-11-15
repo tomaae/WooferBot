@@ -1,3 +1,6 @@
+pathtools
+wheel
+pynput
 requests
 watchdog
 websockets
