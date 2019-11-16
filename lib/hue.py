@@ -18,7 +18,6 @@ import time
 import select
 import re
 import json
-import msvcrt
 
 #---------------------------
 #   HUE Handling
@@ -36,6 +35,11 @@ class Hue:
 		if not self.enabled:
 			return
 		
+		if self.settings.os == 'win':
+			import msvcrt
+		elif self.settings.os == 'lx':
+			import getch
+		
 		print("Initializing Philips HUE...")
 		#
 		# IP Not set
@@ -48,7 +52,11 @@ class Hue:
 				if len(ip_list) == 0:
 					print("Philips HUE Bridge not found")
 					print("Press C to cancel or any key to scan again")
-					input_char = msvcrt.getch().decode("utf-8").upper()
+					if self.settings.os == 'win':
+						input_char = msvcrt.getch().decode("utf-8").upper()
+					elif self.settings.os == 'lx':
+						input_char = getch.getch().upper()
+					
 					if discovery_time < 20:
 						discovery_time = discovery_time + 5
 					if input_char == 'C':

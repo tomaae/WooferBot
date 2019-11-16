@@ -16,12 +16,24 @@ import codecs
 import json
 import os
 import time
+import sys
 
 #---------------------------
 #   Settings Handling
 #---------------------------
 class Settings:
 	def __init__(self, pathRoot=None):
+		## Detect OS
+		if sys.platform.startswith('win'):
+			self.os = 'win'
+		elif sys.platform.startswith('freebsd') or sys.platform.startswith('linux'):
+			self.os = 'lx'
+		elif sys.platform.startswith('darwin'):
+			self.os = 'lx'
+		else:
+			print("Failed to detect OS: " + sys.platform)
+			exit(1)
+		
 		## Check paths
 		self.pathRoot     = pathRoot + '\\'
 		if not os.path.isdir(self.pathRoot):

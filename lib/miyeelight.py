@@ -14,7 +14,6 @@
 
 from yeelight import discover_bulbs
 from yeelight import Bulb
-import msvcrt
 
 #---------------------------
 #   Yeelight Handling
@@ -30,13 +29,22 @@ class Yeelight:
 		if not self.enabled:
 			return
 		
+		if self.settings.os == 'win':
+			import msvcrt
+		elif self.settings.os == 'lx':
+			import getch
+		
 		print("Initializing Yeelight...")
 		while len(self.lights) == 0:
 			self.detect_lights()
 			if len(self.lights) == 0:
 				print("Yeelight not found")
 				print("Press C to cancel or any key to scan again")
-				input_char = msvcrt.getch().decode("utf-8").upper()
+				if self.settings.os == 'win':
+					input_char = msvcrt.getch().decode("utf-8").upper()
+				elif self.settings.os == 'lx':
+					input_char = getch.getch().upper()
+				
 				if input_char == 'C':
 					return
 		
