@@ -26,16 +26,18 @@ class Settings:
 		## Detect OS
 		if sys.platform.startswith('win'):
 			self.os = 'win'
+			self.pathRoot = pathRoot + '\\'
 		elif sys.platform.startswith('freebsd') or sys.platform.startswith('linux'):
 			self.os = 'lx'
+			self.pathRoot = pathRoot + '/'
 		elif sys.platform.startswith('darwin'):
 			self.os = 'lx'
+			self.pathRoot = pathRoot + '/'
 		else:
 			print("Failed to detect OS: " + sys.platform)
 			exit(1)
 		
 		## Check paths
-		self.pathRoot     = pathRoot + '\\'
 		if not os.path.isdir(self.pathRoot):
 			print("Working directory not detected.")
 			exit(1)
