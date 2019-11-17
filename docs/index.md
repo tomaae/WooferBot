@@ -26,6 +26,7 @@ tags:
 					<li>Host/Autohost</li>
 					<li>Sub/Resub</li>
 					<li>Sub gift/Anonymous sub gift</li>
+					<li>Greeting new chatters</li>
 				</ul>
 				<b>CUSTOMIZATION</b><br>
 				<ul>
@@ -37,10 +38,6 @@ tags:
 					<li>Create custom bit notification for different bit amounts or ranges</li>
 				</ul>
 				</span><span>
-				<b>INTERACTIONS</b><br>
-				<ul>
-					<li>Greeting new chatters</li>
-				</ul>
 				<b>COMMANDS</b><br>
 				<ul>
 					<li>Shoutout</li>
