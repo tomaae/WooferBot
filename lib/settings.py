@@ -127,6 +127,7 @@ class Settings:
 		self.CustomBits        = []
 		self.CustomSubs        = []
 		self.Commands          = {}
+		self.Watchdog          = []
 		
 		self.NanoleafEnabled   = False
 		self.NanoleafIP        = ""
