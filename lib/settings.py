@@ -26,18 +26,19 @@ class Settings:
 		## Detect OS
 		if sys.platform.startswith('win'):
 			self.os = 'win'
-			self.pathRoot = pathRoot + '\\'
+			self.slash = '\\'
 		elif sys.platform.startswith('freebsd') or sys.platform.startswith('linux'):
 			self.os = 'lx'
-			self.pathRoot = pathRoot + '/'
+			self.slash = '/'
 		elif sys.platform.startswith('darwin'):
 			self.os = 'lx'
-			self.pathRoot = pathRoot + '/'
+			self.slash = '/'
 		else:
 			print("Failed to detect OS: " + sys.platform)
 			exit(1)
 		
 		## Check paths
+		self.pathRoot = pathRoot + self.slash
 		if not os.path.isdir(self.pathRoot):
 			print("Working directory not detected.")
 			exit(1)
@@ -62,7 +63,7 @@ class Settings:
 		
 		## Load mascot config
 		try:
-			with codecs.open(self.pathRoot + "mascots\\" + self.CurrentMascot + "\\mascot.json", encoding="utf-8-sig", mode="r") as f:
+			with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json", encoding="utf-8-sig", mode="r") as f:
 				data = json.load(f, encoding="utf-8")
 				for key, value in data.items():
 						self.__dict__[key] = value 
@@ -76,7 +77,7 @@ class Settings:
 				print("Mascot Image variable is missing for action: " + action)
 				exit(1)
 			
-			self.mascotImages[action]['Image'] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\images\\" + self.mascotImages[action]['Image']
+			self.mascotImages[action]['Image'] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash + self.mascotImages[action]['Image']
 		
 		## Check mascot audio
 		for action in self.mascotAudio:
@@ -85,7 +86,7 @@ class Settings:
 				exit(1)
 			
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots\\" + self.CurrentMascot + "\\audio\\" + self.mascotAudio[action]['Audio'][idx]
+				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash + self.mascotAudio[action]['Audio'][idx]
 		
 		self.CheckSettingsDependencies()
 		return
@@ -108,8 +109,8 @@ class Settings:
 		self.PoseMapping       = {}
 		self.CurrentMascot     = "malamute"
 		self.AlignMascot       = "left"
-		self.pathImages        = self.pathRoot + "mascots" + '\\' + self.CurrentMascot + '\\' + "images" + '\\'
-		self.pathAudio         = self.pathRoot + "mascots" + '\\' + self.CurrentMascot + '\\' + "audio" + '\\'
+		self.pathImages        = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash
+		self.pathAudio         = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash
 		self.HostMessage       = ""
 		self.AutohostMessage   = ""
 		self.FollowMessage     = ""

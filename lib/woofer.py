@@ -541,7 +541,7 @@ class Woofer:
 					else:
 						self.woofer_addtoqueue({
 							"message"    : random.SystemRandom().choice(self.settings.Messages[action['Name']]),
-							"image"      : self.settings.pathRoot + "\\images\\" + action['Image'],
+							"image"      : self.settings.pathRoot + self.settings.slash + "images" + self.settings.slash + action['Image'],
 							"sender"     : "",
 							"customtag"  : "ScheduledMessage",
 							"id"         : action['Name']
@@ -574,7 +574,7 @@ class Woofer:
 				else:
 					self.woofer_addtoqueue({
 						"message"    : random.SystemRandom().choice(self.settings.Messages[action['Name']]),
-						"image"      : self.settings.pathRoot + "\\images\\" + action['Image'],
+						"image"      : self.settings.pathRoot + self.settings.slash + "images" + self.settings.slash + action['Image'],
 						"sender"     : "",
 						"customtag"  : "ScheduledMessage",
 						"id"         : action['Name']
@@ -654,7 +654,7 @@ class Woofer:
 		#
 		image = ""
 		if self.settings.Commands[jsonData['command']]['Image'] != "":
-			image = self.settings.pathRoot + "\\images\\" + self.settings.Commands[jsonData['command']]['Image']
+			image = self.settings.pathRoot + self.settings.slash + "images" + self.settings.slash + self.settings.Commands[jsonData['command']]['Image']
 			if not os.path.isfile(image):
 				image = ""
 		
@@ -663,7 +663,7 @@ class Woofer:
 		#
 		script = ""
 		if self.settings.Commands[jsonData['command']]['Script'] != "":
-			script = self.settings.pathRoot + "\\scripts\\" + self.settings.Commands[jsonData['command']]['Script']
+			script = self.settings.pathRoot + self.settings.slash + "scripts" + self.settings.slash + self.settings.Commands[jsonData['command']]['Script']
 			if not os.path.isfile(script):
 				script = ""
 		
