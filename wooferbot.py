@@ -11,7 +11,7 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 ##########################################################################
-wooferbotVersion = 'v1.3.0'
+wooferbotVersion = 'v1.3.1'
 
 import sys
 import os
