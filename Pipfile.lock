@@ -1,12 +1,10 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "464d9174c05c961a4525f3294dab67a0ffc6e9ad41d3af82b2d5586a727b9dc5"
+            "sha256": "a8c778201ef53849461e1d9cc259aa288fbf0e1ec4dcb7d4f6a365518f72eab9"
         },
         "pipfile-spec": 6,
-        "requires": {
-            "python_version": "3.8"
-        },
+        "requires": {},
         "sources": [
             {
                 "name": "pypi",
@@ -55,7 +53,7 @@
                 "sha256:a6c22717c10051ce65b8fb7bddb171af705b1175e694a73be956990f6089d8b1"
             ],
             "index": "pypi",
-            "markers": "sys_platform == 'linux2'",
+            "markers": "sys_platform == 'linux'",
             "version": "==1.0"
         },
         "idna": {
@@ -103,6 +101,8 @@
                 "sha256:f27cec5e7f588c3d1051651830ecc00294f90728d19c3bf6916e6dba93ea357c",
                 "sha256:f4c5be1a293bae0076d93c88f37ee8da68136744588bc5e2be2f299a34ceb7aa"
             ],
+            "index": "pypi",
+            "markers": "sys_platform == 'win32'",
             "version": "==227"
         },
         "pyyaml": {
