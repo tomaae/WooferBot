@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pyinstaller = {file = "https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz"}
+
+[packages]
+pynput = "*"
+requests = "*"
+watchdog = "*"
+websockets = "*"
+yeelight = "*"
+pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
+getch = {version = "*",sys_platform = "== 'linux2'"}
+
+[requires]
+python_version = "3.8"
