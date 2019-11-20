@@ -35,16 +35,16 @@ class Settings:
 			self.slash = '/'
 		else:
 			print("Failed to detect OS: " + sys.platform)
-			exit(1)
+			sys.exit(1)
 		
 		## Check paths
 		self.pathRoot = pathRoot + self.slash
 		if not os.path.isdir(self.pathRoot):
 			print("Working directory not detected.")
-			exit(1)
-		if not os.path.isfile(self.pathRoot + "wooferbot.py"):
+			sys.exit(1)
+		if not os.path.isfile(self.pathRoot + "wooferbot.py") and not os.path.isfile(self.pathRoot + "wooferbot_cli.exe"):
 			print("Working directory incorrect.")
-			exit(1)
+			sys.exit(1)
 		if not os.path.isfile(self.pathRoot + "settings.json"):
 			print("Configuration file is missing, recreating with defaults.")
 		
@@ -69,13 +69,13 @@ class Settings:
 						self.__dict__[key] = value 
 		except:
 			print("Unable to load mascot.json")
-			exit(1)
+			sys.exit(1)
 		
 		## Check mascot images
 		for action in self.mascotImages:
 			if 'Image' not in self.mascotImages[action]:
 				print("Mascot Image variable is missing for action: " + action)
-				exit(1)
+				sys.exit(1)
 			
 			self.mascotImages[action]['Image'] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash + self.mascotImages[action]['Image']
 		
@@ -83,7 +83,7 @@ class Settings:
 		for action in self.mascotAudio:
 			if not isinstance(self.mascotAudio[action]['Audio'],list):
 				print("Mascot audio is not a list for action: " + action)
-				exit(1)
+				sys.exit(1)
 			
 			for idx, val in enumerate(self.mascotAudio[action]['Audio']):
 				self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash + self.mascotAudio[action]['Audio'][idx]
@@ -150,7 +150,7 @@ class Settings:
 							self.__dict__[key] = value 
 			except:
 				print("Unable to load settings.json")
-				exit(1)
+				sys.exit(1)
 				
 			self.UpgradeSettingsFile()
 		
@@ -177,7 +177,7 @@ class Settings:
 		if not os.path.isfile(self.pathRoot + "settings.json"):
 			self.Save()
 			print("Default configuration file has been created.")
-			exit(0)
+			sys.exit(0)
 		
 		self.Verify()
 		return
@@ -576,7 +576,7 @@ class Settings:
 		for action in self.Messages:
 			if not isinstance(self.Messages[action], list):
 				print("Message is not a list: " + action)
-				exit(1)
+				sys.exit(1)
 		
 		for action in self.Enabled:
 			if action == 'autohost' or action == 'anonsubgift':
@@ -584,7 +584,7 @@ class Settings:
 				
 			if action not in self.Messages:
 				print("Message does not exist: " + action)
-				exit(1)
+				sys.exit(1)
 		
 		#
 		# Check ScheduledMessages
@@ -593,15 +593,15 @@ class Settings:
 			if 'Name' not in action:
 				print("ScheduledMessages missing Name: ")
 				print(action)
-				exit(1)
+				sys.exit(1)
 			
 			if not isinstance(action['Timer'], int):
 				print("ScheduledMessages Timer value is not a number: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 			
 			if action['Timer'] == 0:
 				print("ScheduledMessages Timer value is 0: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 		
 		#
 		# Check Commands
@@ -609,11 +609,11 @@ class Settings:
 		for action in self.Commands:
 			if not isinstance(self.Commands[action]['ViewerTimeout'], int):
 				print("Commands ViewerTimeout value is not a number: " + action)
-				exit(1)
+				sys.exit(1)
 			
 			if not isinstance(self.Commands[action]['GlobalTimeout'], int):
 				print("Commands GlobalTimeout value is not a number: " + action)
-				exit(1)
+				sys.exit(1)
 		
 		#
 		# CustomBits
@@ -622,31 +622,31 @@ class Settings:
 			if 'Name' not in action:
 				print("CustomBits missing Name: ")
 				print(action)
-				exit(1)
+				sys.exit(1)
 				
 			if 'From' not in action:
 				print("CustomBits is missing parameter From: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 				
 			if not isinstance(action['From'], int):
 				print("CustomBits is From value is not a number: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 				
 			if 'To' not in action:
 				print("CustomBits is missing parameter From: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 				
 			if not isinstance(action['To'], int):
 				print("CustomBits is To value is not a number: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 				
 			if action['To'] == 0:
 				print("CustomBits To value is 0: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 				
 			if action['From'] > action['To']:
 				print("CustomBits From value is higher or equal to To: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 		
 		#
 		# CustomSubs
@@ -655,35 +655,35 @@ class Settings:
 			if 'Name' not in action:
 				print("CustomSubs missing Name: ")
 				print(action)
-				exit(1)
+				sys.exit(1)
 			
 			if 'From' not in action:
 				print("CustomSubs is missing parameter From: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 			
 			if not isinstance(action['From'], int):
 				print("CustomSubs is From value is not a number: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 			
 			if 'To' not in action:
 				print("CustomSubs is missing parameter From: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 			
 			if not isinstance(action['To'], int):
 				print("CustomSubs is To value is not a number: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 				
 			if action['To'] == 0:
 				print("CustomSubs To value is 0: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 			
 			if action['From'] > action['To']:
 				print("CustomSubs From value is higher or equal to To: " + action['Name'])
-				exit(1)
+				sys.exit(1)
 		
 		if error == 2:
 			print("Mandatory dependencies are broken, see above.")
-			exit(1)
+			sys.exit(1)
 		
 		return
 		
@@ -707,7 +707,7 @@ class Settings:
 			if 'Message' in action:
 				if action['Name'] in self.Messages:
 					print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. " + action['Name'] + " already exists in Messages.")
-					exit(1)
+					sys.exit(1)
 				else:
 					self.Messages[action['Name']] = action['Message']
 					del action['Message']
@@ -719,7 +719,7 @@ class Settings:
 			if 'Message' in self.Commands[action]:
 				if action in self.Messages:
 					print("Upgrade: Cannot migrate message values from Commands to Messages. " + action + " already exists in Messages.")
-					exit(1)
+					sys.exit(1)
 				else:
 					self.Messages[action] = self.Commands[action]['Message']
 					del self.Commands[action]['Message']
@@ -731,7 +731,7 @@ class Settings:
 			for action in self.CustomGreets:
 				if action in self.Messages:
 					print("Upgrade: Cannot migrate CustomGreets to Messages. " + action + " already exists in Messages.")
-					exit(1)
+					sys.exit(1)
 			
 			for action in self.CustomGreets:
 				self.Messages["viewer_" + action] = self.CustomGreets[action]
@@ -759,7 +759,7 @@ class Settings:
 				json.dump(tmp, f, indent=4)
 		except:
 			print("Failed to save settings.json")
-			exit(1)
+			sys.exit(1)
 		
 		## Save config copy
 		try:
@@ -767,7 +767,7 @@ class Settings:
 				json.dump(tmp, f, indent=4)
 		except:
 			print("Failed to save settings.bak")
-			exit(1)
+			sys.exit(1)
 		
 		return
 		
@@ -798,6 +798,6 @@ class Settings:
 			code = 1
 		
 		if code:
-			exit(code)
+			sys.exit(code)
 			
 		return

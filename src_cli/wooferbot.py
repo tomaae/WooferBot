@@ -82,4 +82,4 @@ cli.Start()
 
 # Cleanup and exit
 overlay.Stop()
-exit(0)
+sys.exit(0)
