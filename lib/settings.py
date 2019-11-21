@@ -23,6 +23,7 @@ import sys
 #---------------------------
 class Settings:
 	def __init__(self, pathRoot=None):
+		self.encoding = "utf-8-sig"
 		## Detect OS
 		if sys.platform.startswith('win'):
 			self.os = 'win'
@@ -63,8 +64,8 @@ class Settings:
 		
 		## Load mascot config
 		try:
-			with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json", encoding="utf-8-sig", mode="r") as f:
-				data = json.load(f, encoding="utf-8")
+			with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json", encoding=self.encoding, mode="r") as f:
+				data = json.load(f, encoding=self.encoding)
 				for key, value in data.items():
 						self.__dict__[key] = value 
 		except:
@@ -144,14 +145,15 @@ class Settings:
 		#
 		if os.path.isfile(self.pathRoot + "settings.json"):
 			try:
-				with codecs.open(self.pathRoot + "settings.json", encoding="utf-8-sig", mode="r") as f:
-					data = json.load(f, encoding="utf-8")
+				with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="r") as f:
+					data = json.load(f, encoding=self.encoding)
 					for key, value in data.items():
-							self.__dict__[key] = value 
+							self.__dict__[key] = value
+			
 			except:
 				print("Unable to load settings.json")
 				exit(1)
-				
+			
 			self.UpgradeSettingsFile()
 		
 		#
@@ -755,16 +757,16 @@ class Settings:
 		
 		## Save config
 		try:
-			with codecs.open(self.pathRoot + "settings.json", encoding="utf-8-sig", mode="w+") as f:
-				json.dump(tmp, f, indent=4)
+			with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="w+") as f:
+				json.dump(tmp, f, indent=4, ensure_ascii=False)
 		except:
 			print("Failed to save settings.json")
 			exit(1)
 		
 		## Save config copy
 		try:
-			with codecs.open(self.pathRoot + "settings.bak", encoding="utf-8-sig", mode="w+") as f:
-				json.dump(tmp, f, indent=4)
+			with codecs.open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
+				json.dump(tmp, f, indent=4, ensure_ascii=False)
 		except:
 			print("Failed to save settings.bak")
 			exit(1)
