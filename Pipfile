@@ -15,4 +15,4 @@ yeelight = "*"
 pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
 pywin32 = {version = "*", sys_platform = "== 'win32'"}
 getch = {version = "*",sys_platform = "== 'linux'"}
-
+xlib = {version = "*",sys_platform = "== 'linux'"}
