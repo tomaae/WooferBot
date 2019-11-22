@@ -1,10 +1,10 @@
 #!/bin/sh
 rm -rf build dist
 
-REM Python build
-pipenv run pyinstaller --clean -y wooferbot_cli.spec
+echo Python build
+python3 -m pipenv run pyinstaller --clean -y wooferbot_cli.spec
 
-REM Copying data
+echo Copying data
 cp README.md dist/
 cp LICENSE.md dist/
 cp -r src_cli/Overlay.html dist/
