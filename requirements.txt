@@ -1,8 +1,0 @@
-pathtools
-wheel
-pynput
-requests
-watchdog
-websockets
-yeelight
-getch
