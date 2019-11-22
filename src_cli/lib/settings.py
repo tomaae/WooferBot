@@ -42,7 +42,7 @@ class Settings:
 		if not os.path.isdir(self.pathRoot):
 			print("Working directory not detected.")
 			sys.exit(1)
-		if not os.path.isfile(self.pathRoot + "wooferbot.py") and not os.path.isfile(self.pathRoot + "wooferbot_cli.exe"):
+		if not os.path.isfile(self.pathRoot + "wooferbot.py") and not os.path.isfile(self.pathRoot + "wooferbot_cli.exe") and not os.path.isfile(self.pathRoot + "wooferbot_cli"):
 			print("Working directory incorrect.")
 			sys.exit(1)
 		if not os.path.isfile(self.pathRoot + "settings.json"):
