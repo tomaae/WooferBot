@@ -18,5 +18,4 @@ WooferBot is developed using Python 3.8. It was confirmed to work on Python 3.5.
 
 
 ### Building from source
-Windows: Execute `build.cmd`
-Linux: Execute `build.sh`
+Windows only: Execute `build.cmd`

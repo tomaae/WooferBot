@@ -2,8 +2,10 @@
 name: Installation and use
 anchor: installation-and-use
 toc: 
- - name: Download and prepare files
-   anchor: download-and-prepare-files
+ - name: Download and prepare files on windows
+   anchor: download-and-prepare-files-on-windows
+ - name: Download and prepare files on linux
+   anchor: download-and-prepare-files-on-linux
  - name: Configure your login information
    anchor: configure-your-login-information
  - name: Add overlay
@@ -13,9 +15,21 @@ toc:
 ---
 This section explains installation process, broadcasting software setup and first run.
 
-### Download and prepare files
+### Download and prepare files on windows
 1. Download and extract <a class="icon download" href="{{ site.github.url }}/changelog">latest WooferBot release</a>.
 2. Start WooferBot using <span class="icon file">wooferbot_cli.exe</span> to create a default configuration file.
+
+### Download and prepare files on linux
+WooferBot is developed using Python 3.8. It was confirmed to work on Python 3.5.
+1. Install `python3, python3-pip`
+2. Install pipenv `python3 -m pip install pipenv`
+3. Download and extract <a class="icon download" href="{{ site.github.url }}/changelog">latest WooferBot release</a>.
+4. Go to wooferbot root directory
+5. Install dependencies `python3 -m pipenv install`
+6. Start WooferBot using `python3 -m pipenv run python3 wooferbot.py` to create a default configuration file.
+
+<span class="icon idea">Note: Commands based on Ubuntu, may be different on other distributions.</span>
+<span class="icon idea">Note: You can create a shell file run wooferbot `python3 -m pipenv run python3 wooferbot.py`.</span>
 
 ### Configure your login information
 Edit "settings.json" file and change login information for your <a class="icon website" href="https://www.twitch.tv" target="_blank">twitch.tv</a> account. These parameters are **mandatory** for bot to work.
