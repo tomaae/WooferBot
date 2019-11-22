@@ -23,8 +23,6 @@ tags:
 <div class="caption"><span>{{ release.name }}{% if release.prerelease -%} (pre-release){%- endif %}</span><span>Release date: <time datetime="{{ release.published_at | date_to_xmlschema }}">{{ release.published_at | date_to_string }}</time></span></div>
 {{ release.body }}
 <div class="dllist">
-	<a href="{{ release.zipball_url }}"><span>Download release</span></a>
-	<a href="{{ site.github.url }}/assets/files/python37.zip"><span>Download Embedded Python 3.7</span></a>
 {% for asset in release.assets -%}
 <a href="{{ asset.browser_download_url }}"><span>{{ asset.name }}</span></a>
 {%- endfor %}
