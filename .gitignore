@@ -1,4 +1,4 @@
-/src_cli/settings.json
+/src_cli/settings*.json
 /src_cli/settings.bak
 /src_cli/images/*
 !/src_cli/images/__place_images.txt
