@@ -148,11 +148,12 @@ class Settings:
 				with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="r") as f:
 					data = json.load(f, encoding=self.encoding)
 					for key, value in data.items():
-							self.__dict__[key] = value 
+							self.__dict__[key] = value
+			
 			except:
 				print("Unable to load settings.json")
 				sys.exit(1)
-				
+			
 			self.UpgradeSettingsFile()
 		
 		#
