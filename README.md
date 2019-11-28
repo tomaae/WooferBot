@@ -1,8 +1,8 @@
 # WooferBot
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fwooferbot.com&style=plastic)](https://wooferbot.com)
-[![Discord](https://img.shields.io/discord/537760074484023296?style=plastic)](https://discord.gg/vpprtdE)
-![Supporting Windows](https://img.shields.io/badge/os-windows-informational?style=plastic)
-![Supporting Linux](https://img.shields.io/badge/os-linux-informational?style=plastic)
+[![Discord](https://img.shields.io/discord/537760074484023296?style=plastic&logo=discord&logoWidth=12)](https://discord.gg/vpprtdE)
+![Supporting Windows](https://img.shields.io/badge/os-windows-informational?style=plastic&logo=windows&logoWidth=10)
+![Supporting Linux](https://img.shields.io/badge/os-linux-informational?style=plastic&logo=linux&logoWidth=12)
 [![License](https://img.shields.io/badge/license-custom-informational?style=plastic)](LICENSE.md)
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/tomaae/wooferbot?style=plastic)
