@@ -241,8 +241,9 @@ class Twitch:
 						continue
 					
 					# SUB
-					if jsonData['msg-id'] == 'sub':
-						jsonData['custom-tag'] = 'sub'
+					if jsonData['msg-id'] == 'sub' or jsonData['msg-id'] == 'resub' or jsonData['msg-id'] == 'subgift' or jsonData['msg-id'] == 'anonsubgift':
+						jsonData['custom-tag'] = jsonData['msg-id']
+						
 						if jsonData['msg-param-sub-plan'] == "Prime":
 							jsonData['sub_tier'] = 'Prime'
 						if jsonData['msg-param-sub-plan'] == "1000":
@@ -252,57 +253,12 @@ class Twitch:
 						if jsonData['msg-param-sub-plan'] == "3000":
 							jsonData['sub_tier'] = 'Tier 3'
 						
-						if jsonData['msg-param-cumulative-months']:
-							jsonData['months'] = jsonData['msg-param-cumulative-months']
-						if jsonData['msg-param-streak-months']:
-							jsonData['months_streak'] = jsonData['msg-param-streak-months']
-						self.woofer.ProcessJson(jsonData)
-						continue
-					
-					# RESUB
-					if jsonData['msg-id'] == 'resub':
-						jsonData['custom-tag'] = 'resub'
-						if jsonData['msg-param-sub-plan'] == "Prime":
-							jsonData['sub_tier'] = 'Prime'
-						if jsonData['msg-param-sub-plan'] == "1000":
-							jsonData['sub_tier'] = 'Tier 1'
-						if jsonData['msg-param-sub-plan'] == "2000":
-							jsonData['sub_tier'] = 'Tier 2'
-						if jsonData['msg-param-sub-plan'] == "3000":
-							jsonData['sub_tier'] = 'Tier 3'
+						if jsonData['msg-id'] == 'sub' or jsonData['msg-id'] == 'resub':
+							if jsonData['msg-param-cumulative-months']:
+								jsonData['months'] = jsonData['msg-param-cumulative-months']
+							if jsonData['msg-param-streak-months']:
+								jsonData['months_streak'] = jsonData['msg-param-streak-months']
 						
-						if jsonData['msg-param-cumulative-months']:
-							jsonData['months'] = jsonData['msg-param-cumulative-months']
-						if jsonData['msg-param-streak-months']:
-							jsonData['months_streak'] = jsonData['msg-param-streak-months']
-						self.woofer.ProcessJson(jsonData)
-						continue
-					
-					# SUBGIFT
-					if jsonData['msg-id'] == 'subgift':
-						jsonData['custom-tag'] = 'subgift'
-						if jsonData['msg-param-sub-plan'] == "Prime":
-							jsonData['sub_tier'] = 'Prime'
-						if jsonData['msg-param-sub-plan'] == "1000":
-							jsonData['sub_tier'] = 'Tier 1'
-						if jsonData['msg-param-sub-plan'] == "2000":
-							jsonData['sub_tier'] = 'Tier 2'
-						if jsonData['msg-param-sub-plan'] == "3000":
-							jsonData['sub_tier'] = 'Tier 3'
-						self.woofer.ProcessJson(jsonData)
-						continue
-					
-					# ANON SUBGIFT
-					if jsonData['msg-id'] == 'anonsubgift':
-						jsonData['custom-tag'] = 'anonsubgift'
-						if jsonData['msg-param-sub-plan'] == "Prime":
-							jsonData['sub_tier'] = 'Prime'
-						if jsonData['msg-param-sub-plan'] == "1000":
-							jsonData['sub_tier'] = 'Tier 1'
-						if jsonData['msg-param-sub-plan'] == "2000":
-							jsonData['sub_tier'] = 'Tier 2'
-						if jsonData['msg-param-sub-plan'] == "3000":
-							jsonData['sub_tier'] = 'Tier 3'
 						self.woofer.ProcessJson(jsonData)
 						continue
 					
