@@ -562,7 +562,7 @@ class Woofer:
 					continue
 				
 				self.settings.scheduleLines = 0
-				self.settings.scheduleTable[action['Name']] = currentEpoch
+				self.settings.scheduleTable[action['Name']] = int(time.time())
 				if 'Command' in action:
 					self.woofer_commands({
 						"command"      : action['Command'],
