@@ -1,8 +1,9 @@
+/** global: Element */
 Element.prototype.getElementById = function(id) {
 	return this.querySelector("#"+id);
 }
 
-mascotART = function(mascot) {
+window.mascotART = function(mascot) {
 	document.getElementById("m_" + mascot).getElementById("ART").style.display="block";
 	document.getElementById("m_" + mascot).getElementById("VA").style.display="none";
 	document.getElementById("m_" + mascot).getElementById("BTN").getElementsByTagName('div')[0].style.pointerEvents = "none";
@@ -11,7 +12,7 @@ mascotART = function(mascot) {
 	document.getElementById("m_" + mascot).getElementById("BTN").getElementsByTagName('div')[1].style.backgroundPositionY = "-14px";
 }
 
-mascotVA = function(mascot) {
+window.mascotVA = function(mascot) {
 	document.getElementById("m_" + mascot).getElementById("ART").style.display="none";
 	document.getElementById("m_" + mascot).getElementById("VA").style.display="block";
 	document.getElementById("m_" + mascot).getElementById("BTN").getElementsByTagName('div')[0].style.pointerEvents = "auto";
@@ -20,7 +21,7 @@ mascotVA = function(mascot) {
 	document.getElementById("m_" + mascot).getElementById("BTN").getElementsByTagName('div')[1].style.backgroundPositionY = "0";
 }
 
-mascotFilter = function(filter) {
+window.mascotFilter = function(filter) {
 	switch(filter){
 		case 'all':
 			document.getElementById("f_humanoid").style.display="block";
