@@ -7,7 +7,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/tomaae/wooferbot?style=plastic)
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/tomaae/wooferbot/latest?style=plastic)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/tomaae/wooferbot?style=plastic)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/tomaae/wooferbot?style=plastic)
 
 WooferBot is fully customizable interactive mascot for streamers, designed to be used as Browser Source within broadcasting software.
 
