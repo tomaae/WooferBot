@@ -14,15 +14,15 @@
 
 import socket
 from threading import Timer, Thread
-import json
 import re
 import time
+
 
 #---------------------------
 #   Twitch API
 #---------------------------
 class Twitch:
-	def __init__(self, settings, woofer, bot = False):
+	def __init__(self, settings, woofer, bot=False):
 		self.bot           = bot
 		self.settings      = settings
 		self.woofer        = woofer
@@ -76,7 +76,7 @@ class Twitch:
 	#---------------------------
 	def LinkTwitch(self, account):
 		self.linkTwitch = account
-		return 
+		return
 		
 	#---------------------------
 	#   Send
@@ -91,7 +91,7 @@ class Twitch:
 			return False
 		
 		## Send message to chat
-		self.con.send(bytes("PRIVMSG #" + self.settings.TwitchChannel +' :'+ message +'\r\n', self.chrset))
+		self.con.send(bytes("PRIVMSG #" + self.settings.TwitchChannel + ' :' + message + '\r\n', self.chrset))
 		return True
 		
 	#---------------------------
@@ -115,9 +115,9 @@ class Twitch:
 		try:
 			self.con = socket.socket()
 			self.con.connect((self.host, self.port))
-			self.con.send(bytes('PASS %s\r\n'  % TwitchOAUTH,                     self.chrset)) # www.twitchapps.com/tmi/ will help to retrieve the required authkey
-			self.con.send(bytes('NICK %s\r\n'  % TwitchLogin,                     self.chrset))
-			self.con.send(bytes('JOIN #%s\r\n' % self.settings.TwitchChannel,     self.chrset))
+			self.con.send(bytes('PASS %s\r\n' % TwitchOAUTH, self.chrset))  # www.twitchapps.com/tmi/ will help to retrieve the required authkey
+			self.con.send(bytes('NICK %s\r\n' % TwitchLogin, self.chrset))
+			self.con.send(bytes('JOIN #%s\r\n' % self.settings.TwitchChannel, self.chrset))
 			if not self.bot:
 				self.con.send(bytes('CAP REQ :twitch.tv/tags twitch.tv/commands\r\n', self.chrset))
 		except:
@@ -138,7 +138,7 @@ class Twitch:
 		data = ""
 		while True:
 			try:
-				data = data+self.con.recv(1024).decode(self.chrset)
+				data = data + self.con.recv(1024).decode(self.chrset)
 				data_split = re.split(r"[~\r\n]+", data)
 				data = data_split.pop()
 				Thread(target=self.ProcessData, args=(data_split,)).start()
@@ -338,15 +338,15 @@ class Twitch:
 			"months": "0",
 			"months_streak": "0",
 			"display-name": "",
-			"msg-id": "", # Valid values: sub, resub, subgift, anonsubgift, raid, ritual.
-			"msg-param-viewerCount": "", # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
-			"msg-param-recipient-display-name": "", # (Sent only on subgift, anonsubgift) The display name of the subscription gift recipient.
-			"msg-param-sub-plan": "", #(Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
-			"msg-param-cumulative-months": "", #(Sent only on sub, resub) The total number of months the user has subscribed.
-			"msg-param-streak-months": "", #(Sent only on sub, resub) The number of consecutive months the user has subscribed. This is 0 if msg-param-should-share-streak is 0.
-			"msg-param-ritual-name": "", # (Sent only on ritual) The name of the ritual this notice is for. Valid value: new_chatter.
+			"msg-id": "",  # Valid values: sub, resub, subgift, anonsubgift, raid, ritual.
+			"msg-param-viewerCount": "",  # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
+			"msg-param-recipient-display-name": "",  # (Sent only on subgift, anonsubgift) The display name of the subscription gift recipient.
+			"msg-param-sub-plan": "",  # (Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
+			"msg-param-cumulative-months": "",  # (Sent only on sub, resub) The total number of months the user has subscribed.
+			"msg-param-streak-months": "",  # (Sent only on sub, resub) The number of consecutive months the user has subscribed. This is 0 if msg-param-should-share-streak is 0.
+			"msg-param-ritual-name": "",  # (Sent only on ritual) The name of the ritual this notice is for. Valid value: new_chatter.
 			"login": "",
-			"emotes": "", # <emote ID>:<first index>-<last index>,<another first index>-<another last index>/<another emote ID>:<first index>-<last index>...
+			"emotes": "",  # <emote ID>:<first index>-<last index>,<another first index>-<another last index>/<another emote ID>:<first index>-<last index>...
 			"command": "",
 			"command_parameter": "",
 			"sender": "",
@@ -419,6 +419,6 @@ class Twitch:
 			if emote.find(':') >= 0:
 				emote = emote.split(":")[1]
 			emote = emote.split("-")
-			msg = msg[:int(emote[0])] + msg[int(emote[1])+1:]
+			msg = msg[:int(emote[0])] + msg[int(emote[1]) + 1:]
 		#print(msg)
 		return msg

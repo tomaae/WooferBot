@@ -21,6 +21,7 @@ import time
 import os
 from pynput.keyboard import Key, Controller
 
+
 #---------------------------
 #   Woofer logic
 #---------------------------
@@ -251,7 +252,7 @@ class Woofer:
 		if 'hue' in jsonData:
 			for device in jsonData['hue']:
 				if 'Brightness' in jsonData['hue'][device] and jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in jsonData['hue'][device] and len(jsonData['hue'][device]['Color']) >= 6 and len(jsonData['hue'][device]['Color']) <= 7:
-					self.hue.state(device = device, bri = jsonData['hue'][device]['Brightness'], col = jsonData['hue'][device]['Color'])
+					self.hue.state(device=device, bri=jsonData['hue'][device]['Brightness'], col=jsonData['hue'][device]['Color'])
 			
 			if 'huepersistent' in jsonData and jsonData['huepersistent']:
 				self.changedLightsHue = jsonData['hue']
@@ -262,7 +263,7 @@ class Woofer:
 		if 'yeelight' in jsonData:
 			for device in jsonData['yeelight']:
 				if 'Brightness' in jsonData['yeelight'][device] and jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in jsonData['yeelight'][device] and len(jsonData['yeelight'][device]['Color']) >= 6 and len(jsonData['yeelight'][device]['Color']) <= 7:
-					self.yeelight.state(device = device, brightness = jsonData['yeelight'][device]['Brightness'], color = jsonData['yeelight'][device]['Color'], transition = jsonData['yeelight'][device]['Transition'], transitionTime = jsonData['yeelight'][device]['TransitionTime'])
+					self.yeelight.state(device=device, brightness=jsonData['yeelight'][device]['Brightness'], color=jsonData['yeelight'][device]['Color'], transition=jsonData['yeelight'][device]['Transition'], transitionTime=jsonData['yeelight'][device]['TransitionTime'])
 			
 			if 'yeelightpersistent' in jsonData and jsonData['yeelightpersistent']:
 				self.changedLightsYeelight = jsonData['yeelight']
@@ -270,13 +271,13 @@ class Woofer:
 		#
 		# Reset to default after X seconds
 		#
-		threading.Timer(jsonData['time'] / 1000, self.woofer_queue_default, args=(queue_id,jsonData)).start()
+		threading.Timer(jsonData['time'] / 1000, self.woofer_queue_default, args=(queue_id, jsonData)).start()
 		return
 	
 	#---------------------------
 	#   woofer_queue_default
 	#---------------------------
-	def woofer_queue_default(self,queue_id, old_jsonData):
+	def woofer_queue_default(self, queue_id, old_jsonData):
 		#
 		# Set default Idle image
 		#
@@ -324,29 +325,29 @@ class Woofer:
 			if self.changedLightsHue:
 				for device in self.changedLightsHue:
 					if 'Brightness' in self.changedLightsHue[device] and self.changedLightsHue[device]['Brightness'] >= 1 and 'Color' in self.changedLightsHue[device] and len(self.changedLightsHue[device]['Color']) >= 6 and len(self.changedLightsHue[device]['Color']) <= 7:
-						self.hue.state(device = device, bri = self.changedLightsHue[device]['Brightness'], col = self.changedLightsHue[device]['Color'])
+						self.hue.state(device=device, bri=self.changedLightsHue[device]['Brightness'], col=self.changedLightsHue[device]['Color'])
 				
 				for device in old_jsonData['hue']:
 					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
 						if device not in self.changedLightsHue:
-							self.hue.state(device = device)
+							self.hue.state(device=device)
 			
 			## Reset to Idle lights
 			elif 'Idle' in self.settings.PoseMapping and 'Hue' in self.settings.PoseMapping['Idle']:
 				for device in self.settings.PoseMapping['Idle']['Hue']:
 					if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
-						self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+						self.hue.state(device=device, bri=self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col=self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
 				
 				for device in old_jsonData['hue']:
 					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
 						if device not in self.settings.PoseMapping['Idle']['Hue']:
-							self.hue.state(device = device)
+							self.hue.state(device=device)
 			
 			## Turn off lights
 			else:
 				for device in old_jsonData['hue']:
 					if 'Brightness' in old_jsonData['hue'][device] and old_jsonData['hue'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['hue'][device] and len(old_jsonData['hue'][device]['Color']) >= 6 and len(old_jsonData['hue'][device]['Color']) <= 7:
-						self.hue.state(device = device)
+						self.hue.state(device=device)
 		
 		#
 		# Reset Yeelight to Idle
@@ -356,29 +357,29 @@ class Woofer:
 			if self.changedLightsYeelight:
 				for device in self.changedLightsYeelight:
 					if 'Brightness' in self.changedLightsYeelight[device] and self.changedLightsYeelight[device]['Brightness'] >= 1 and 'Color' in self.changedLightsYeelight[device] and len(self.changedLightsYeelight[device]['Color']) >= 6 and len(self.changedLightsYeelight[device]['Color']) <= 7:
-						self.yeelight.state(device = device, brightness = self.changedLightsYeelight[device]['Brightness'], color = self.changedLightsYeelight[device]['Color'], transition = self.changedLightsYeelight[device]['Transition'], transitionTime = self.changedLightsYeelight[device]['TransitionTime'])
+						self.yeelight.state(device=device, brightness=self.changedLightsYeelight[device]['Brightness'], color=self.changedLightsYeelight[device]['Color'], transition=self.changedLightsYeelight[device]['Transition'], transitionTime=self.changedLightsYeelight[device]['TransitionTime'])
 				
 				for device in old_jsonData['yeelight']:
 					if 'Brightness' in old_jsonData['yeelight'][device] and old_jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['yeelight'][device] and len(old_jsonData['yeelight'][device]['Color']) >= 6 and len(old_jsonData['yeelight'][device]['Color']) <= 7:
 						if device not in self.changedLightsYeelight:
-							self.yeelight.state(device = device)
+							self.yeelight.state(device=device)
 			
 			## Reset to Idle lights
 			elif 'Idle' in self.settings.PoseMapping and 'Yeelight' in self.settings.PoseMapping['Idle']:
 				for device in self.settings.PoseMapping['Idle']['Yeelight']:
 					if 'Brightness' in self.settings.PoseMapping['Idle']['Yeelight'][device] and self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Yeelight'][device] and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) <= 7:
-						self.yeelight.state(device = device, brightness = self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'], color = self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'], transition = self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'], transitionTime = self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
+						self.yeelight.state(device=device, brightness=self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'], color=self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'], transition=self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'], transitionTime=self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
 				
 				for device in old_jsonData['yeelight']:
 					if 'Brightness' in old_jsonData['yeelight'][device] and old_jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['yeelight'][device] and len(old_jsonData['yeelight'][device]['Color']) >= 6 and len(old_jsonData['yeelight'][device]['Color']) <= 7:
 						if device not in self.settings.PoseMapping['Idle']['Yeelight']:
-							self.yeelight.state(device = device)
+							self.yeelight.state(device=device)
 			
 			## Turn off lights
 			else:
 				for device in old_jsonData['yeelight']:
 					if 'Brightness' in old_jsonData['yeelight'][device] and old_jsonData['yeelight'][device]['Brightness'] >= 1 and 'Color' in old_jsonData['yeelight'][device] and len(old_jsonData['yeelight'][device]['Color']) >= 6 and len(old_jsonData['yeelight'][device]['Color']) <= 7:
-						self.yeelight.state(device = device)
+						self.yeelight.state(device=device)
 		
 		#
 		# Remove notification from queue
@@ -391,7 +392,7 @@ class Woofer:
 	#---------------------------
 	#   woofer_addtoqueue
 	#---------------------------
-	def woofer_addtoqueue(self,jsonResponse):
+	def woofer_addtoqueue(self, jsonResponse):
 		print("{0}: {1}".format(jsonResponse['id'], jsonResponse['sender']))
 		
 		if 'message' not in jsonResponse or jsonResponse["message"] == "":
@@ -421,7 +422,7 @@ class Woofer:
 	#---------------------------
 	#   woofer_alert
 	#---------------------------
-	def woofer_alert(self,jsonData):
+	def woofer_alert(self, jsonData):
 		customId = jsonData['custom-tag']
 		jsonFeed = {
 			"sender" : jsonData['display-name']
@@ -679,7 +680,7 @@ class Woofer:
 	#---------------------------
 	#   woofer_greet
 	#---------------------------
-	def woofer_greet(self,jsonData):
+	def woofer_greet(self, jsonData):
 		## Check if user was already greeted
 		s = set(self.greetedUsers)
 		if jsonData['sender'] in s:
@@ -774,7 +775,7 @@ class Woofer:
 			return
 		
 		if jsonData['command_parameter'].find('@') == 0:
-			jsonData['command_parameter'] = jsonData['command_parameter'] [1:]
+			jsonData['command_parameter'] = jsonData['command_parameter'][1:]
 		
 		#
 		# Get user info

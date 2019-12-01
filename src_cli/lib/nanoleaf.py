@@ -19,6 +19,7 @@ import select
 import re
 import json
 
+
 #---------------------------
 #   Nanoleaf Handling
 #---------------------------
@@ -67,7 +68,7 @@ class Nanoleaf:
 		#
 		# Token not set
 		#
-		result = self.put_request("state", { 'on': { 'value': False } })
+		result = self.put_request("state", {'on': {'value': False}})
 		if self.token == "" or result.status_code == 401:
 			while not self.auth():
 				print("Press C to cancel or any key to try again")
@@ -92,11 +93,7 @@ class Nanoleaf:
 		SSDP_IP = "239.255.255.250"
 		SSDP_PORT = 1900
 		SSDP_MX = 10
-		req = ['M-SEARCH * HTTP/1.1',
-		'HOST: ' + SSDP_IP + ':' + str(SSDP_PORT),
-		'MAN: "ssdp:discover"',
-		'MX: ' + str(SSDP_MX),
-		'ST: ssdp:all']
+		req = ['M-SEARCH * HTTP/1.1', 'HOST: ' + SSDP_IP + ':' + str(SSDP_PORT), 'MAN: "ssdp:discover"', 'MX: ' + str(SSDP_MX), 'ST: ssdp:all']
 		req = '\r\n'.join(req).encode('utf-8')
 		
 		#
@@ -127,7 +124,7 @@ class Nanoleaf:
 					ip = ""
 					for line in response.lower().split("\n"):
 						if "location:" in line:
-							ip = re.search( r'[0-9]+(?:\.[0-9]+){3}', line).group()
+							ip = re.search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
 							if ip not in devices and (self.is_valid_ipv4_address(ip) or self.is_valid_ipv6_address(ip)):
 								devices.append(ip)
 			
@@ -168,19 +165,19 @@ class Nanoleaf:
 	#---------------------------
 	#   Scene
 	#---------------------------
-	def Scene(self, name = None):
+	def Scene(self, name=None):
 		## Check if nanoleaf is active
 		if not self.active:
 			return
 		
 		if not name:
 			## Turn nanoleaf off
-			data = { 'on': { 'value': False } }
+			data = {'on': {'value': False}}
 			result = self.put_request("state", data)
 			return result
 		
 		## Set nanoleaf scene
-		data = { 'select': name } 
+		data = {'select': name}
 		result = self.put_request("effects", data)
 		return result
 		
@@ -190,7 +187,7 @@ class Nanoleaf:
 	def put_request(self, endpoint, data: dict):
 		url = "http://" + self.ip + ":16021/api/v1/" + self.token + "/" + endpoint
 		try:
-			result = requests.put(url, data = json.dumps(data), timeout = 1)
+			result = requests.put(url, data=json.dumps(data), timeout=1)
 		except requests.exceptions.RequestException as e:
 			print(e)
 			return result
@@ -229,7 +226,7 @@ class Nanoleaf:
 		url = "http://" + self.ip + ":16021/api/v1/new"
 		result = requests.post(url)
 		
-		## Authorization successful 
+		## Authorization successful
 		if result.status_code == 200:
 			print("Authorized ok")
 			self.token = result.json()['auth_token']
@@ -237,8 +234,8 @@ class Nanoleaf:
 		
 		## Authorization requires hardware confirmation
 		if result.status_code == 403:
-			print("Nanoleaf not in discovery mode.")	
-			print("Hold down power button for ~5 seconds until led starts blinking.")	
+			print("Nanoleaf not in discovery mode.")
+			print("Hold down power button for ~5 seconds until led starts blinking.")
 			return False
 		
 		return
@@ -248,7 +245,7 @@ class Nanoleaf:
 	#---------------------------
 	def portup(self, ip, port):
 		#socket.setdefaulttimeout(0.01)
-		socket_obj = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		if socket_obj.connect_ex((ip, port)) == 0:
 			socket_obj.close()
 			return True

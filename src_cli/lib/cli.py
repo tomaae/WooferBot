@@ -12,7 +12,6 @@
 #
 ##########################################################################
 
-import random
 
 #---------------------------
 #   CLI Handling
@@ -52,11 +51,11 @@ class Cli:
 			#
 			if cmd == "0":
 				self.woofer.woofer_commands({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"broadcaster"  : 1,
-						"command"      : "!start",
-						"custom-tag"   : "!start"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"broadcaster"  : 1,
+					"command"      : "!start",
+					"custom-tag"   : "!start"
 				})
 			
 			#
@@ -64,8 +63,8 @@ class Cli:
 			#
 			if cmd == "1":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"custom-tag"   : "follow"
+					"display-name" : "testname",
+					"custom-tag"   : "follow"
 				})
 			
 			#
@@ -73,9 +72,9 @@ class Cli:
 			#
 			if cmd == "2":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"custom-tag"   : "greet"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"custom-tag"   : "greet"
 				})
 			
 			#
@@ -83,14 +82,14 @@ class Cli:
 			#
 			if cmd == "3":
 				self.woofer.woofer_shoutout({
-						"subscriber"        : "1",
-						"vip"               : "1",
-						"moderator"         : "1",
-						"broadcaster"       : "1",
-						"display-name"      : "testname",
-						"sender"            : "testname",
-						"command_parameter" : "testname",
-						"custom-tag"        : "shoutout"
+					"subscriber"        : "1",
+					"vip"               : "1",
+					"moderator"         : "1",
+					"broadcaster"       : "1",
+					"display-name"      : "testname",
+					"sender"            : "testname",
+					"command_parameter" : "testname",
+					"custom-tag"        : "shoutout"
 				})
 			
 			#
@@ -98,9 +97,9 @@ class Cli:
 			#
 			if cmd == "4":
 				self.woofer.woofer_lurk({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"custom-tag"   : "lurk"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"custom-tag"   : "lurk"
 				})
 			
 			#
@@ -108,9 +107,9 @@ class Cli:
 			#
 			if cmd == "5":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"bits"         : "1000",
-						"custom-tag"   : "bits"
+					"display-name" : "testname",
+					"bits"         : "1000",
+					"custom-tag"   : "bits"
 				})
 			
 			#
@@ -118,9 +117,9 @@ class Cli:
 			#
 			if cmd == "6":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"custom-tag"   : "new_chatter"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"custom-tag"   : "new_chatter"
 				})
 			
 			#
@@ -128,10 +127,10 @@ class Cli:
 			#
 			if cmd == "7":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"viewers"      : "1",
-						"custom-tag"   : "raid"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"viewers"      : "1",
+					"custom-tag"   : "raid"
 				})
 			
 			#
@@ -139,9 +138,9 @@ class Cli:
 			#
 			if cmd == "8":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"custom-tag"   : "host"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"custom-tag"   : "host"
 				})
 			
 			#
@@ -149,12 +148,12 @@ class Cli:
 			#
 			if cmd == "9":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"sub_tier"     : "Tier 2",
-						"months"       : "4",
-						"months_streak": "4",
-						"custom-tag"   : "sub"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"sub_tier"     : "Tier 2",
+					"months"       : "4",
+					"months_streak": "4",
+					"custom-tag"   : "sub"
 				})
 			
 			#
@@ -162,12 +161,12 @@ class Cli:
 			#
 			if cmd == "10":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"sub_tier"     : "Tier 2",
-						"months"       : "4",
-						"months_streak": "4",
-						"custom-tag"   : "resub"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"sub_tier"     : "Tier 2",
+					"months"       : "4",
+					"months_streak": "4",
+					"custom-tag"   : "resub"
 				})
 			
 			#
@@ -175,11 +174,11 @@ class Cli:
 			#
 			if cmd == "11":
 				self.woofer.woofer_alert({
-						"display-name" : "testname",
-						"sender"       : "testname",
-						"sub_tier"     : "Tier 2",
-						"msg-param-recipient-display-name" : "testname2",
-						"custom-tag"   : "subgift"
+					"display-name" : "testname",
+					"sender"       : "testname",
+					"sub_tier"     : "Tier 2",
+					"msg-param-recipient-display-name" : "testname2",
+					"custom-tag"   : "subgift"
 				})
 			
 			#
@@ -193,5 +192,3 @@ class Cli:
 			
 			#print(cmd)
 		return
-		
-		

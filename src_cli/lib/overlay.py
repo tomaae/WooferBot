@@ -19,6 +19,7 @@ import threading
 import os
 import random
 
+
 #---------------------------
 #   Overlay Handling
 #---------------------------
@@ -61,7 +62,7 @@ class Overlay:
 	#---------------------------
 	#   Send
 	#---------------------------
-	def Send(self, event, jsonData, init = 0):
+	def Send(self, event, jsonData, init=0):
 		if self.sendQueue:
 			return 1
 		
@@ -131,19 +132,19 @@ class Overlay:
 				if 'Hue' in self.settings.PoseMapping['Idle']:
 					for device in self.settings.PoseMapping['Idle']['Hue']:
 						if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Hue'][device] and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
-							self.hue.state(device = device, bri = self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col = self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+							self.hue.state(device=device, bri=self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'], col=self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
 				
 				## Reset Yeelight to Idle
 				if 'Yeelight' in self.settings.PoseMapping['Idle']:
 					for device in self.settings.PoseMapping['Idle']['Yeelight']:
 						if 'Brightness' in self.settings.PoseMapping['Idle']['Yeelight'][device] and self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'] >= 1 and 'Color' in self.settings.PoseMapping['Idle']['Yeelight'][device] and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) >= 6 and len(self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) <= 7 and isinstance(self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'], int):
-							self.yeelight.state(device = device, brightness = self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'], color = self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'], transition = self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'], transitionTime = self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
+							self.yeelight.state(device=device, brightness=self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'], color=self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'], transition=self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'], transitionTime=self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
 			
 			## Send Idle payload
 			jsonData = {
 				"mascot": mascotIdleImage
 			}
-			self.Send(event = "EVENT_WOOFERBOT", jsonData = jsonData, init = 1)
+			self.Send(event="EVENT_WOOFERBOT", jsonData=jsonData, init=1)
 		
 		#
 		# Overlay loop
@@ -221,7 +222,7 @@ class Overlay:
 		if self.settings.AlignMascot == "right":
 			css[".mascot|left"] = "auto"
 			css[".mascot|right"] = "0"
-			css[".message|right"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10 ) + "px"
+			css[".message|right"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10) + "px"
 			css[".message|left"] = "auto"
 			css[".mainbox|text-align"] = "right"
 			css[".message::after|display"] = "none"
@@ -231,7 +232,7 @@ class Overlay:
 		else:
 			css[".mascot|left"] = "0"
 			css[".mascot|right"] = "auto"
-			css[".message|left"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10 ) + "px"
+			css[".message|left"] = str(int(self.settings.mascotStyles["MascotMaxWidth"]) + 10) + "px"
 			css[".message|right"] = "auto"
 			css[".mainbox|text-align"] = "left"
 			css[".message::after|display"] = "block"
@@ -266,8 +267,8 @@ class Overlay:
 			if style == "BorderStrokeColor":
 				if val == "":
 					css[".message|box-shadow"] = ""
-					css[".message::after|border-right-color"] = "transparent" # Not working
-					css[".message::before|border-right-color"] = "transparent" # Not working
+					css[".message::after|border-right-color"] = "transparent"  # Not working
+					css[".message::before|border-right-color"] = "transparent"  # Not working
 				else:
 					css[".message|box-shadow"] = "-1px -1px 0 " + val + ", 1px -1px 0 " + val + ", -1px 1px 0 " + val + ", 1px 1px 0 " + val
 					css[".message::after|border-right-color"] = val  # Not working

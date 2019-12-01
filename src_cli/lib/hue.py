@@ -19,6 +19,7 @@ import select
 import re
 import json
 
+
 #---------------------------
 #   HUE Handling
 #---------------------------
@@ -69,7 +70,7 @@ class Hue:
 		# Token not set
 		#
 		url = "http://" + self.ip + ":80/api/" + self.token
-		result = requests.get(url, data = json.dumps({ 'devicetype': 'wooferbot' }), timeout = 5)
+		result = requests.get(url, data=json.dumps({'devicetype': 'wooferbot'}), timeout=5)
 		output_json = result.json()
 		if result.status_code != 200 or len(output_json) == 0:
 			print("Philips HUE Bridge did not responding correctly")
@@ -86,7 +87,7 @@ class Hue:
 				settings.HueToken = self.token
 		
 		url = "http://" + self.ip + ":80/api/" + self.token
-		result = requests.get(url, data = json.dumps({ 'devicetype': 'wooferbot' }), timeout = 5)
+		result = requests.get(url, data=json.dumps({'devicetype': 'wooferbot'}), timeout=5)
 		output_json = result.json()
 		if result.status_code == 200 and 'config' in output_json and 'bridgeid' in output_json['config'] and len(output_json['config']['bridgeid']) > 2:
 			self.detect_lights()
@@ -114,7 +115,7 @@ class Hue:
 	#---------------------------
 	#   state
 	#---------------------------
-	def state(self, device, col = "", bri = 100):
+	def state(self, device, col="", bri=100):
 		## Check if hue is active
 		if not self.active:
 			return
@@ -136,21 +137,19 @@ class Hue:
 			data['on'] = False
 		
 		if 'bri' in data:
-			data['bri'] = round(bri *2.54)
+			data['bri'] = round(bri * 2.54)
 		
 		## Send API request to Hue Bridge
 		url = "http://" + self.ip + ":80/api/" + self.token + "/lights/" + str(self.lights[device]) + "/state"
-		requests.put(url, data = json.dumps(data), timeout = 5)
+		requests.put(url, data=json.dumps(data), timeout=5)
 		return
 		
 	#---------------------------
 	#   detect_lights
 	#---------------------------
 	def detect_lights(self):
-		data = { 'devicetype': 'wooferbot' }
 		url = "http://" + self.ip + ":80/api/" + self.token + "/lights"
-		#result = requests.post(url, data = json.dumps(data), timeout = 5)
-		result = requests.get(url, timeout = 5)
+		result = requests.get(url, timeout=5)
 		
 		if result.status_code == 200:
 			output_json = result.json()
@@ -185,11 +184,7 @@ class Hue:
 		SSDP_IP = "239.255.255.250"
 		SSDP_PORT = 1900
 		SSDP_MX = 10
-		req = ['M-SEARCH * HTTP/1.1',
-		'HOST: ' + SSDP_IP + ':' + str(SSDP_PORT),
-		'MAN: "ssdp:discover"',
-		'MX: ' + str(SSDP_MX),
-		'ST: ssdp:all']
+		req = ['M-SEARCH * HTTP/1.1', 'HOST: ' + SSDP_IP + ':' + str(SSDP_PORT), 'MAN: "ssdp:discover"', 'MX: ' + str(SSDP_MX), 'ST: ssdp:all']
 		req = '\r\n'.join(req).encode('utf-8')
 		
 		#
@@ -220,7 +215,7 @@ class Hue:
 					ip = ""
 					for line in response.lower().split("\n"):
 						if "location:" in line:
-							ip = re.search( r'[0-9]+(?:\.[0-9]+){3}', line).group()
+							ip = re.search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
 							if ip not in devices and (self.is_valid_ipv4_address(ip) or self.is_valid_ipv6_address(ip)):
 								devices.append(ip)
 			
@@ -238,9 +233,9 @@ class Hue:
 	def auth(self):
 		print("Registering HueBridge...")
 		## Send API request
-		data = { 'devicetype': 'wooferbot' }
+		data = {'devicetype': 'wooferbot'}
 		url = "http://" + self.ip + ":80/api"
-		result = requests.post(url, data = json.dumps(data), timeout = 5)
+		result = requests.post(url, data=json.dumps(data), timeout=5)
 		
 		if result.status_code == 200:
 			output_json = result.json()
@@ -254,7 +249,7 @@ class Hue:
 						print("Error: Press link button and try again")
 						return False
 				
-				## Authorization successful 
+				## Authorization successful
 				if 'success' in items:
 					self.token = output_json[i]['success']['username']
 					print("Authorized successfully")
@@ -295,7 +290,7 @@ class Hue:
 	#---------------------------
 	def portup(self, ip, port):
 		#socket.setdefaulttimeout(0.01)
-		socket_obj = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		if socket_obj.connect_ex((ip, port)) == 0:
 			socket_obj.close()
 			return True
@@ -305,7 +300,7 @@ class Hue:
 	#---------------------------
 	#   hex_to_hue
 	#---------------------------
-	def hex_to_hue(self,h):
+	def hex_to_hue(self, h):
 		h = h.lstrip('#')
 		r = int(h[0:2], 16)
 		g = int(h[2:4], 16)
@@ -331,5 +326,5 @@ class Hue:
 			h /= 6
 		
 		h = round(h * 65535)
-		s = round(s *254)
+		s = round(s * 254)
 		return h, s

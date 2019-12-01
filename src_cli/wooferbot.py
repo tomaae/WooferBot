@@ -17,7 +17,7 @@ import sys
 import os
 
 pathRoot = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(pathRoot, "lib")) #point at lib folder for classes / references
+sys.path.append(os.path.join(pathRoot, "lib"))  # point at lib folder for classes / references
 
 from settings import Settings
 from overlay import Overlay
@@ -30,7 +30,7 @@ from hue import Hue
 from miyeelight import Yeelight
 
 #---------------------------
-#   Main
+#  Main
 #---------------------------
 
 print('WooferBot ' + wooferbotVersion + '  Copyright (C) 2019  Tomaae')
@@ -55,7 +55,7 @@ yeelight = Yeelight(settings=settings)
 settings.Save()
 
 # Initialize twitch chatbot
-twitchBot = Twitch(settings=settings, woofer=None, bot = True)
+twitchBot = Twitch(settings=settings, woofer=None, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
 	twitchBot.Connect()
 

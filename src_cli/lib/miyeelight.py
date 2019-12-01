@@ -15,11 +15,11 @@
 from yeelight import discover_bulbs
 from yeelight import Bulb
 
+
 #---------------------------
 #   Yeelight Handling
 #---------------------------
 class Yeelight:
-	
 	def __init__(self, settings):
 		self.settings = settings
 		self.enabled = self.settings.YeelightEnabled
@@ -71,7 +71,7 @@ class Yeelight:
 	#---------------------------
 	#   state
 	#---------------------------
-	def state(self, device, color = "", brightness = 100, transition = True, transitionTime = 1000):
+	def state(self, device, color="", brightness=100, transition=True, transitionTime=1000):
 		## Check if yeelight is active
 		if not self.active:
 			return
@@ -199,7 +199,7 @@ class Yeelight:
 	#---------------------------
 	#   hex_to_rgb
 	#---------------------------
-	def hex_to_rgb(self,h):
+	def hex_to_rgb(self, h):
 		h = h.lstrip('#')
 		r = int(h[0:2], 16)
 		g = int(h[2:4], 16)

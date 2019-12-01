@@ -12,11 +12,10 @@
 #
 ##########################################################################
 
-import sys
 import os
-import re
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+
 
 #---------------------------
 #   _WatchdogCustomHandler
@@ -76,6 +75,7 @@ class _WatchdogCustomHandler(FileSystemEventHandler):
 						})
 		
 		return
+
 
 #---------------------------
 #   Watchdog

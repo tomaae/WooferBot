@@ -18,6 +18,7 @@ import os
 import time
 import sys
 
+
 #---------------------------
 #   Settings Handling
 #---------------------------
@@ -67,7 +68,7 @@ class Settings:
 			with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json", encoding=self.encoding, mode="r") as f:
 				data = json.load(f, encoding=self.encoding)
 				for key, value in data.items():
-						self.__dict__[key] = value 
+						self.__dict__[key] = value
 		except:
 			print("Unable to load mascot.json")
 			sys.exit(1)
@@ -82,7 +83,7 @@ class Settings:
 		
 		## Check mascot audio
 		for action in self.mascotAudio:
-			if not isinstance(self.mascotAudio[action]['Audio'],list):
+			if not isinstance(self.mascotAudio[action]['Audio'], list):
 				print("Mascot audio is not a list for action: " + action)
 				sys.exit(1)
 			
