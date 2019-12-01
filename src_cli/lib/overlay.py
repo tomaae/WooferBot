@@ -12,12 +12,12 @@
 #
 ##########################################################################
 
-import websockets
 import json
 import asyncio
 import threading
 import os
 import random
+import websockets
 
 
 #---------------------------
@@ -25,18 +25,18 @@ import random
 #---------------------------
 class Overlay:
 	def __init__(self, settings, nanoleaf, hue, yeelight, chatbot):
-		self.bindIP       = '127.0.0.1'
-		self.bindPort     = 3339
-		self.active       = 0
-		self.sendQueue    = None
+		self.bindIP = '127.0.0.1'
+		self.bindPort = 3339
+		self.active = 0
+		self.sendQueue = None
 		self.serverSocket = None
-		self.loop         = None
-		self.loopThread   = None
-		self.settings     = settings
-		self.chatbot      = chatbot
-		self.nanoleaf     = nanoleaf
-		self.hue          = hue
-		self.yeelight     = yeelight
+		self.loop = None
+		self.loopThread = None
+		self.settings = settings
+		self.chatbot = chatbot
+		self.nanoleaf = nanoleaf
+		self.hue = hue
+		self.yeelight = yeelight
 		
 	#---------------------------
 	#   Start

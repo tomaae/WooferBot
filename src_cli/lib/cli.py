@@ -18,7 +18,7 @@
 #---------------------------
 class Cli:
 	def __init__(self, settings, woofer, twitch, twitchBot):
-		self.woofer   = woofer
+		self.woofer = woofer
 		self.settings = settings
 		self.twitch = twitch
 		self.twitchBot = twitchBot

@@ -60,7 +60,7 @@ class Settings:
 	def ReloadMascot(self):
 		print("Loading mascot settings...")
 		self.mascotImages = {}
-		self.mascotAudio  = {}
+		self.mascotAudio = {}
 		self.mascotStyles = {}
 		
 		## Load mascot config
@@ -98,48 +98,48 @@ class Settings:
 	#---------------------------
 	def Reload(self):
 		print("Loading settings...")
-		self.TwitchChannel     = ""
-		self.TwitchOAUTH       = ""
-		self.TwitchBotChannel  = ""
-		self.TwitchBotOAUTH    = ""
-		self.UseChatbot        = False
-		self.twitchClientID    = "zpm94cuvrntu030mauvxvz9cv2ldja"
-		self.Styles            = {}
-		self.Messages          = {}
-		self.Activities        = {}
-		self.Enabled           = {}
-		self.PoseMapping       = {}
-		self.CurrentMascot     = "malamute"
-		self.AlignMascot       = "left"
-		self.pathImages        = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash
-		self.pathAudio         = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash
-		self.HostMessage       = ""
-		self.AutohostMessage   = ""
-		self.FollowMessage     = ""
-		self.GlobalVolume      = 0.2
-		self.MinBits           = 0
-		self.AutoShoutout      = False
-		self.AutoShoutoutTime  = 10
-		self.ShoutoutAccess    = "mod"
-		self.Bots              = []
-		self.commonBots        = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
+		self.TwitchChannel = ""
+		self.TwitchOAUTH = ""
+		self.TwitchBotChannel = ""
+		self.TwitchBotOAUTH = ""
+		self.UseChatbot = False
+		self.twitchClientID = "zpm94cuvrntu030mauvxvz9cv2ldja"
+		self.Styles = {}
+		self.Messages = {}
+		self.Activities = {}
+		self.Enabled = {}
+		self.PoseMapping = {}
+		self.CurrentMascot = "malamute"
+		self.AlignMascot = "left"
+		self.pathImages = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash
+		self.pathAudio = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash
+		self.HostMessage = ""
+		self.AutohostMessage = ""
+		self.FollowMessage = ""
+		self.GlobalVolume = 0.2
+		self.MinBits = 0
+		self.AutoShoutout = False
+		self.AutoShoutoutTime = 10
+		self.ShoutoutAccess = "mod"
+		self.Bots = []
+		self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
 		self.ScheduledMessages = []
-		self.scheduleTable     = {}
-		self.scheduleLines     = 0
-		self.CustomBits        = []
-		self.CustomSubs        = []
-		self.Commands          = {}
-		self.Watchdog          = []
+		self.scheduleTable = {}
+		self.scheduleLines = 0
+		self.CustomBits = []
+		self.CustomSubs = []
+		self.Commands = {}
+		self.Watchdog = []
 		
-		self.NanoleafEnabled   = False
-		self.NanoleafIP        = ""
-		self.NanoleafToken     = ""
+		self.NanoleafEnabled = False
+		self.NanoleafIP = ""
+		self.NanoleafToken = ""
 		
-		self.HueEnabled        = False
-		self.HueIP             = ""
-		self.HueToken          = ""
+		self.HueEnabled = False
+		self.HueIP = ""
+		self.HueToken = ""
 		
-		self.YeelightEnabled   = False
+		self.YeelightEnabled = False
 		
 		#
 		# Load config

@@ -23,18 +23,18 @@ import time
 #---------------------------
 class Twitch:
 	def __init__(self, settings, woofer, bot=False):
-		self.bot           = bot
-		self.settings      = settings
-		self.woofer        = woofer
-		self.host          = "irc.twitch.tv"                           # Hostname of the IRC-Server in this case twitch's
-		self.port          = 6667                                      # Default IRC-Port
-		self.chrset        = 'UTF-8'
-		self.con           = socket.socket()
+		self.bot = bot
+		self.settings = settings
+		self.woofer = woofer
+		self.host = "irc.twitch.tv"  # Hostname of the IRC-Server in this case twitch's
+		self.port = 6667  # Default IRC-Port
+		self.chrset = 'UTF-8'
+		self.con = socket.socket()
 		self.conCheckTimer = Timer(30, self.ConnectionChecker)
-		self.lastPing      = 0
-		self.connected     = False
-		self.linkTwitch    = False
-		self.TwitchLogin   = ""
+		self.lastPing = 0
+		self.connected = False
+		self.linkTwitch = False
+		self.TwitchLogin = ""
 		return
 		
 	#---------------------------

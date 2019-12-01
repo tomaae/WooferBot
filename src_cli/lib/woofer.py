@@ -13,12 +13,12 @@
 ##########################################################################
 
 import json
-import requests
 import uuid
 import random
 import threading
 import time
 import os
+import requests
 from pynput.keyboard import Key, Controller
 
 
@@ -27,30 +27,30 @@ from pynput.keyboard import Key, Controller
 #---------------------------
 class Woofer:
 	def __init__(self, settings, overlay, nanoleaf, hue, yeelight, chatbot):
-		self.settings       = settings
-		self.overlay        = overlay
-		self.nanoleaf       = nanoleaf
-		self.hue            = hue
-		self.yeelight       = yeelight
-		self.chatbot        = chatbot
+		self.settings = settings
+		self.overlay = overlay
+		self.nanoleaf = nanoleaf
+		self.hue = hue
+		self.yeelight = yeelight
+		self.chatbot = chatbot
 		
 		self.keyboard = Controller()
 		
-		self.queue          = []
-		self.greetedUsers   = []
+		self.queue = []
+		self.greetedUsers = []
 		self.greetedUsers.append(self.settings.TwitchChannel)
 		self.greetedUsers.append(self.settings.TwitchChannel + "bot")
 		
-		self.lurkingUsers          = []
-		self.unlurkingUsers        = []
-		self.hostingUsers          = []
-		self.shoutoutUsers         = []
-		self.commandsViewerOnce    = {}
+		self.lurkingUsers = []
+		self.unlurkingUsers = []
+		self.hostingUsers = []
+		self.shoutoutUsers = []
+		self.commandsViewerOnce = {}
 		self.commandsViewerTimeout = {}
 		self.commandsGlobalTimeout = {}
 		
 		self.changedLightsNanoleaf = ""
-		self.changedLightsHue      = {}
+		self.changedLightsHue = {}
 		self.changedLightsYeelight = {}
 		
 		## Start timer for ScheduledMessages
@@ -210,7 +210,40 @@ class Woofer:
 		# Execute hotkey
 		#
 		if 'hotkey' in jsonData and jsonData['hotkey'] != "":
-			keylist = {'space': Key.space, 'alt': Key.alt, 'ctrl': Key.ctrl, 'shift': Key.shift, 'f1': Key.f1, 'f2': Key.f2, 'f3': Key.f3, 'f4': Key.f4, 'f5': Key.f5, 'f6': Key.f6, 'f7': Key.f7, 'f8': Key.f8, 'f9': Key.f9, 'f10': Key.f10, 'f11': Key.f11, 'f12': Key.f12, 'left': Key.left, 'right': Key.right, 'up': Key.up, 'down': Key.down, 'backspace': Key.backspace, 'cmd': Key.cmd, 'delete': Key.delete, 'end': Key.end, 'enter': Key.enter, 'esc': Key.esc, 'home': Key.home, 'insert': Key.insert, 'page_down': Key.page_down, 'page_up': Key.page_up, 'pause': Key.pause, 'print_screen': Key.print_screen, 'tab': Key.tab}
+			keylist = {'space': Key.space,
+				'alt': Key.alt,
+				'ctrl': Key.ctrl,
+				'shift': Key.shift,
+				'f1': Key.f1,
+				'f2': Key.f2,
+				'f3': Key.f3,
+				'f4': Key.f4,
+				'f5': Key.f5,
+				'f6': Key.f6,
+				'f7': Key.f7,
+				'f8': Key.f8,
+				'f9': Key.f9,
+				'f10': Key.f10,
+				'f11': Key.f11,
+				'f12': Key.f12,
+				'left': Key.left,
+				'right': Key.right,
+				'up': Key.up,
+				'down': Key.down,
+				'backspace': Key.backspace,
+				'cmd': Key.cmd,
+				'delete': Key.delete,
+				'end': Key.end,
+				'enter': Key.enter,
+				'esc': Key.esc,
+				'home': Key.home,
+				'insert': Key.insert,
+				'page_down': Key.page_down,
+				'page_up': Key.page_up,
+				'pause': Key.pause,
+				'print_screen': Key.print_screen,
+				'tab': Key.tab
+			}
 			
 			for key in jsonData['hotkey']:
 				if key in keylist:
@@ -401,16 +434,16 @@ class Woofer:
 			else:
 				jsonResponse["message"] = ""
 		
-		jsonResponse["mascot"]             = self.mascotImagesFile(jsonResponse["id"])
-		jsonResponse["mascotmouth"]        = self.mascotImagesMouthHeight(jsonResponse["id"])
-		jsonResponse["time"]               = self.mascotImagesTime(jsonResponse["id"])
-		jsonResponse["audio"]              = self.mascotAudioFile(jsonResponse["id"])
-		jsonResponse["volume"]             = self.mascotAudioVolume(jsonResponse["id"])
-		jsonResponse["nanoleaf"]           = self.mascotNanoleafScene(jsonResponse["id"])
+		jsonResponse["mascot"] = self.mascotImagesFile(jsonResponse["id"])
+		jsonResponse["mascotmouth"] = self.mascotImagesMouthHeight(jsonResponse["id"])
+		jsonResponse["time"] = self.mascotImagesTime(jsonResponse["id"])
+		jsonResponse["audio"] = self.mascotAudioFile(jsonResponse["id"])
+		jsonResponse["volume"] = self.mascotAudioVolume(jsonResponse["id"])
+		jsonResponse["nanoleaf"] = self.mascotNanoleafScene(jsonResponse["id"])
 		jsonResponse["nanoleafpersistent"] = self.mascotNanoleafPersistent(jsonResponse["id"])
-		jsonResponse["hue"]                = self.mascotHueDevices(jsonResponse["id"])
-		jsonResponse["huepersistent"]      = self.mascotHuePersistent(jsonResponse["id"])
-		jsonResponse["yeelight"]           = self.mascotYeelightDevices(jsonResponse["id"])
+		jsonResponse["hue"] = self.mascotHueDevices(jsonResponse["id"])
+		jsonResponse["huepersistent"] = self.mascotHuePersistent(jsonResponse["id"])
+		jsonResponse["yeelight"] = self.mascotYeelightDevices(jsonResponse["id"])
 		jsonResponse["yeelightpersistent"] = self.mascotYeelightPersistent(jsonResponse["id"])
 		
 		## Add to queue
@@ -431,7 +464,7 @@ class Woofer:
 		#
 		# sub/resub
 		#
-		if customId == 'sub' or customId == 'resub':
+		if customId in ('sub', 'resub'):
 			for customObj in self.settings.CustomSubs:
 				if customObj['Tier'] == "" and int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
 					customId = customObj['Name']
@@ -450,19 +483,19 @@ class Woofer:
 				if sub_tier == customObj['Tier'] and int(jsonData['months']) >= int(customObj['From']) and int(jsonData['months']) <= int(customObj['To']):
 					customId = customObj['Name']
 					
-			jsonFeed['months']        = jsonData['months']
+			jsonFeed['months'] = jsonData['months']
 			jsonFeed['months_streak'] = jsonData['months_streak']
-			jsonFeed['sub_tier']      = jsonData['sub_tier']
+			jsonFeed['sub_tier'] = jsonData['sub_tier']
 		
 		#
 		# subgift/anonsubgift
 		#
-		if customId == 'subgift' or customId == 'anonsubgift':
+		if customId in ('subgift', 'anonsubgift'):
 			if jsonData['custom-tag'] == 'anonsubgift':
 				jsonData['display-name'] = 'anonymous'
 			
 			jsonFeed['recipient'] = jsonData['msg-param-recipient-display-name']
-			jsonFeed['sub_tier']  = jsonData['sub_tier']
+			jsonFeed['sub_tier'] = jsonData['sub_tier']
 		
 		#
 		# bits
@@ -477,7 +510,7 @@ class Woofer:
 		#
 		# host/raid
 		#
-		if customId == 'host' or customId == 'raid':
+		if customId in ('host', 'raid'):
 			## Check if user has already raided/hosted
 			s = set(self.hostingUsers)
 			if jsonData['sender'] in s:
@@ -497,7 +530,7 @@ class Woofer:
 		jsonFeed['id'] = customId
 		self.woofer_addtoqueue(jsonFeed)
 		
-		if customId == 'host' or customId == 'raid':
+		if customId in ('host', 'raid'):
 			if self.settings.AutoShoutout:
 				jsonData['subscriber'] = '1'
 				jsonData['vip'] = '1'
@@ -874,7 +907,7 @@ class Woofer:
 		if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Image'] in self.settings.mascotImages:
 			if 'MouthHeight' in self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]:
 				MouthHeight = self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]['MouthHeight']
-				if MouthHeight == "" or MouthHeight == 0:
+				if MouthHeight in ("", 0):
 					return 80
 				return MouthHeight - 5
 				

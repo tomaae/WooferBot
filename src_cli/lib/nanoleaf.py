@@ -13,11 +13,11 @@
 ##########################################################################
 
 import socket
-import requests
 import time
 import select
 import re
 import json
+import requests
 
 
 #---------------------------

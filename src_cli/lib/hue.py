@@ -13,18 +13,17 @@
 ##########################################################################
 
 import socket
-import requests
 import time
 import select
 import re
 import json
+import requests
 
 
 #---------------------------
 #   HUE Handling
 #---------------------------
 class Hue:
-	
 	def __init__(self, settings):
 		self.settings = settings
 		self.enabled = self.settings.HueEnabled
