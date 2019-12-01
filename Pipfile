@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 pyinstaller = {file = "https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz"}
+flake8 = "*"
+pylint = "*"
 
 [packages]
 pynput = "*"
@@ -13,6 +15,6 @@ watchdog = "*"
 websockets = "*"
 yeelight = "*"
 pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
-pywin32 = {version = "*", sys_platform = "== 'win32'"}
+pywin32 = {version = "*",sys_platform = "== 'win32'"}
 getch = {version = "*",sys_platform = "== 'linux'"}
 xlib = {version = "*",sys_platform = "== 'linux'"}
