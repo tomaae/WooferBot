@@ -113,6 +113,14 @@ class Woofer:
 			## MinLines increase for timers
 			self.settings.scheduleLines += 1
 			
+			## Channel points default
+			if jsonData['msg-id'] == 'highlighted-message':
+			    print("Channel points, claimed reward: Redeemed Highlight My Message")
+			
+			## Channel points custom w/message
+			if jsonData['custom-reward-id']:
+			    print("Channel points, claimed custom reward: " +  jsonData['custom-reward-id'])
+			
 			## Greeting
 			if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData['sender'] not in customBots:
 				self.woofer_greet(jsonData)

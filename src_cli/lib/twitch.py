@@ -307,7 +307,8 @@ class Twitch:
 			"command_parameter": "",
 			"sender": "",
 			"message": "",
-			"custom-tag": ""
+			"custom-tag": "",
+			"custom-reward-id": ""
 		}
 		return result
 		
