@@ -39,7 +39,6 @@ body { margin: 0px auto; overflow: hidden;}
 }
 
 .message {
-	display:none;
 	position: absolute;
   bottom: 95px;
   left: 160px;
@@ -61,6 +60,11 @@ body { margin: 0px auto; overflow: hidden;}
   
   word-wrap: break-word;
   word-break: keep-all;
+
+  transform-origin: 0% 100%;
+  transform: scale(0);
+  transform-style: preserve-3d;
+  animation-fill-mode: forwards;
 }
 
 .user {
@@ -85,6 +89,7 @@ body { margin: 0px auto; overflow: hidden;}
 	margin-top: -14.5px;
 	margin-left: -29px;
 	z-index: -1;
+	transform: translateZ(-1em);
 }
 
 .message div:first-child {
@@ -116,6 +121,7 @@ body { margin: 0px auto; overflow: hidden;}
 	margin-top: -14.5px;
 	margin-left: -3.5px;
 	z-index: -1;
+	transform: translateZ(-1em);
 }
 
 .message div:last-child {
@@ -148,6 +154,27 @@ body { margin: 0px auto; overflow: hidden;}
 .msg {
 	padding: 7px;
 }
+
+@keyframes expand-bounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shrink {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
 </style>
 
 <body>
@@ -177,7 +204,7 @@ body { margin: 0px auto; overflow: hidden;}
 				rules = sheet.cssRules;
 				for(j=0, jLen=rules.length; j<jLen; j++){
 					if(rules[j].selectorText == selector)rules[j].style.setProperty(property, value);
-					console.log(rules[j].selectorText);
+					//console.log(rules[j].selectorText);
 				}
 			}
 		}
@@ -283,9 +310,16 @@ body { margin: 0px auto; overflow: hidden;}
         			document.getElementById("msgimg").style.display = "none";
         		}
         		Overlay.message.innerHTML = data.message;
-        		document.getElementById("message").style.display = "block";
+
+				var msg = document.getElementById("message")
+				msg.style.animationDelay = "0.4s";
+				msg.style.animationDuration = "0.4s";
+				msg.style.animationName = "expand-bounce";
         	}else{
-        		document.getElementById("message").style.display = "none";
+				var msg = document.getElementById("message")
+				msg.style.animationDelay = "0s";
+				msg.style.animationDuration = "0.15s";
+				msg.style.animationName = "shrink";
         	}
         }
   			
