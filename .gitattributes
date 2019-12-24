@@ -2,4 +2,5 @@
 .gitignore export-ignore
 .github export-ignore
 .sonarcloud.properties export-ignore
+.idea export-ignore
 docs export-ignore
