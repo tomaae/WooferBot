@@ -57,7 +57,7 @@ settings.Save()
 # Initialize twitch chatbot
 twitchBot = Twitch(settings=settings, woofer=None, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
-	twitchBot.Connect()
+    twitchBot.Connect()
 
 # Initialize overlay
 overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchBot)
@@ -71,7 +71,7 @@ woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, 
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
-	twitchBot.LinkTwitch(twitch)
+    twitchBot.LinkTwitch(twitch)
 
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)

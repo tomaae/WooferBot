@@ -30,14 +30,14 @@ Add "Hue" variable into pose mapping and add all lights you want to use for each
             "Image": "Wave",
             "Audio": "Wave",
             "Hue": {
-            	"Hue lightstrip outdoor 1": {
-            		"Brightness": 100,
-            		"Color": "#b16a16"
-            	},
-            	"Hue color lamp 1": {
-            		"Brightness": 100,
-            		"Color": "#ff0000"
-            	}
+                "Hue lightstrip outdoor 1": {
+                    "Brightness": 100,
+                    "Color": "#b16a16"
+                },
+                "Hue color lamp 1": {
+                    "Brightness": 100,
+                    "Color": "#ff0000"
+                }
             },
             "HuePersistent": false
         }

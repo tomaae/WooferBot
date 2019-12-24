@@ -1,53 +1,53 @@
 <!doctype html>
 <html lang="{{ site.lang | default: "en-US" }}">
-	<head>
-		<meta content="text/html; charset=UTF-8" name="Content-Type" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="wot-verification" content="6128fda5575786e18d13"/>
-		{% seo %}
-		<link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
-		<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-		<script src="{{ '/assets/js/script.js' | relative_url }}"></script>
-		<meta name="twitter:card" content="summary" />
-		<meta name="twitter:creator" content="@tomaae_" />
-		<meta name="twitter:image" content="{{ site.github.url }}{{ '/assets/images/cardicon.png' | relative_url }}" />
-		<meta property="og:image" content="{{ site.github.url }}{{ '/assets/images/cardicon.png' | relative_url }}" />
-	</head>
-	<body>
-		<div class="wrapper">
-			<header>
-				<div class="headerimg"><a href="{{ site.github.url }}/"><img src="assets/images/header.png"></a></div>
-				<ul>
-					<li><a{% if page.url == "/" %} class="active"{% endif %} href="{{ site.github.url }}/">What's WooferBot?</a></li>
-					<li><a{% if page.url == "/mascots.html" %} class="active"{% endif %} href="{{ site.github.url }}/mascots">Mascots</a></li>
-					<li><a{% if page.url == "/documentation.html" %} class="active"{% endif %} href="{{ site.github.url }}/documentation">Documentation</a></li>
-					<li><a href="{{ site.github.latest_release.zipball_url }}">Download</a></li>
-				</ul>
-			</header>
-			<section{% if page.class %} class="{{ page.class }}"{% endif %}>
-				{{ content }}
-			</section>
-			<footer>
-				<copyright>Copyright © {{ site.time | date: '%Y' }} Tomaae</copyright>
-				<ul>
-					<li><a{% if page.url == "/changelog.html" %} class="active"{% endif %} href="{{ site.github.url }}/changelog">Changelog</a></li>
-					<li><a{% if page.url == "/contacts.html" %} class="active"{% endif %} href="{{ site.github.url }}/contacts">Contacts</a></li>
-					<li><a{% if page.url == "/resources.html" %} class="active"{% endif %} href="{{ site.github.url }}/resources">Resources</a></li>
-					<li><a{% if page.url == "/license.html" %} class="active"{% endif %} href="{{ site.github.url }}/license">License</a></li>
-					<li><a href="{{ site.github.repository_url }}" target="_blank">View on GitHub</a></li>
-					<li><a href="https://www.patreon.com/wooferbot" target="_blank">Patreon</a></li>
-				</ul>
-			</footer>
-		</div>
-		{% if site.google_analytics %}
-			<!-- Global site tag (gtag.js) - Google Analytics -->
-			<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
-			<script>
-				window.dataLayer = window.dataLayer || [];
-				function gtag(){dataLayer.push(arguments);}
-				gtag('js', new Date());
-				gtag('config', '{{ site.google_analytics }}');
-			</script>
-		{% endif %}
-	</body>
+    <head>
+        <meta content="text/html; charset=UTF-8" name="Content-Type" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="wot-verification" content="6128fda5575786e18d13"/>
+        {% seo %}
+        <link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
+        <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+        <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:creator" content="@tomaae_" />
+        <meta name="twitter:image" content="{{ site.github.url }}{{ '/assets/images/cardicon.png' | relative_url }}" />
+        <meta property="og:image" content="{{ site.github.url }}{{ '/assets/images/cardicon.png' | relative_url }}" />
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <div class="headerimg"><a href="{{ site.github.url }}/"><img src="assets/images/header.png"></a></div>
+                <ul>
+                    <li><a{% if page.url == "/" %} class="active"{% endif %} href="{{ site.github.url }}/">What's WooferBot?</a></li>
+                    <li><a{% if page.url == "/mascots.html" %} class="active"{% endif %} href="{{ site.github.url }}/mascots">Mascots</a></li>
+                    <li><a{% if page.url == "/documentation.html" %} class="active"{% endif %} href="{{ site.github.url }}/documentation">Documentation</a></li>
+                    <li><a href="{{ site.github.latest_release.zipball_url }}">Download</a></li>
+                </ul>
+            </header>
+            <section{% if page.class %} class="{{ page.class }}"{% endif %}>
+                {{ content }}
+            </section>
+            <footer>
+                <copyright>Copyright © {{ site.time | date: '%Y' }} Tomaae</copyright>
+                <ul>
+                    <li><a{% if page.url == "/changelog.html" %} class="active"{% endif %} href="{{ site.github.url }}/changelog">Changelog</a></li>
+                    <li><a{% if page.url == "/contacts.html" %} class="active"{% endif %} href="{{ site.github.url }}/contacts">Contacts</a></li>
+                    <li><a{% if page.url == "/resources.html" %} class="active"{% endif %} href="{{ site.github.url }}/resources">Resources</a></li>
+                    <li><a{% if page.url == "/license.html" %} class="active"{% endif %} href="{{ site.github.url }}/license">License</a></li>
+                    <li><a href="{{ site.github.repository_url }}" target="_blank">View on GitHub</a></li>
+                    <li><a href="https://www.patreon.com/wooferbot" target="_blank">Patreon</a></li>
+                </ul>
+            </footer>
+        </div>
+        {% if site.google_analytics %}
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '{{ site.google_analytics }}');
+            </script>
+        {% endif %}
+    </body>
 </html>

@@ -15,31 +15,31 @@
 -->
 <html>
 <style>
-	
+    
 @import url("https://fonts.googleapis.com/css?family=Fira+Sans");
 body { margin: 0px auto; overflow: hidden;}
 
 .mainbox {
-	position: relative;
-	height: 400px;
-	text-align: left;
+    position: relative;
+    height: 400px;
+    text-align: left;
 }
 
 .mascot {
   position: absolute;
   bottom: 0;
   left: 0;
-	width:150px;
+    width:150px;
 }
 
 .mascot img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .message {
-	position: absolute;
+    position: absolute;
   bottom: 95px;
   left: 160px;
   min-width:300px;
@@ -68,91 +68,91 @@ body { margin: 0px auto; overflow: hidden;}
 }
 
 .user {
-	color: #ffba70;
-	font-size: 24px;
-	letter-spacing:3px;
-	text-shadow: -1px -1px 0 #b16a16, 1px -1px 0 #b16a16,-1px 0 0 #b16a16, 1px 0 0 #b16a16,	-1px 1px 0 #b16a16,0 -1px 0 #b16a16, 0 1px 0 #b16a16, 1px 1px 0 #b16a16, 3px 3px 3px #ffba70;
+    color: #ffba70;
+    font-size: 24px;
+    letter-spacing:3px;
+    text-shadow: -1px -1px 0 #b16a16, 1px -1px 0 #b16a16,-1px 0 0 #b16a16, 1px 0 0 #b16a16, -1px 1px 0 #b16a16,0 -1px 0 #b16a16, 0 1px 0 #b16a16, 1px 1px 0 #b16a16, 3px 3px 3px #ffba70;
 }
 
 .message::after {
-	display:none;
-	content: '';
-	position: absolute;
-	left: 0;
-	bottom: 10px;
-	width: 0;
-	height: 0;
-	border: 29px solid transparent;
-	border-right-color: #fff;
-	border-left: 0;
-	border-bottom: 0;
-	margin-top: -14.5px;
-	margin-left: -29px;
-	z-index: -1;
-	transform: translateZ(-1em);
+    display:none;
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    width: 0;
+    height: 0;
+    border: 29px solid transparent;
+    border-right-color: #fff;
+    border-left: 0;
+    border-bottom: 0;
+    margin-top: -14.5px;
+    margin-left: -29px;
+    z-index: -1;
+    transform: translateZ(-1em);
 }
 
 .message div:first-child {
-	display:none;
-	content: '';
-	position: absolute;
-	left: -26px;
-	bottom: 11px;
-	width: 0;
-	height: 0;
-	border: 23px solid transparent;
-	border-right-color: #ffba70;
-	border-left: 0;
-	border-bottom: 0;
+    display:none;
+    content: '';
+    position: absolute;
+    left: -26px;
+    bottom: 11px;
+    width: 0;
+    height: 0;
+    border: 23px solid transparent;
+    border-right-color: #ffba70;
+    border-left: 0;
+    border-bottom: 0;
 }
 
 .message::before {
-	display:none;
-	content: '';
-	position: absolute;
-	left: 100%;
-	bottom: 10px;
-	width: 0;
-	height: 0;
-	border: 32px solid transparent;
-	border-left-color: #fff;
-	border-right: 0;
-	border-bottom: 0;
-	margin-top: -14.5px;
-	margin-left: -3.5px;
-	z-index: -1;
-	transform: translateZ(-1em);
+    display:none;
+    content: '';
+    position: absolute;
+    left: 100%;
+    bottom: 10px;
+    width: 0;
+    height: 0;
+    border: 32px solid transparent;
+    border-left-color: #fff;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -14.5px;
+    margin-left: -3.5px;
+    z-index: -1;
+    transform: translateZ(-1em);
 }
 
 .message div:last-child {
-	display:none;
-	content: '';
-	position: absolute;
-	left: 100%;
-	bottom: 11px;
-	width: 0;
-	height: 0;
-	border: 26px solid transparent;
-	border-left-color: #ffba70;
-	border-right: 0;
-	border-bottom: 0;
+    display:none;
+    content: '';
+    position: absolute;
+    left: 100%;
+    bottom: 11px;
+    width: 0;
+    height: 0;
+    border: 26px solid transparent;
+    border-left-color: #ffba70;
+    border-right: 0;
+    border-bottom: 0;
 }
 
 .msgimg {
-	display:none;
-	margin: 7px;
-	float: left;
-	height: 75px;
-	width: 75px;
-	border-radius: 7px;
+    display:none;
+    margin: 7px;
+    float: left;
+    height: 75px;
+    width: 75px;
+    border-radius: 7px;
   border-width: 2px;
   border-style: solid;
   border-color: #ffba70;
-	box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 }
 
 .msg {
-	padding: 7px;
+    padding: 7px;
 }
 
 @keyframes expand-bounce {
@@ -179,164 +179,164 @@ body { margin: 0px auto; overflow: hidden;}
 
 <body>
   <div>
-		<p id="my_event">
-			<div class="mainbox">
-  			<div class="message" id="message"><div></div>
-  				<img class="msgimg" id="msgimg"></img>
-  				<div class="msg" id="msg"></div><div></div>
-  			</div>
-  			<div class="mascot"><img id="mascot"></img></div>
-			</div>
-		</p>
-	</div>
+        <p id="my_event">
+            <div class="mainbox">
+            <div class="message" id="message"><div></div>
+                <img class="msgimg" id="msgimg"></img>
+                <div class="msg" id="msg"></div><div></div>
+            </div>
+            <div class="mascot"><img id="mascot"></img></div>
+            </div>
+        </p>
+    </div>
 </body>
 
 
 <script>
-	function modifyCSSProperty(selector, property, value){
-		var sheets = document.styleSheets;
-		var sheet, rules;
-		var i, j, iLen, jLen;
-		
-		for(i=0, iLen=sheets.length; i<iLen; i++){
-			sheet = sheets[i];
-			if(sheet.cssRules){
-				rules = sheet.cssRules;
-				for(j=0, jLen=rules.length; j<jLen; j++){
-					if(rules[j].selectorText == selector)rules[j].style.setProperty(property, value);
-					//console.log(rules[j].selectorText);
-				}
-			}
-		}
-	}
-	
-	
+    function modifyCSSProperty(selector, property, value){
+        var sheets = document.styleSheets;
+        var sheet, rules;
+        var i, j, iLen, jLen;
+        
+        for(i=0, iLen=sheets.length; i<iLen; i++){
+            sheet = sheets[i];
+            if(sheet.cssRules){
+                rules = sheet.cssRules;
+                for(j=0, jLen=rules.length; j<jLen; j++){
+                    if(rules[j].selectorText == selector)rules[j].style.setProperty(property, value);
+                    //console.log(rules[j].selectorText);
+                }
+            }
+        }
+    }
+    
+    
   var Overlay = {
 
-  	//---------------------------------
-  	// HTML Elements
-  	//---------------------------------
-  	message: document.getElementById('msg'),
-  	messageImage: document.getElementById('msgimg'),
-  	mascot: document.getElementById('mascot'),
+    //---------------------------------
+    // HTML Elements
+    //---------------------------------
+    message: document.getElementById('msg'),
+    messageImage: document.getElementById('msgimg'),
+    mascot: document.getElementById('mascot'),
 
-  	Listen: function() {
-  		this.socket = new WebSocket('ws://127.0.0.1:3339');
-  		this.connected = false;
+    Listen: function() {
+        this.socket = new WebSocket('ws://127.0.0.1:3339');
+        this.connected = false;
 
-  		//---------------------------------
-  		// Open Event
-  		//---------------------------------
-  		this.socket.onopen = function() {
-  			this.connected = true;
+        //---------------------------------
+        // Open Event
+        //---------------------------------
+        this.socket.onopen = function() {
+            this.connected = true;
 
-  		}
+        }
 
-  		//---------------------------------
-  		// Error Event
-  		//---------------------------------
-  		this.socket.onerror = function(error) {
-  			// Something went terribly wrong... Respond?!
-  			console.log('Error: ' + error);
-  		}
+        //---------------------------------
+        // Error Event
+        //---------------------------------
+        this.socket.onerror = function(error) {
+            // Something went terribly wrong... Respond?!
+            console.log('Error: ' + error);
+        }
 
-  		//---------------------------------
-  		// Message Event
-  		//---------------------------------
-  		this.socket.onmessage = function(message) {
-  			//console.log(message);
-  			
+        //---------------------------------
+        // Message Event
+        //---------------------------------
+        this.socket.onmessage = function(message) {
+            //console.log(message);
+            
         var json = JSON.parse(message.data);
         //console.log("json", json);
         
         if(json.styles !== undefined){
-        	var style = Object.keys(json.styles);
-        	for(var i=0, iLen=style.length; i<iLen; i++){
-        		val = style[i].split("|");
-        		modifyCSSProperty(val[0], val[1], json.styles[style[i]]);
-        	}
+            var style = Object.keys(json.styles);
+            for(var i=0, iLen=style.length; i<iLen; i++){
+                val = style[i].split("|");
+                modifyCSSProperty(val[0], val[1], json.styles[style[i]]);
+            }
         }
         
         if(json.event == 'EVENT_WOOFERBOT') {
           var data = json.data;
           //console.log("data", data);
 
-        	if(data.audio){
-        		var audio = new Audio(data.audio);
-         		audio.volume = data.volume;
-        		audio.play();
-        	}
-        	
+            if(data.audio){
+                var audio = new Audio(data.audio);
+                audio.volume = data.volume;
+                audio.play();
+            }
+            
           if(data.message){
-          	if(data.message.indexOf("{sender}")){
-          		if(data.sender === undefined)data.sender = "";
-          		data.message = data.message.replace(/{sender}/gi, '<span class="user">' + data.sender + '</span>');
-          	}
-          	if(data.message.indexOf("{recipient}")){
-          		if(data.recipient === undefined)data.recipient = "";
-          		data.message = data.message.replace(/{recipient}/gi, '<span class="user">' + data.recipient + '</span>');
-          	}
-          	if(data.message.indexOf("{bits}")){
-          		if(data.bits === undefined)data.bits = "";
-          		data.message = data.message.replace(/{bits}/gi, '<span class="user">' + data.bits + '</span>');
-          	}
-          	if(data.message.indexOf("{months}")){
-          		if(data.months === undefined)data.months = "";
-          		data.message = data.message.replace(/{months}/gi, '<span class="user">' + data.months + '</span>');
-          	}
-          	if(data.message.indexOf("{activity}")){
-          		if(data.activity === undefined)data.activity = "";
-          		data.message = data.message.replace(/{activity}/gi, '<span class="user">' + data.activity + '</span>');
-          	}
+            if(data.message.indexOf("{sender}")){
+                if(data.sender === undefined)data.sender = "";
+                data.message = data.message.replace(/{sender}/gi, '<span class="user">' + data.sender + '</span>');
+            }
+            if(data.message.indexOf("{recipient}")){
+                if(data.recipient === undefined)data.recipient = "";
+                data.message = data.message.replace(/{recipient}/gi, '<span class="user">' + data.recipient + '</span>');
+            }
+            if(data.message.indexOf("{bits}")){
+                if(data.bits === undefined)data.bits = "";
+                data.message = data.message.replace(/{bits}/gi, '<span class="user">' + data.bits + '</span>');
+            }
+            if(data.message.indexOf("{months}")){
+                if(data.months === undefined)data.months = "";
+                data.message = data.message.replace(/{months}/gi, '<span class="user">' + data.months + '</span>');
+            }
+            if(data.message.indexOf("{activity}")){
+                if(data.activity === undefined)data.activity = "";
+                data.message = data.message.replace(/{activity}/gi, '<span class="user">' + data.activity + '</span>');
+            }
           }
           
           if (typeof data.id !== 'undefined'){
-          	data.mascot += '?x=' + Date.now();
+            data.mascot += '?x=' + Date.now();
           }
-        	
-        	// Modify mascot's mouth height
-        	if(data.mascotmouth){
-        		modifyCSSProperty(".message", "bottom", data.mascotmouth + "px");
-        	}
-        	
-        	
-        	// Update interface
-        	Overlay.mascot.src = data.mascot;
-        	if(data.message){
-        		if(data.image){
-        			Overlay.messageImage.src = data.image;
-        			document.getElementById("msgimg").style.display = "inline-block";
-        		}else{
-        			document.getElementById("msgimg").style.display = "none";
-        		}
-        		Overlay.message.innerHTML = data.message;
+            
+            // Modify mascot's mouth height
+            if(data.mascotmouth){
+                modifyCSSProperty(".message", "bottom", data.mascotmouth + "px");
+            }
+            
+            
+            // Update interface
+            Overlay.mascot.src = data.mascot;
+            if(data.message){
+                if(data.image){
+                    Overlay.messageImage.src = data.image;
+                    document.getElementById("msgimg").style.display = "inline-block";
+                }else{
+                    document.getElementById("msgimg").style.display = "none";
+                }
+                Overlay.message.innerHTML = data.message;
 
-				var msg = document.getElementById("message")
-				msg.style.animationDelay = "0.4s";
-				msg.style.animationDuration = "0.4s";
-				msg.style.animationName = "expand-bounce";
-        	}else{
-				var msg = document.getElementById("message")
-				msg.style.animationDelay = "0s";
-				msg.style.animationDuration = "0.15s";
-				msg.style.animationName = "shrink";
-        	}
+                var msg = document.getElementById("message")
+                msg.style.animationDelay = "0.4s";
+                msg.style.animationDuration = "0.4s";
+                msg.style.animationName = "expand-bounce";
+            }else{
+                var msg = document.getElementById("message")
+                msg.style.animationDelay = "0s";
+                msg.style.animationDuration = "0.15s";
+                msg.style.animationName = "shrink";
+            }
         }
-  			
-  			// You have received new data now process it
-  			//console.log(message);
-  		}
+            
+            // You have received new data now process it
+            //console.log(message);
+        }
 
-  		//---------------------------------
-  		// Close Event
-  		//---------------------------------
-  		this.socket.onclose = function() {
-  			// Connection has been closed by you or the server
-  			console.log('Connection Closed!');
-  			this.connected = false;
-  			setTimeout(Overlay.Listen, 3000)
-  		}
-  	}
+        //---------------------------------
+        // Close Event
+        //---------------------------------
+        this.socket.onclose = function() {
+            // Connection has been closed by you or the server
+            console.log('Connection Closed!');
+            this.connected = false;
+            setTimeout(Overlay.Listen, 3000)
+        }
+    }
   }
 
   // Start Script

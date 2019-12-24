@@ -10,9 +10,9 @@ tags:
   - tos
 ---
 <div class="heading">
-	<span><svg><text x="50%" y="40px">LICENSE</text></svg></span><br>
-	<span></span>
-	<span></span>
+    <span><svg><text x="50%" y="40px">LICENSE</text></svg></span><br>
+    <span></span>
+    <span></span>
 </div>
 
 > Version 1.0, October 2019

@@ -15,9 +15,9 @@ tags:
   - installer
 ---
 <div class="heading">
-	<span><svg><text x="50%" y="40px">CHANGELOG AND RELEASE NEWS</text></svg></span><br>
-	<span>You can find latest versions of WooferBot here.</span>
-	<span></span>
+    <span><svg><text x="50%" y="40px">CHANGELOG AND RELEASE NEWS</text></svg></span><br>
+    <span>You can find latest versions of WooferBot here.</span>
+    <span></span>
 </div>
 {% for release in site.github.releases limit:5 %}
 <div class="caption"><span>{{ release.name }}{% if release.prerelease -%} (pre-release){%- endif %}</span><span>Release date: <time datetime="{{ release.published_at | date_to_xmlschema }}">{{ release.published_at | date_to_string }}</time></span></div>

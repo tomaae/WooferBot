@@ -12,9 +12,9 @@ tags:
   - banner
 ---
 <div class="heading">
-	<span><svg><text x="50%" y="40px">RESOURCES</text></svg></span><br>
-	<span>Use one of our free panels for your Twitch channel or Website! Thank you for helping us spread the word about WooferBot!</span>
-	<span></span>
+    <span><svg><text x="50%" y="40px">RESOURCES</text></svg></span><br>
+    <span>Use one of our free panels for your Twitch channel or Website! Thank you for helping us spread the word about WooferBot!</span>
+    <span></span>
 </div>
 <div>
 <img src="assets/images/panels/apricot.png">
