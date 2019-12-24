@@ -55,30 +55,30 @@ yeelight = Yeelight(settings=settings)
 settings.Save()
 
 # Initialize twitch chatbot
-twitchBot = Twitch(settings=settings, woofer=None, bot=True)
+twitchbot = Twitch(settings=settings, woofer=None, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
-    twitchBot.Connect()
+    twitchbot.Connect()
 
 # Initialize overlay
-overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchBot)
+overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
 overlay.Start()
 
 
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchBot)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
-    twitchBot.LinkTwitch(twitch)
+    twitchbot.LinkTwitch(twitch)
 
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
 
 # Start CLI
-cli = Cli(settings=settings, woofer=woofer, twitch=twitch, twitchBot=twitchBot)
-cli.Start()
+cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=twitchbot)
+cli.start()
 
 # Cleanup and exit
 overlay.Stop()

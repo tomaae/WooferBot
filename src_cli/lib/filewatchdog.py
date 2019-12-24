@@ -21,41 +21,37 @@ from watchdog.events import FileSystemEventHandler
 #   _WatchdogCustomHandler
 #---------------------------
 class _WatchdogCustomHandler(FileSystemEventHandler):
-    def __init__(self, settings, woofer, WatchdogName):
+    def __init__(self, settings, woofer, watchdog_name):
         self.settings = settings
         self.woofer = woofer
         self.filename = ""
-        self.WatchdogName = WatchdogName
+        self.watchdog_name = watchdog_name
         
         for action in self.settings.Watchdog:
-            if action['Name'] != self.WatchdogName:
+            if action['Name'] != self.watchdog_name:
                 continue
             
             self.filename = action['Filename']
-            
-        return
-    
+
     #---------------------------
     #   on_created
     #---------------------------
     def on_created(self, event):
         self._check_modification(event.src_path)
-        return
-    
+
     #---------------------------
     #   on_modified
     #---------------------------
     def on_modified(self, event):
         self._check_modification(event.src_path)
-        return
-    
+
     #---------------------------
     #   _check_modification
     #---------------------------
     def _check_modification(self, filename):
         if self.filename == filename:
             for action in self.settings.Watchdog:
-                if action['Name'] == self.WatchdogName:
+                if action['Name'] == self.watchdog_name:
                     f = open(self.filename, "r")
                     
                     if 'Command' in action:
@@ -73,9 +69,6 @@ class _WatchdogCustomHandler(FileSystemEventHandler):
                             "sender"     : action['Name'],
                             "id"         : "watchdog"
                         })
-        
-        return
-
 
 #---------------------------
 #   Watchdog
@@ -84,27 +77,23 @@ class Watchdog:
     def __init__(self, settings, woofer):
         self.settings = settings
         self.woofer = woofer
-        self.watchdog = {}
+        self.watchdogs = {}
         
         for action in self.settings.Watchdog:
             if not action['Enabled']:
                 continue
             
             path, filename = os.path.split(action['Filename'])
-            self.watchdog[action['Name']] = Observer()
-            self.watchdog[action['Name']].schedule(_WatchdogCustomHandler(settings, woofer, action['Name']), path, recursive=False)
-            self.watchdog[action['Name']].start()
-        
-        return
-    
+            self.watchdogs[action['Name']] = Observer()
+            self.watchdogs[action['Name']].schedule(_WatchdogCustomHandler(settings, woofer, action['Name']), path, recursive=False)
+            self.watchdogs[action['Name']].start()
+
     #---------------------------
     #   stop
     #---------------------------
     def stop(self):
-        for action in self.watchdog:
+        for action in self.watchdogs:
             action.stop()
         
-        for action in self.watchdog:
+        for action in self.watchdogs:
             action.join()
-        
-        return

@@ -13,182 +13,185 @@
 #
 ##########################################################################
 -->
-<html>
-<style>
-    
-@import url("https://fonts.googleapis.com/css?family=Fira+Sans");
-body { margin: 0px auto; overflow: hidden;}
+<!doctype html>
+<html lang="en" xml:lang="en">
+<head>
+    <title>WooferBot</title>
+    <meta charset="UTF-8">
+    <style>
+    @import url("https://fonts.googleapis.com/css?family=Fira+Sans");
+    body { margin: 0px auto; overflow: hidden;}
 
-.mainbox {
-    position: relative;
-    height: 400px;
-    text-align: left;
-}
+    .mainbox {
+        position: relative;
+        height: 400px;
+        text-align: left;
+    }
 
-.mascot {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-    width:150px;
-}
+    .mascot {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width:150px;
+    }
 
-.mascot img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+    .mascot img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-.message {
-    position: absolute;
-  bottom: 95px;
-  left: 160px;
-  min-width:300px;
-  max-width:500px;
-  min-height:70px;
-  
-  background-color: #fef7ed;
-  border-width: 4px;
-  border-style: solid;
-  border-color: #ffba70;
-  border-radius: 4px;
-  box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-  
-  font-size: 22px;
-  font-weight: 900;
-  color: #b16a16;
-  font-family: 'Fira Sans';
-  
-  word-wrap: break-word;
-  word-break: keep-all;
+    .message {
+        position: absolute;
+        bottom: 95px;
+        left: 160px;
+        min-width:300px;
+        max-width:500px;
+        min-height:70px;
 
-  transform-origin: 0% 100%;
-  transform: scale(0);
-  transform-style: preserve-3d;
-  animation-fill-mode: forwards;
-}
+        background-color: #fef7ed;
+        border-width: 4px;
+        border-style: solid;
+        border-color: #ffba70;
+        border-radius: 4px;
+        box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 
-.user {
-    color: #ffba70;
-    font-size: 24px;
-    letter-spacing:3px;
-    text-shadow: -1px -1px 0 #b16a16, 1px -1px 0 #b16a16,-1px 0 0 #b16a16, 1px 0 0 #b16a16, -1px 1px 0 #b16a16,0 -1px 0 #b16a16, 0 1px 0 #b16a16, 1px 1px 0 #b16a16, 3px 3px 3px #ffba70;
-}
+        font-size: 22px;
+        font-weight: 900;
+        color: #b16a16;
+        font-family: 'Fira Sans';
 
-.message::after {
-    display:none;
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 10px;
-    width: 0;
-    height: 0;
-    border: 29px solid transparent;
-    border-right-color: #fff;
-    border-left: 0;
-    border-bottom: 0;
-    margin-top: -14.5px;
-    margin-left: -29px;
-    z-index: -1;
-    transform: translateZ(-1em);
-}
+        word-wrap: break-word;
+        word-break: keep-all;
 
-.message div:first-child {
-    display:none;
-    content: '';
-    position: absolute;
-    left: -26px;
-    bottom: 11px;
-    width: 0;
-    height: 0;
-    border: 23px solid transparent;
-    border-right-color: #ffba70;
-    border-left: 0;
-    border-bottom: 0;
-}
+        transform-origin: 0% 100%;
+        transform: scale(0);
+        transform-style: preserve-3d;
+        animation-fill-mode: forwards;
+    }
 
-.message::before {
-    display:none;
-    content: '';
-    position: absolute;
-    left: 100%;
-    bottom: 10px;
-    width: 0;
-    height: 0;
-    border: 32px solid transparent;
-    border-left-color: #fff;
-    border-right: 0;
-    border-bottom: 0;
-    margin-top: -14.5px;
-    margin-left: -3.5px;
-    z-index: -1;
-    transform: translateZ(-1em);
-}
+    .user {
+        color: #ffba70;
+        font-size: 24px;
+        letter-spacing:3px;
+        text-shadow: -1px -1px 0 #b16a16, 1px -1px 0 #b16a16,-1px 0 0 #b16a16, 1px 0 0 #b16a16, -1px 1px 0 #b16a16,0 -1px 0 #b16a16, 0 1px 0 #b16a16, 1px 1px 0 #b16a16, 3px 3px 3px #ffba70;
+    }
 
-.message div:last-child {
-    display:none;
-    content: '';
-    position: absolute;
-    left: 100%;
-    bottom: 11px;
-    width: 0;
-    height: 0;
-    border: 26px solid transparent;
-    border-left-color: #ffba70;
-    border-right: 0;
-    border-bottom: 0;
-}
+    .message::after {
+        display:none;
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 10px;
+        width: 0;
+        height: 0;
+        border: 29px solid transparent;
+        border-right-color: #fff;
+        border-left: 0;
+        border-bottom: 0;
+        margin-top: -14.5px;
+        margin-left: -29px;
+        z-index: -1;
+        transform: translateZ(-1em);
+    }
 
-.msgimg {
-    display:none;
-    margin: 7px;
-    float: left;
-    height: 75px;
-    width: 75px;
-    border-radius: 7px;
-  border-width: 2px;
-  border-style: solid;
-  border-color: #ffba70;
-    box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-}
+    .message div:first-child {
+        display:none;
+        content: '';
+        position: absolute;
+        left: -26px;
+        bottom: 11px;
+        width: 0;
+        height: 0;
+        border: 23px solid transparent;
+        border-right-color: #ffba70;
+        border-left: 0;
+        border-bottom: 0;
+    }
 
-.msg {
-    padding: 7px;
-}
+    .message::before {
+        display:none;
+        content: '';
+        position: absolute;
+        left: 100%;
+        bottom: 10px;
+        width: 0;
+        height: 0;
+        border: 32px solid transparent;
+        border-left-color: #fff;
+        border-right: 0;
+        border-bottom: 0;
+        margin-top: -14.5px;
+        margin-left: -3.5px;
+        z-index: -1;
+        transform: translateZ(-1em);
+    }
 
-@keyframes expand-bounce {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+    .message div:last-child {
+        display:none;
+        content: '';
+        position: absolute;
+        left: 100%;
+        bottom: 11px;
+        width: 0;
+        height: 0;
+        border: 26px solid transparent;
+        border-left-color: #ffba70;
+        border-right: 0;
+        border-bottom: 0;
+    }
 
-@keyframes shrink {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-</style>
+    .msgimg {
+        display:none;
+        margin: 7px;
+        float: left;
+        height: 75px;
+        width: 75px;
+        border-radius: 7px;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #ffba70;
+        box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    }
 
+    .msg {
+        padding: 7px;
+    }
+
+    @keyframes expand-bounce {
+        0% {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1.25);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes shrink {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+    </style>
+</head>
 <body>
-  <div>
-        <p id="my_event">
-            <div class="mainbox">
-            <div class="message" id="message"><div></div>
-                <img class="msgimg" id="msgimg"></img>
-                <div class="msg" id="msg"></div><div></div>
-            </div>
-            <div class="mascot"><img id="mascot"></img></div>
-            </div>
-        </p>
+<div>
+    <p id="my_event">
+    <div class="mainbox">
+        <div class="message" id="message"><div></div>
+            <img class="msgimg" alt="" id="msgimg"></img>
+            <div class="msg" alt="" id="msg"></div><div></div>
+        </div>
+        <div class="mascot"><img alt="" id="mascot"></img></div>
     </div>
+    </p>
+</div>
 </body>
 
 

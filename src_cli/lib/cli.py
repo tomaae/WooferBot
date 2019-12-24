@@ -17,21 +17,20 @@
 #   CLI Handling
 #---------------------------
 class Cli:
-    def __init__(self, settings, woofer, twitch, twitchBot):
+    def __init__(self, settings, woofer, twitch, chatbot):
         self.woofer = woofer
         self.settings = settings
         self.twitch = twitch
-        self.twitchBot = twitchBot
-        return
-    
-    def Start(self):
+        self.chatbot = chatbot
+
+    def start(self):
         print("Starting cli...")
         while True:
             cmd = input("")
-            
+
             if cmd == "x":
                 print("exit")
-            if cmd == "h":
+            elif cmd == "h":
                 print(" === WooferBot Help ===")
                 print(" 1 - Follow")
                 print(" 2 - Greet")
@@ -49,7 +48,7 @@ class Cli:
             #
             # Start
             #
-            if cmd == "0":
+            elif cmd == "0":
                 self.woofer.woofer_commands({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -61,7 +60,7 @@ class Cli:
             #
             # Follow
             #
-            if cmd == "1":
+            elif cmd == "1":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "custom-tag"   : "follow"
@@ -70,7 +69,7 @@ class Cli:
             #
             # Greet
             #
-            if cmd == "2":
+            elif cmd == "2":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -80,7 +79,7 @@ class Cli:
             #
             # Shoutout
             #
-            if cmd == "3":
+            elif cmd == "3":
                 self.woofer.woofer_shoutout({
                     "subscriber"        : "1",
                     "vip"               : "1",
@@ -95,7 +94,7 @@ class Cli:
             #
             # Lurk
             #
-            if cmd == "4":
+            elif cmd == "4":
                 self.woofer.woofer_lurk({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -105,7 +104,7 @@ class Cli:
             #
             # Bits
             #
-            if cmd == "5":
+            elif cmd == "5":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "bits"         : "1000",
@@ -115,7 +114,7 @@ class Cli:
             #
             # New chatter
             #
-            if cmd == "6":
+            elif cmd == "6":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -125,7 +124,7 @@ class Cli:
             #
             # Raid
             #
-            if cmd == "7":
+            elif cmd == "7":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -136,7 +135,7 @@ class Cli:
             #
             # Host
             #
-            if cmd == "8":
+            elif cmd == "8":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -146,7 +145,7 @@ class Cli:
             #
             # Sub
             #
-            if cmd == "9":
+            elif cmd == "9":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -159,11 +158,11 @@ class Cli:
             #
             # Resub
             #
-            if cmd == "10":
+            elif cmd == "10":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
-                    "sub_tier"     : "Tier 2",
+                    "sub_tier"     : "Tier 3",
                     "months"       : "4",
                     "months_streak": "4",
                     "custom-tag"   : "resub"
@@ -172,7 +171,7 @@ class Cli:
             #
             # Subgift
             #
-            if cmd == "11":
+            elif cmd == "11":
                 self.woofer.woofer_alert({
                     "display-name" : "testname",
                     "sender"       : "testname",
@@ -184,11 +183,10 @@ class Cli:
             #
             # Reconnect to twitch
             #
-            if cmd == "r":
+            elif cmd == "r":
                 if self.twitch.connected:
                     self.twitch.Disconnect()
-                if self.twitchBot.connected:
-                    self.twitchBot.Disconnect()
+                if self.chatbot.connected:
+                    self.chatbot.Disconnect()
             
-            #print(cmd)
-        return
+            # print(cmd)
