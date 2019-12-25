@@ -207,25 +207,11 @@ class Settings:
                 var_found = False
                 tmp = get_var_default(defaults_list[var])
 
-            if type(defaults_list[var]) == str and (tmp == "" or not var_found or type(tmp) != str):
-                if type(cls) == dict:
-                    cls[var] = defaults_list[var]
-                else:
-                    setattr(cls, var, defaults_list[var])
-
-            if (type(defaults_list[var]) == int or type(defaults_list[var]) == float) and (not tmp or not var_found or (type(tmp) != int and type(tmp) != float)):
-                if type(cls) == dict:
-                    cls[var] = defaults_list[var]
-                else:
-                    setattr(cls, var, defaults_list[var])
-
-            if type(defaults_list[var]) == bool and (not var_found or type(tmp) != bool):
-                if type(cls) == dict:
-                    cls[var] = defaults_list[var]
-                else:
-                    setattr(cls, var, defaults_list[var])
-
-            if type(defaults_list[var]) == list and (not tmp or not var_found or type(tmp) != list):
+            if (type(defaults_list[var]) == str and type(tmp) != str) \
+                    or (type(defaults_list[var]) in [int, float] and type(tmp) not in [int, float]) \
+                    or (type(defaults_list[var]) == bool and type(tmp) != bool) \
+                    or (type(defaults_list[var]) == list and type(tmp) != list) \
+                    or not var_found:
                 if type(cls) == dict:
                     cls[var] = defaults_list[var]
                 else:
