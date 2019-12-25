@@ -16,86 +16,90 @@ import codecs
 import json
 import os
 import time
-import sys
+from sys import exit, platform
 
 
-#---------------------------
+# ---------------------------
 #   Settings Handling
-#---------------------------
+# ---------------------------
 class Settings:
     def __init__(self, pathRoot=None):
         self.encoding = "utf-8-sig"
-        ## Detect OS
-        if sys.platform.startswith('win'):
+        # Detect OS
+        if platform.startswith('win'):
             self.os = 'win'
             self.slash = '\\'
-        elif sys.platform.startswith('freebsd') or sys.platform.startswith('linux'):
+        elif platform.startswith('freebsd') or platform.startswith('linux'):
             self.os = 'lx'
             self.slash = '/'
-        elif sys.platform.startswith('darwin'):
-            self.os = 'lx'
+        elif platform.startswith('darwin'):
+            self.os = 'osx'
             self.slash = '/'
         else:
-            print("Failed to detect OS: " + sys.platform)
-            sys.exit(1)
-        
-        ## Check paths
+            print("Failed to detect OS: " + platform)
+            exit(1)
+
+        # Check paths
         self.pathRoot = pathRoot + self.slash
         if not os.path.isdir(self.pathRoot):
             print("Working directory not detected.")
-            sys.exit(1)
-        if not os.path.isfile(self.pathRoot + "wooferbot.py") and not os.path.isfile(self.pathRoot + "wooferbot_cli.exe") and not os.path.isfile(self.pathRoot + "wooferbot_cli"):
+            exit(1)
+        if not os.path.isfile(self.pathRoot + "wooferbot.py") and not os.path.isfile(
+                self.pathRoot + "wooferbot_cli.exe") and not os.path.isfile(self.pathRoot + "wooferbot_cli"):
             print("Working directory incorrect.")
-            sys.exit(1)
+            exit(1)
         if not os.path.isfile(self.pathRoot + "settings.json"):
             print("Configuration file is missing, recreating with defaults.")
-        
+
         self.Reload()
         self.ReloadMascot()
-        return
-        
-    #---------------------------
+
+    # ---------------------------
     #   ReloadMascot
-    #---------------------------
+    # ---------------------------
     def ReloadMascot(self):
         print("Loading mascot settings...")
         self.mascotImages = {}
         self.mascotAudio = {}
         self.mascotStyles = {}
-        
-        ## Load mascot config
+
+        # Load mascot config
         try:
-            with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json", encoding=self.encoding, mode="r") as f:
+            with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json",
+                             encoding=self.encoding, mode="r") as f:
                 data = json.load(f, encoding=self.encoding)
                 for key, value in data.items():
-                        self.__dict__[key] = value
+                    self.__dict__[key] = value
         except:
             print("Unable to load mascot.json")
-            sys.exit(1)
-        
-        ## Check mascot images
+            exit(1)
+
+        # Check mascot images
         for action in self.mascotImages:
             if 'Image' not in self.mascotImages[action]:
                 print("Mascot Image variable is missing for action: " + action)
-                sys.exit(1)
-            
-            self.mascotImages[action]['Image'] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash + self.mascotImages[action]['Image']
-        
-        ## Check mascot audio
+                exit(1)
+
+            self.mascotImages[action][
+                'Image'] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash + \
+                           self.mascotImages[action]['Image']
+
+        # Check mascot audio
         for action in self.mascotAudio:
             if not isinstance(self.mascotAudio[action]['Audio'], list):
                 print("Mascot audio is not a list for action: " + action)
-                sys.exit(1)
-            
+                exit(1)
+
             for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-                self.mascotAudio[action]['Audio'][idx] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash + self.mascotAudio[action]['Audio'][idx]
-        
+                self.mascotAudio[action]['Audio'][
+                    idx] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash + \
+                           self.mascotAudio[action]['Audio'][idx]
+
         self.CheckSettingsDependencies()
-        return
-        
-    #---------------------------
+
+    # ---------------------------
     #   Reload
-    #---------------------------
+    # ---------------------------
     def Reload(self):
         print("Loading settings...")
         self.TwitchChannel = ""
@@ -122,7 +126,8 @@ class Settings:
         self.AutoShoutoutTime = 10
         self.ShoutoutAccess = "mod"
         self.Bots = []
-        self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot", "moobot"]
+        self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot",
+                           "moobot"]
         self.ScheduledMessages = []
         self.scheduleTable = {}
         self.scheduleLines = 0
@@ -130,17 +135,17 @@ class Settings:
         self.CustomSubs = []
         self.Commands = {}
         self.Watchdog = []
-        
+
         self.NanoleafEnabled = False
         self.NanoleafIP = ""
         self.NanoleafToken = ""
-        
+
         self.HueEnabled = False
         self.HueIP = ""
         self.HueToken = ""
-        
+
         self.YeelightEnabled = False
-        
+
         #
         # Load config
         #
@@ -149,14 +154,14 @@ class Settings:
                 with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="r") as f:
                     data = json.load(f, encoding=self.encoding)
                     for key, value in data.items():
-                            self.__dict__[key] = value
-            
+                        self.__dict__[key] = value
+
             except:
                 print("Unable to load settings.json")
-                sys.exit(1)
-            
+                exit(1)
+
             self.UpgradeSettingsFile()
-        
+
         #
         # CONVERT
         #
@@ -168,26 +173,25 @@ class Settings:
         self.Bots = [x.lower() for x in self.Bots]
         for action in self.Commands:
             self.Commands[action]['Hotkey'] = [key.lower() for key in self.Commands[action]['Hotkey']]
-        
+
         #
         # Reset time on all ScheduledMessages
         #
         for action in self.ScheduledMessages:
             self.scheduleTable[action['Name']] = int(time.time())
-        
+
         self.AutofillSettings()
-        
+
         if not os.path.isfile(self.pathRoot + "settings.json"):
             self.Save()
             print("Default configuration file has been created.")
-            sys.exit(0)
-        
+            exit(0)
+
         self.Verify()
-        return
-        
-    #---------------------------
+
+    # ---------------------------
     #   AutofillSettings
-    #---------------------------
+    # ---------------------------
     def AutofillSettings(self):
         #
         # DEFAULT
@@ -206,7 +210,7 @@ class Settings:
             self.AutoShoutout = False
         if not self.AutoShoutoutTime:
             self.AutoShoutoutTime = 10
-        
+
         #
         # DEFAULT MAPPING
         #
@@ -214,7 +218,7 @@ class Settings:
             self.PoseMapping['DEFAULT'] = {}
             self.PoseMapping['DEFAULT']['Image'] = 'Wave'
             self.PoseMapping['DEFAULT']['Audio'] = 'Wave'
-        
+
         #
         # ENABLED
         #
@@ -244,7 +248,7 @@ class Settings:
             self.Enabled["lurk"] = True
         if "shoutout" not in self.Enabled:
             self.Enabled["shoutout"] = True
-        
+
         #
         # STYLES
         #
@@ -278,7 +282,7 @@ class Settings:
             self.Styles["HighlightTextShadowColor"] = "#fc938f"
         if "HighlightTextShadowOffset" not in self.Styles:
             self.Styles["HighlightTextShadowOffset"] = 3
-        
+
         #
         # Messages
         #
@@ -331,7 +335,7 @@ class Settings:
             self.Messages["shoutout"] = [
                 "Please checkout {recipient}, they're a fantastic streamer"
             ]
-        
+
         #
         # Activities
         #
@@ -391,8 +395,8 @@ class Settings:
             self.Activities["ASMR"] = [
                 " and they were last streaming ASMR"
             ]
-            
-        ## Autofill ScheduledMessages
+
+        # Autofill ScheduledMessages
         for action in self.ScheduledMessages:
             if 'Timer' not in action:
                 action['Timer'] = 30
@@ -404,8 +408,8 @@ class Settings:
                 action['Command'] = ""
             if 'Image' not in action:
                 action['Image'] = ""
-        
-        ## Autofill Commands
+
+        # Autofill Commands
         for action in self.Commands:
             if 'Image' not in self.Commands[action]:
                 self.Commands[action]['Image'] = ""
@@ -423,15 +427,15 @@ class Settings:
                 self.Commands[action]['Aliases'] = []
             if 'Hotkey' not in self.Commands[action]:
                 self.Commands[action]['Hotkey'] = []
-            
-            ## Autofill CustomBits
+
+            # Autofill CustomBits
             for action in self.CustomBits:
                 if 'From' not in action:
                     action['From'] = 0
                 if 'To' not in action:
                     action['To'] = 0
-            
-            ## Autofill CustomSubs
+
+            # Autofill CustomSubs
             for action in self.CustomSubs:
                 if 'From' not in action:
                     action['From'] = 0
@@ -439,8 +443,8 @@ class Settings:
                     action['To'] = 0
                 if 'Tier' not in action:
                     action['Tier'] = ""
-            
-            ## Autofill PoseMapping
+
+            # Autofill PoseMapping
             for action in self.PoseMapping:
                 if 'Hue' in self.PoseMapping[action]:
                     for light in self.PoseMapping[action]['Hue']:
@@ -448,7 +452,7 @@ class Settings:
                             self.PoseMapping[action]['Hue'][light]['Brightness'] = 50
                         if 'Color' not in self.PoseMapping[action]['Hue'][light]:
                             self.PoseMapping[action]['Hue'][light]['Color'] = "#ffffff"
-                            
+
                 if 'Yeelight' in self.PoseMapping[action]:
                     for light in self.PoseMapping[action]['Yeelight']:
                         if 'Brightness' not in self.PoseMapping[action]['Yeelight'][light]:
@@ -459,15 +463,13 @@ class Settings:
                             self.PoseMapping[action]['Yeelight'][light]['Transition'] = True
                         if 'TransitionTime' not in self.PoseMapping[action]['Yeelight'][light]:
                             self.PoseMapping[action]['Yeelight'][light]['TransitionTime'] = 1000
-        
-        return
-        
-    #---------------------------
+
+    # ---------------------------
     #   CheckSettingsDependencies
-    #---------------------------
+    # ---------------------------
     def CheckSettingsDependencies(self):
         error = 0
-        
+
         #
         # Check mascot images configuration
         #
@@ -476,10 +478,10 @@ class Settings:
                 print("Mascot image missing for action: " + action)
                 if action == "Idle":
                     error = 2
-                
+
                 if error < 2:
                     error = 1
-            
+
             if action != 'Idle':
                 if 'MouthHeight' not in self.mascotImages[action]:
                     print("Mascot image mouth height missing for action: " + action)
@@ -489,7 +491,7 @@ class Settings:
                         print("Mascot image mouth height is too small for action: " + action)
                         if error < 2:
                             error = 1
-                
+
                 if 'Time' not in self.mascotImages[action]:
                     print("Mascot image time missing for action: " + action)
                     error = 2
@@ -498,7 +500,7 @@ class Settings:
                         print("Mascot image time is too short for action: " + action)
                         if error < 2:
                             error = 1
-        
+
         #
         # Check mascot audio configuration
         #
@@ -508,7 +510,7 @@ class Settings:
                     print("Mascot audio missing for action: " + action)
                     if error < 2:
                         error = 1
-            
+
             if 'Volume' not in self.mascotAudio[action]:
                 print("Mascot audio volume missing for action: " + action)
                 error = 2
@@ -519,7 +521,7 @@ class Settings:
                     print("Mascot audio volume value is invalid for action: " + action)
                     if error < 2:
                         error = 1
-        
+
         #
         # Check mascot other configuration
         #
@@ -531,7 +533,7 @@ class Settings:
                 print("Mascot MascotMaxWidth is too small")
                 if error < 2:
                     error = 1
-        
+
         #
         # Check default bindings
         #
@@ -542,7 +544,7 @@ class Settings:
             if self.PoseMapping['DEFAULT']['Image'] not in self.mascotImages:
                 print("Default pose mapping Image reference does not exist.")
                 error = 2
-        
+
         if 'Audio' not in self.PoseMapping['DEFAULT']:
             print("Default pose mapping Audio variable is missing.")
             if error < 2:
@@ -552,7 +554,7 @@ class Settings:
                 print("Default pose mapping Audio reference does not exist.")
                 if error < 2:
                     error = 1
-        
+
         #
         # Check other bindings
         #
@@ -566,29 +568,29 @@ class Settings:
                     print("Pose mapping Image reference does not exist for action: " + action)
                     if error < 2:
                         error = 1
-            
+
             if 'Audio' in self.PoseMapping[action]:
                 if self.PoseMapping[action]['Audio'] not in self.mascotAudio:
-                        print("Pose mapping Audio reference does not exist for action: " + action)
-                        if error < 2:
-                            error = 1
-        
+                    print("Pose mapping Audio reference does not exist for action: " + action)
+                    if error < 2:
+                        error = 1
+
         #
         # Check messages
         #
         for action in self.Messages:
             if not isinstance(self.Messages[action], list):
                 print("Message is not a list: " + action)
-                sys.exit(1)
-        
+                exit(1)
+
         for action in self.Enabled:
             if action == 'autohost' or action == 'anonsubgift':
                 continue
-                
+
             if action not in self.Messages:
                 print("Message does not exist: " + action)
-                sys.exit(1)
-        
+                exit(1)
+
         #
         # Check ScheduledMessages
         #
@@ -596,28 +598,28 @@ class Settings:
             if 'Name' not in action:
                 print("ScheduledMessages missing Name: ")
                 print(action)
-                sys.exit(1)
-            
+                exit(1)
+
             if not isinstance(action['Timer'], int):
                 print("ScheduledMessages Timer value is not a number: " + action['Name'])
-                sys.exit(1)
-            
+                exit(1)
+
             if action['Timer'] == 0:
                 print("ScheduledMessages Timer value is 0: " + action['Name'])
-                sys.exit(1)
-        
+                exit(1)
+
         #
         # Check Commands
         #
         for action in self.Commands:
             if not isinstance(self.Commands[action]['ViewerTimeout'], int):
                 print("Commands ViewerTimeout value is not a number: " + action)
-                sys.exit(1)
-            
+                exit(1)
+
             if not isinstance(self.Commands[action]['GlobalTimeout'], int):
                 print("Commands GlobalTimeout value is not a number: " + action)
-                sys.exit(1)
-        
+                exit(1)
+
         #
         # CustomBits
         #
@@ -625,32 +627,32 @@ class Settings:
             if 'Name' not in action:
                 print("CustomBits missing Name: ")
                 print(action)
-                sys.exit(1)
-                
+                exit(1)
+
             if 'From' not in action:
                 print("CustomBits is missing parameter From: " + action['Name'])
-                sys.exit(1)
-                
+                exit(1)
+
             if not isinstance(action['From'], int):
                 print("CustomBits is From value is not a number: " + action['Name'])
-                sys.exit(1)
-                
+                exit(1)
+
             if 'To' not in action:
                 print("CustomBits is missing parameter From: " + action['Name'])
-                sys.exit(1)
-                
+                exit(1)
+
             if not isinstance(action['To'], int):
                 print("CustomBits is To value is not a number: " + action['Name'])
-                sys.exit(1)
-                
+                exit(1)
+
             if action['To'] == 0:
                 print("CustomBits To value is 0: " + action['Name'])
-                sys.exit(1)
-                
+                exit(1)
+
             if action['From'] > action['To']:
                 print("CustomBits From value is higher or equal to To: " + action['Name'])
-                sys.exit(1)
-        
+                exit(1)
+
         #
         # CustomSubs
         #
@@ -658,41 +660,39 @@ class Settings:
             if 'Name' not in action:
                 print("CustomSubs missing Name: ")
                 print(action)
-                sys.exit(1)
-            
+                exit(1)
+
             if 'From' not in action:
                 print("CustomSubs is missing parameter From: " + action['Name'])
-                sys.exit(1)
-            
+                exit(1)
+
             if not isinstance(action['From'], int):
                 print("CustomSubs is From value is not a number: " + action['Name'])
-                sys.exit(1)
-            
+                exit(1)
+
             if 'To' not in action:
                 print("CustomSubs is missing parameter From: " + action['Name'])
-                sys.exit(1)
-            
+                exit(1)
+
             if not isinstance(action['To'], int):
                 print("CustomSubs is To value is not a number: " + action['Name'])
-                sys.exit(1)
-                
+                exit(1)
+
             if action['To'] == 0:
                 print("CustomSubs To value is 0: " + action['Name'])
-                sys.exit(1)
-            
+                exit(1)
+
             if action['From'] > action['To']:
                 print("CustomSubs From value is higher or equal to To: " + action['Name'])
-                sys.exit(1)
-        
+                exit(1)
+
         if error == 2:
             print("Mandatory dependencies are broken, see above.")
-            sys.exit(1)
-        
-        return
-        
-    #---------------------------
+            exit(1)
+
+    # ---------------------------
     #   UpgradeSettingsFile
-    #---------------------------
+    # ---------------------------
     def UpgradeSettingsFile(self):
         #
         # CurrectMascot fix v1.1
@@ -700,7 +700,7 @@ class Settings:
         if hasattr(self, 'CurrectMascot'):
             self.CurrentMascot = self.CurrectMascot
             del self.CurrectMascot
-        
+
         #
         # ScheduledMessages Messages and remove LastShown v1.2
         #
@@ -709,45 +709,46 @@ class Settings:
                 del action['LastShown']
             if 'Message' in action:
                 if action['Name'] in self.Messages:
-                    print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. " + action['Name'] + " already exists in Messages.")
-                    sys.exit(1)
+                    print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. " + action[
+                        'Name'] + " already exists in Messages.")
+                    exit(1)
                 else:
                     self.Messages[action['Name']] = action['Message']
                     del action['Message']
-        
+
         #
         # Commands Messages v1.2
         #
         for action in self.Commands:
             if 'Message' in self.Commands[action]:
                 if action in self.Messages:
-                    print("Upgrade: Cannot migrate message values from Commands to Messages. " + action + " already exists in Messages.")
-                    sys.exit(1)
+                    print(
+                        "Upgrade: Cannot migrate message values from Commands to Messages. " + action + " already exists in Messages.")
+                    exit(1)
                 else:
                     self.Messages[action] = self.Commands[action]['Message']
                     del self.Commands[action]['Message']
-        
+
         #
         # CustomGreets v1.2
         #
         if hasattr(self, 'CustomGreets'):
             for action in self.CustomGreets:
                 if action in self.Messages:
-                    print("Upgrade: Cannot migrate CustomGreets to Messages. " + action + " already exists in Messages.")
-                    sys.exit(1)
-            
+                    print(
+                        "Upgrade: Cannot migrate CustomGreets to Messages. " + action + " already exists in Messages.")
+                    exit(1)
+
             for action in self.CustomGreets:
                 self.Messages["viewer_" + action] = self.CustomGreets[action]
-            
+
             del self.CustomGreets
-        
-        return
-        
-    #---------------------------
+
+    # ---------------------------
     #   Save
-    #---------------------------
+    # ---------------------------
     def Save(self):
-        ## Export config
+        # Export config
         tmp = {}
         try:
             for key in self.__dict__:
@@ -755,52 +756,47 @@ class Settings:
                     tmp[key] = self.__dict__[key]
         except:
             print("Failed to export configuration")
-        
-        ## Save config
+
+        # Save config
         try:
             with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="w+") as f:
                 json.dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             print("Failed to save settings.json")
-            sys.exit(1)
-        
-        ## Save config copy
+            exit(1)
+
+        # Save config copy
         try:
             with codecs.open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
                 json.dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             print("Failed to save settings.bak")
-            sys.exit(1)
-        
-        return
-        
-    #---------------------------
+            exit(1)
+
+    # ---------------------------
     #   Verify
-    #---------------------------
+    # ---------------------------
     def Verify(self):
         code = 0
-        ## Check user name
+        # Check user name
         if len(self.TwitchChannel) < 1:
             print("Twitch channel not specified")
             code = 1
-        
-        ## Check OAUTH
+
+        # Check OAUTH
         if self.TwitchOAUTH.find('oauth:') != 0:
             print("Twitch OAUTH is invalid")
             code = 1
-        
-        ## Check chatbot
-        if self.UseChatbot:
-            if len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
-                print("Twitch Bot OAUTH is invalid")
-                code = 1
-        
-        ## Check twitch client ID
+
+        # Check chatbot
+        if self.UseChatbot and len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
+            print("Twitch Bot OAUTH is invalid")
+            code = 1
+
+        # Check twitch client ID
         if len(self.twitchClientID) < 1:
             print("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
             code = 1
-        
+
         if code:
-            sys.exit(code)
-            
-        return
+            exit(code)
