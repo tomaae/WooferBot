@@ -16,24 +16,24 @@ from yeelight import discover_bulbs
 from yeelight import Bulb
 
 
-#---------------------------
+# ---------------------------
 #   Yeelight Handling
-#---------------------------
+# ---------------------------
 class Yeelight:
     def __init__(self, settings):
         self.settings = settings
         self.enabled = self.settings.YeelightEnabled
         self.active = False
         self.lights = {}
-        
+
         if not self.enabled:
             return
-        
+
         if self.settings.os == 'win':
-            import msvcrt
+            from msvcrt import getch
         elif self.settings.os == 'lx':
-            import getch
-        
+            from getch import getch
+
         print("Initializing Yeelight...")
         while len(self.lights) == 0:
             self.detect_lights()
@@ -41,168 +41,174 @@ class Yeelight:
                 print("Yeelight not found")
                 print("Press C to cancel or any key to scan again")
                 if self.settings.os == 'win':
-                    input_char = msvcrt.getch().decode("utf-8").upper()
+                    input_char = getch().decode("utf-8").upper()
                 elif self.settings.os == 'lx':
-                    input_char = getch.getch().upper()
-                
+                    input_char = getch().upper()
+                else:
+                    input_char = "C"
+
                 if input_char == 'C':
                     return
-        
+
         self.active = True
         self.check_mappings()
-        return
-    
-    #---------------------------
+
+    # ---------------------------
     #   check_mappings
-    #---------------------------
+    # ---------------------------
     def check_mappings(self):
-        ## Check if hue is active
+        # Check if hue is active
         if not self.active:
             return
-        
+
         for action in self.settings.PoseMapping:
             if 'Yeelight' in self.settings.PoseMapping[action]:
                 for light in self.settings.PoseMapping[action]['Yeelight']:
                     if light not in self.lights:
-                        print("Error: Yeelight \"" + light + "\" defined in PoseMapping \"" + action + "\" has not been detected.")
-        
-        return
-    
-    #---------------------------
+                        print("Error: Yeelight \"{}\" defined in PoseMapping \"{}\" has not been detected.".format(light, action))
+
+    # ---------------------------
     #   state
-    #---------------------------
-    def state(self, device, color="", brightness=100, transition=True, transitionTime=1000):
-        ## Check if yeelight is active
+    # ---------------------------
+    def state(self, device, color="", brightness=100, transition=True, transition_time=1000):
+        # Check if yeelight is active
         if not self.active:
             return
-        
-        ## Check if light has been detected on startup
+
+        # Check if light has been detected on startup
         if device not in self.lights:
-            print("Yeelight Device \"" + device + "\" does not detected1")
+            print("Yeelight Device \"{}\" does not detected".format(device))
             return
-        
-        ## Set light transition transition
+
+        # Set light transition transition
         try:
             if transition:
                 self.lights[device].transition = "smooth"
-                self.lights[device].duration = transitionTime
+                self.lights[device].duration = transition_time
             else:
                 self.lights[device].effect = "sudden"
-                
+
         except:
-            print("Communication failed with Yeelight " + device + ", light disabled")
+            print("Communication failed with Yeelight {}, light disabled".format(device))
             del self.lights[device]
             return
-        
-        ## Turn light off
+
+        # Turn light off
         if not color:
             try:
                 self.lights[device].turn_off()
             except:
-                print("Communication failed with Yeelight " + device + ", light disabled")
+                print("Communication failed with Yeelight {}, light disabled".format(device))
                 del self.lights[device]
                 return
             return
-        
+
         if color:
-            ## Turn light on
+            # Turn light on
             try:
                 self.lights[device].turn_on()
                 tmp = self.hex_to_rgb(color)
                 self.lights[device].set_brightness(brightness)
                 self.lights[device].set_rgb(tmp[0], tmp[1], tmp[2])
             except:
-                print("Communication failed with Yeelight " + device + ", light disabled")
+                print("Communication failed with Yeelight {}, light disabled".format(device))
                 del self.lights[device]
                 return
         else:
             try:
                 self.lights[device].set_brightness(brightness)
             except:
-                print("Communication failed with Yeelight " + device + ", light disabled")
+                print("Communication failed with Yeelight {}, light disabled".format(device))
                 del self.lights[device]
                 return
-        
-        return
-    
-    #---------------------------
+
+    # ---------------------------
     #   detect_lights
-    #---------------------------
+    # ---------------------------
     def detect_lights(self):
-        discoveredLights = discover_bulbs()
-        
-        for light in discoveredLights:
-            ## Check light compatibility
-            if 'capabilities' in light and 'model' in light['capabilities']:
-                if light['capabilities']['model'] not in ['mono', 'color', 'stripe', 'bslamp', 'ceiling']:
-                    continue
-            
-            ## Check reply consistency
+        discovered_lights = discover_bulbs()
+
+        for light in discovered_lights:
+            # Check light compatibility
+            if 'capabilities' in light and 'model' in light['capabilities'] \
+                    and light['capabilities']['model'] not in ['mono', 'color', 'stripe', 'bslamp', 'ceiling']:
+                continue
+
+            # Check reply consistency
             if 'ip' not in light:
                 continue
-            
-            ## Set device name
+
+            # Set device name
             device_name = light['capabilities']['name']
-            
-            ## Check if device has a name
+
+            # Check if device has a name
             if device_name == "":
-                print("Name not defined for Yeelight " + light['capabilities']['model'] + ", ID: " + light['capabilities']['id'])
-                
-                ## Identify light for user
-                try:
-                    bulb = Bulb(light['ip'])
-                    bulb.turn_off()
-                    bulb.effect = "sudden"
-                    bulb.turn_on()
-                    bulb.set_brightness(100)
-                    bulb.set_rgb(0, 0, 255)
-                    bulb.effect = "smooth"
-                    bulb.duration = 10000
-                    bulb.set_rgb(255, 0, 0)
-                except:
-                    print("Communication failed with Yeelight " + light['capabilities']['model'] + ", ID: " + light['capabilities']['id'])
+                device_name = self.set_light_name(light['ip'], light['capabilities']['model'],
+                                                  light['capabilities']['id'])
+                if device_name == "":
                     continue
-                
-                ## Get user input for light name
-                print("This device will change color from blue to red over 10 seconds.")
-                print("Enter name for this device or press enter to skip it:")
-                input_char = input()
-                if input_char == '':
-                    try:
-                        bulb.turn_off()
-                    except:
-                        print("Communication failed with Yeelight " + light['capabilities']['model'] + ", ID: " + light['capabilities']['id'])
-                        continue
-                    continue
-                
-                ## Set light name
-                device_name = input_char
-                try:
-                    bulb.set_name(device_name)
-                except:
-                    print("Communication failed with Yeelight " + light['capabilities']['model'] + ", ID: " + light['capabilities']['id'])
-                    continue
-            
-            ## Add usable light to list
+
+            # Add usable light to list
             self.lights[device_name] = Bulb(light['ip'])
-            
-            ## Turn off light
+
+            # Turn off light
             try:
                 self.lights[device_name].turn_off()
             except:
-                print("Communication failed with Yeelight " + device_name + ", light disabled")
+                print("Communication failed with Yeelight {}, light disabled".format(device_name))
                 del self.lights[device_name]
                 continue
-        
-        return
-    
-    #---------------------------
+
+    # ---------------------------
+    #   set_light_name
+    # ---------------------------
+    def set_light_name(self, ip, light_model, light_id):
+        print("Name not defined for Yeelight {}, ID: {}".format(light_model, light_id))
+
+        # Identify light for user
+        try:
+            bulb = Bulb(ip)
+            bulb.turn_off()
+            bulb.effect = "sudden"
+            bulb.turn_on()
+            bulb.set_brightness(100)
+            bulb.set_rgb(0, 0, 255)
+            bulb.effect = "smooth"
+            bulb.duration = 10000
+            bulb.set_rgb(255, 0, 0)
+        except:
+            print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
+            return ""
+
+        # Get user input for light name
+        print("This device will change color from blue to red over 10 seconds.")
+        print("Enter name for this device or press enter to skip it:")
+        input_char = input()
+        if input_char == '':
+            try:
+                bulb.turn_off()
+            except:
+                print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
+                return ""
+            return ""
+
+        # Set light name
+        device_name = input_char
+        try:
+            bulb.set_name(device_name)
+        except:
+            print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
+            return ""
+
+        return device_name
+
+    # ---------------------------
     #   hex_to_rgb
-    #---------------------------
+    # ---------------------------
     def hex_to_rgb(self, h):
         h = h.lstrip('#')
         r = int(h[0:2], 16)
         g = int(h[2:4], 16)
         b = int(h[4:6], 16)
-        
+
         return r, g, b
