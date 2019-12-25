@@ -70,7 +70,7 @@ class Twitch:
     # ---------------------------
     #   LinkTwitch
     # ---------------------------
-    def LinkTwitch(self, account):
+    def LinkAccount(self, account):
         self.linkTwitch = account
 
     # ---------------------------

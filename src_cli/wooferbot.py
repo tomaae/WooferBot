@@ -66,7 +66,7 @@ woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, 
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.Connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
-    twitchbot.LinkTwitch(twitch)
+    twitchbot.LinkAccount(twitch)
 
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
