@@ -43,6 +43,7 @@ class Settings:
 
         # Check paths
         self.pathRoot = pathRoot + self.slash
+        self.configFile = self.pathRoot + "settings.json"
         if not os.path.isdir(self.pathRoot):
             print("Working directory not detected.")
             exit(1)
@@ -50,7 +51,7 @@ class Settings:
                 self.pathRoot + "wooferbot_cli.exe") and not os.path.isfile(self.pathRoot + "wooferbot_cli"):
             print("Working directory incorrect.")
             exit(1)
-        if not os.path.isfile(self.pathRoot + "settings.json"):
+        if not os.path.isfile(self.configFile):
             print("Configuration file is missing, recreating with defaults.")
 
         self.Reload()
@@ -151,9 +152,9 @@ class Settings:
         #
         # Load config
         #
-        if os.path.isfile(self.pathRoot + "settings.json"):
+        if os.path.isfile(self.configFile):
             try:
-                with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="r") as f:
+                with codecs.open(self.configFile, encoding=self.encoding, mode="r") as f:
                     data = json.load(f, encoding=self.encoding)
                     for key, value in data.items():
                         self.__dict__[key] = value
@@ -184,7 +185,7 @@ class Settings:
 
         self.AutofillSettings()
 
-        if not os.path.isfile(self.pathRoot + "settings.json"):
+        if not os.path.isfile(self.configFile):
             self.Save()
             print("Default configuration file has been created.")
             exit(0)
@@ -538,7 +539,7 @@ class Settings:
 
         # Save config
         try:
-            with codecs.open(self.pathRoot + "settings.json", encoding=self.encoding, mode="w+") as f:
+            with codecs.open(self.configFile, encoding=self.encoding, mode="w+") as f:
                 json.dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             print("Failed to save settings.json")
