@@ -55,7 +55,7 @@ class _WatchdogCustomHandler(FileSystemEventHandler):
                     f = open(self.filename, "r")
 
                     if 'Command' in action:
-                        self.woofer_commands({
+                        self.woofer.woofer_commands({
                             "command": action['Command'],
                             "broadcaster": 1,
                             "sender": action['Name'],
