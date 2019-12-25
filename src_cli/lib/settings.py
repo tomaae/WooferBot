@@ -515,9 +515,7 @@ class Settings:
                 print("Mascot audio volume missing for action: " + action)
                 error = 2
             else:
-                if self.mascotAudio[action]['Volume'] > 0 and self.mascotAudio[action]['Volume'] <= 1:
-                    error = error
-                else:
+                if self.mascotAudio[action]['Volume'] > 1:
                     print("Mascot audio volume value is invalid for action: " + action)
                     if error < 2:
                         error = 1
@@ -569,11 +567,10 @@ class Settings:
                     if error < 2:
                         error = 1
 
-            if 'Audio' in self.PoseMapping[action]:
-                if self.PoseMapping[action]['Audio'] not in self.mascotAudio:
-                    print("Pose mapping Audio reference does not exist for action: " + action)
-                    if error < 2:
-                        error = 1
+            if 'Audio' in self.PoseMapping[action] and self.PoseMapping[action]['Audio'] not in self.mascotAudio:
+                print("Pose mapping Audio reference does not exist for action: " + action)
+                if error < 2:
+                    error = 1
 
         #
         # Check messages
