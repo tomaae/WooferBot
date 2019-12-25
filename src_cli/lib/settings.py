@@ -190,7 +190,7 @@ class Settings:
             print("Default configuration file has been created.")
             exit(0)
 
-        self.Verify()
+        self.VerifyLoginInformation()
 
     # ---------------------------
     #   SetVariables
@@ -555,9 +555,9 @@ class Settings:
             exit(1)
 
     # ---------------------------
-    #   Verify
+    #   VerifyLoginInformation
     # ---------------------------
-    def Verify(self):
+    def VerifyLoginInformation(self):
         code = 0
         # Check user name
         if len(self.TwitchChannel) < 1:
