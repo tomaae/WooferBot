@@ -66,16 +66,17 @@ class Overlay:
 
         # Check mascot image
         if 'mascot' in jsonData:
-            jsonData["mascot"] = ""
             if path.isfile(jsonData["mascot"]):
                 jsonData["mascot"] = f"file:///{jsonData['mascot']}"
-
+            else:
+                jsonData["mascot"] = ""
 
         # Check audio
         if 'audio' in jsonData:
-            jsonData["audio"] = ""
             if path.isfile(jsonData["audio"]):
                 jsonData["audio"] = f"file:///{jsonData['audio']}"
+            else:
+                jsonData["audio"] = ""
 
         # Check speech bubble image
         if 'image' in jsonData:
