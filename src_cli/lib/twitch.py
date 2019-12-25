@@ -216,7 +216,6 @@ class Twitch:
                         jsonData["custom-tag"] = "message"
                         self.woofer.ProcessJson(jsonData)
                         continue
-                    continue
 
                 #
                 # USERNOTICE
