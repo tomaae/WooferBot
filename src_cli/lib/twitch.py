@@ -12,10 +12,10 @@
 #
 ##########################################################################
 
-import socket
+from socket import socket, error as socket_error, timeout as socket_timeout
 from threading import Timer, Thread
-import re
-import time
+from re import split as re_split
+from time import time
 
 
 # ---------------------------
@@ -29,7 +29,7 @@ class Twitch:
         self.host = "irc.twitch.tv"  # Hostname of the IRC-Server in this case twitch's
         self.port = 6667  # Default IRC-Port
         self.chrset = 'UTF-8'
-        self.con = socket.socket()
+        self.con = socket()
         self.conCheckTimer = Timer(30, self.ConnectionChecker)
         self.lastPing = 0
         self.connected = False
@@ -61,7 +61,7 @@ class Twitch:
         if not self.connected:
             return
 
-        if int(time.time()) > (self.lastPing + 400):
+        if int(time()) > (self.lastPing + 400):
             print("Connection " + self.TwitchLogin + " to Twitch not responding, reconnecting...")
             self.connected = False
             self.Disconnect()
@@ -113,7 +113,7 @@ class Twitch:
         # Log in
         #
         try:
-            self.con = socket.socket()
+            self.con = socket()
             self.con.connect((self.host, self.port))
             self.con.send(bytes('PASS %s\r\n' % TwitchOAUTH, self.chrset))  # www.twitchapps.com/tmi/ will help to retrieve the required authkey
             self.con.send(bytes('NICK %s\r\n' % TwitchLogin, self.chrset))
@@ -126,7 +126,7 @@ class Twitch:
             return 1
         print("Connected " + TwitchLogin + " to Twitch...")
         self.connected = True
-        self.lastPing = int(time.time())
+        self.lastPing = int(time())
         if self.conCheckTimer.is_alive():
             self.conCheckTimer.cancel()
         self.conCheckTimer = Timer(30, self.ConnectionChecker)
@@ -139,15 +139,15 @@ class Twitch:
         while True:
             try:
                 data = data + self.con.recv(1024).decode(self.chrset)
-                data_split = re.split(r"[~\r\n]+", data)
+                data_split = re_split(r"[~\r\n]+", data)
                 data = data_split.pop()
                 Thread(target=self.ProcessData, args=(data_split,)).start()
-            except socket.error:
+            except socket_error:
                 print("Twitch " + TwitchLogin + " socket error")
                 self.connected = False
                 self.Connect()
                 break
-            except socket.timeout:
+            except socket_timeout:
                 print("Twitch " + TwitchLogin + " socket timeout")
                 self.connected = False
                 self.Connect()
@@ -169,7 +169,7 @@ class Twitch:
                 # PING
                 #
                 if line[0] == 'PING':
-                    self.lastPing = int(time.time())
+                    self.lastPing = int(time())
                     self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
                     continue
 
