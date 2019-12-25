@@ -167,3 +167,19 @@ def is_valid_ipv6_address(address):
     except socket.error:  # not a valid address
         return False
     return True
+
+
+# ---------------------------
+#   get_var_default
+# ---------------------------
+def get_var_default(vartype):
+    if isinstance(vartype, str):
+        tmp = ""
+    elif type(vartype) == int or type(vartype) == float:
+        tmp = 0
+    elif type(vartype) == bool:
+        tmp = False
+    elif type(vartype) == list:
+        tmp = []
+
+    return tmp

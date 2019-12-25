@@ -17,6 +17,8 @@ import json
 import os
 import time
 from sys import exit, platform
+from lib.helper import get_var_default
+from lib.defaults import *
 
 
 # ---------------------------
@@ -113,8 +115,8 @@ class Settings:
         self.Activities = {}
         self.Enabled = {}
         self.PoseMapping = {}
-        self.CurrentMascot = "malamute"
-        self.AlignMascot = "left"
+        self.CurrentMascot = ""
+        self.AlignMascot = ""
         self.pathImages = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash
         self.pathAudio = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash
         self.HostMessage = ""
@@ -190,279 +192,79 @@ class Settings:
         self.Verify()
 
     # ---------------------------
+    #   SetVariables
+    # ---------------------------
+    @classmethod
+    def SetVariables(self, cls, defaults_list):
+        for var in defaults_list:
+            var_found = True
+            try:
+                if type(cls) == dict:
+                    tmp = cls[var]
+                else:
+                    tmp = getattr(cls, var)
+            except:
+                var_found = False
+                tmp = get_var_default(defaults_list[var])
+
+            if type(defaults_list[var]) == str and (tmp == "" or not var_found or type(tmp) != str):
+                if type(cls) == dict:
+                    cls[var] = defaults_list[var]
+                else:
+                    setattr(cls, var, defaults_list[var])
+
+            if (type(defaults_list[var]) == int or type(defaults_list[var]) == float) and (not tmp or not var_found or (type(tmp) != int and type(tmp) != float)):
+                if type(cls) == dict:
+                    cls[var] = defaults_list[var]
+                else:
+                    setattr(cls, var, defaults_list[var])
+
+            if type(defaults_list[var]) == bool and (not var_found or type(tmp) != bool):
+                if type(cls) == dict:
+                    cls[var] = defaults_list[var]
+                else:
+                    setattr(cls, var, defaults_list[var])
+
+            if type(defaults_list[var]) == list and (not tmp or not var_found or type(tmp) != list):
+                if type(cls) == dict:
+                    cls[var] = defaults_list[var]
+                else:
+                    setattr(cls, var, defaults_list[var])
+
+    # ---------------------------
     #   AutofillSettings
     # ---------------------------
     def AutofillSettings(self):
-        #
-        # DEFAULT
-        #
-        if self.CurrentMascot == "":
-            self.CurrentMascot = "malamute"
-        if self.HostMessage == "":
-            self.HostMessage = "is now hosting you."
-        if self.AutohostMessage == "":
-            self.AutohostMessage = "is auto hosting you"
-        if self.FollowMessage == "":
-            self.FollowMessage = "Thank you for the follow!"
-        if not self.MinBits:
-            self.MinBits = 0
-        if not self.AutoShoutout:
-            self.AutoShoutout = False
-        if not self.AutoShoutoutTime:
-            self.AutoShoutoutTime = 10
+        self.SetVariables(self, defaults_root)
+        self.SetVariables(self.Enabled, defaults_enabled)
+        self.SetVariables(self.Styles, defaults_styles)
+        self.SetVariables(self.Messages, defaults_messages)
+        self.SetVariables(self.Activities, defaults_activities)
+        for action in self.ScheduledMessages:
+            self.SetVariables(action, defaults_scheduledmessages)
 
-        #
-        # DEFAULT MAPPING
-        #
+        for action in self.Commands:
+            self.SetVariables(self.Commands[action], defaults_commands)
+
+        for action in self.CustomBits:
+            self.SetVariables(action, defaults_custombits)
+
+        for action in self.CustomSubs:
+            self.SetVariables(action, defaults_customsubs)
+
         if "DEFAULT" not in self.PoseMapping:
             self.PoseMapping['DEFAULT'] = {}
             self.PoseMapping['DEFAULT']['Image'] = 'Wave'
             self.PoseMapping['DEFAULT']['Audio'] = 'Wave'
 
-        #
-        # ENABLED
-        #
-        if "new_chatter" not in self.Enabled:
-            self.Enabled["new_chatter"] = True
-        if "greet" not in self.Enabled:
-            self.Enabled["greet"] = True
-        if "follow" not in self.Enabled:
-            self.Enabled["follow"] = True
-        if "raid" not in self.Enabled:
-            self.Enabled["raid"] = True
-        if "host" not in self.Enabled:
-            self.Enabled["host"] = True
-        if "autohost" not in self.Enabled:
-            self.Enabled["autohost"] = True
-        if "sub" not in self.Enabled:
-            self.Enabled["sub"] = True
-        if "resub" not in self.Enabled:
-            self.Enabled["resub"] = True
-        if "subgift" not in self.Enabled:
-            self.Enabled["subgift"] = True
-        if "anonsubgift" not in self.Enabled:
-            self.Enabled["anonsubgift"] = True
-        if "bits" not in self.Enabled:
-            self.Enabled["bits"] = True
-        if "lurk" not in self.Enabled:
-            self.Enabled["lurk"] = True
-        if "shoutout" not in self.Enabled:
-            self.Enabled["shoutout"] = True
+        for action in self.PoseMapping:
+            if 'Hue' in self.PoseMapping[action]:
+                for light in self.PoseMapping[action]['Hue']:
+                    self.SetVariables(self.PoseMapping[action]['Hue'][light], defaults_posemapping_hue)
 
-        #
-        # STYLES
-        #
-        if "BackgroundColor" not in self.Styles:
-            self.Styles["BackgroundColor"] = "#fefeff"
-        if "BorderColor" not in self.Styles:
-            self.Styles["BorderColor"] = "#69656c"
-        if "BorderWidth" not in self.Styles:
-            self.Styles["BorderWidth"] = 4
-        if "BorderRadius" not in self.Styles:
-            self.Styles["BorderRadius"] = 4
-        if "BorderStrokeColor" not in self.Styles:
-            self.Styles["BorderStrokeColor"] = "#ffffff"
-        if "TextFontFamily" not in self.Styles:
-            self.Styles["TextFontFamily"] = "Fira Sans"
-        if "TextSize" not in self.Styles:
-            self.Styles["TextSize"] = 22
-        if "TextWeight" not in self.Styles:
-            self.Styles["TextWeight"] = 900
-        if "TextColor" not in self.Styles:
-            self.Styles["TextColor"] = "#69656c"
-        if "HighlightTextSize" not in self.Styles:
-            self.Styles["HighlightTextSize"] = 24
-        if "HighlightTextSpacing" not in self.Styles:
-            self.Styles["HighlightTextSpacing"] = 3
-        if "HighlightTextColor" not in self.Styles:
-            self.Styles["HighlightTextColor"] = "#ca5c67"
-        if "HighlightTextStrokeColor" not in self.Styles:
-            self.Styles["HighlightTextStrokeColor"] = "#8e4148"
-        if "HighlightTextShadowColor" not in self.Styles:
-            self.Styles["HighlightTextShadowColor"] = "#fc938f"
-        if "HighlightTextShadowOffset" not in self.Styles:
-            self.Styles["HighlightTextShadowOffset"] = 3
-
-        #
-        # Messages
-        #
-        if "new_chatter" not in self.Messages:
-            self.Messages["new_chatter"] = [
-                "Oh? {sender} is new here. Welcome~ ^..^"
-            ]
-        if "follow" not in self.Messages:
-            self.Messages["follow"] = [
-                "Oh? We have a new friend! Welcome {sender} ^..^"
-            ]
-        if "sub" not in self.Messages:
-            self.Messages["sub"] = [
-                "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for becoming our best friend ^..^"
-            ]
-        if "resub" not in self.Messages:
-            self.Messages["resub"] = [
-                "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for being our best friend for {months} months ^..^"
-            ]
-        if "subgift" not in self.Messages:
-            self.Messages["subgift"] = [
-                "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for gifting a sub to {recipient} ^..^"
-            ]
-        if "bits" not in self.Messages:
-            self.Messages["bits"] = [
-                "Yay~! {sender} just gave me {bits} treats ^..^"
-            ]
-        if "raid" not in self.Messages:
-            self.Messages["raid"] = [
-                "Oh? Is it a raid? {sender} raid?? Did they bring lots of treats??! ^..^"
-            ]
-        if "host" not in self.Messages:
-            self.Messages["host"] = [
-                "Oh? Do I spy a host from {sender}?? Come on over and don't forget to bring treats! ^..^"
-            ]
-        if "greet" not in self.Messages:
-            self.Messages["greet"] = [
-                "[Hello;Hi;Hey;Hewwo;Ello] {sender}, can I have some treats please?",
-                "[Hello;Hi;Hey;Hewwo;Ello] {sender}!? Are you here to pet me? Or to give me wet food? Either one is fine, just let me know! ^..^"
-            ]
-        if "lurk" not in self.Messages:
-            self.Messages["lurk"] = [
-                "Sit back, get some snacks and enjoy you lurk {sender}. But please share some with me~ ^..^"
-            ]
-        if "unlurk" not in self.Messages:
-            self.Messages["unlurk"] = [
-                "Welcome back {sender}, can I have a treats now? Pretty please~ ^..^"
-            ]
-        if "shoutout" not in self.Messages:
-            self.Messages["shoutout"] = [
-                "Please checkout {recipient}, they're a fantastic streamer"
-            ]
-
-        #
-        # Activities
-        #
-        if "Game" not in self.Activities:
-            self.Activities["Game"] = [
-                " and they were last playing {activity}"
-            ]
-        if "Art" not in self.Activities:
-            self.Activities["Art"] = [
-                " and they were last streaming Art"
-            ]
-        if "Makers and Crafting" not in self.Activities:
-            self.Activities["Makers and Crafting"] = [
-                " and they were last streaming Makers and Crafting"
-            ]
-        if "Food & Drink" not in self.Activities:
-            self.Activities["Food & Drink"] = [
-                " and they were last streaming Food & Drink"
-            ]
-        if "Music & Performing Arts" not in self.Activities:
-            self.Activities["Music & Performing Arts"] = [
-                " and they were last streaming Music & Performing Arts"
-            ]
-        if "Beauty & Body Art" not in self.Activities:
-            self.Activities["Beauty & Body Art"] = [
-                " and they were last streaming Beauty & Body Art"
-            ]
-        if "Science & Technology" not in self.Activities:
-            self.Activities["Science & Technology"] = [
-                " and they were last streaming Science & Technology activities"
-            ]
-        if "Just Chatting" not in self.Activities:
-            self.Activities["Just Chatting"] = [
-                " and they were last chatting"
-            ]
-        if "Travel & Outdoors" not in self.Activities:
-            self.Activities["Travel & Outdoors"] = [
-                " and they were last streaming Travel & Outdoors activities"
-            ]
-        if "Sports & Fitness" not in self.Activities:
-            self.Activities["Sports & Fitness"] = [
-                " and they were last streaming Sports & Fitness activities"
-            ]
-        if "Tabletop RPGs" not in self.Activities:
-            self.Activities["Tabletop RPGs"] = [
-                " and they were last playing IRL Tabletop RPG"
-            ]
-        if "Special Events" not in self.Activities:
-            self.Activities["Special Events"] = [
-                " and they were last streaming a Special Event"
-            ]
-        if "Talk Shows & Podcasts" not in self.Activities:
-            self.Activities["Talk Shows & Podcasts"] = [
-                " and they were last streaming a Talk Show or Podcast"
-            ]
-        if "ASMR" not in self.Activities:
-            self.Activities["ASMR"] = [
-                " and they were last streaming ASMR"
-            ]
-
-        # Autofill ScheduledMessages
-        for action in self.ScheduledMessages:
-            if 'Timer' not in action:
-                action['Timer'] = 30
-            if 'MinLines' not in action:
-                action['MinLines'] = 0
-            if 'Enabled' not in action:
-                action['Enabled'] = False
-            if 'Command' not in action:
-                action['Command'] = ""
-            if 'Image' not in action:
-                action['Image'] = ""
-
-        # Autofill Commands
-        for action in self.Commands:
-            if 'Image' not in self.Commands[action]:
-                self.Commands[action]['Image'] = ""
-            if 'Script' not in self.Commands[action]:
-                self.Commands[action]['Script'] = ""
-            if 'Enabled' not in self.Commands[action]:
-                self.Commands[action]['Enabled'] = False
-            if 'ViewerOnce' not in self.Commands[action]:
-                self.Commands[action]['ViewerOnce'] = False
-            if 'ViewerTimeout' not in self.Commands[action]:
-                self.Commands[action]['ViewerTimeout'] = 0
-            if 'GlobalTimeout' not in self.Commands[action]:
-                self.Commands[action]['GlobalTimeout'] = 0
-            if 'Aliases' not in self.Commands[action]:
-                self.Commands[action]['Aliases'] = []
-            if 'Hotkey' not in self.Commands[action]:
-                self.Commands[action]['Hotkey'] = []
-
-            # Autofill CustomBits
-            for action in self.CustomBits:
-                if 'From' not in action:
-                    action['From'] = 0
-                if 'To' not in action:
-                    action['To'] = 0
-
-            # Autofill CustomSubs
-            for action in self.CustomSubs:
-                if 'From' not in action:
-                    action['From'] = 0
-                if 'To' not in action:
-                    action['To'] = 0
-                if 'Tier' not in action:
-                    action['Tier'] = ""
-
-            # Autofill PoseMapping
-            for action in self.PoseMapping:
-                if 'Hue' in self.PoseMapping[action]:
-                    for light in self.PoseMapping[action]['Hue']:
-                        if 'Brightness' not in self.PoseMapping[action]['Hue'][light]:
-                            self.PoseMapping[action]['Hue'][light]['Brightness'] = 50
-                        if 'Color' not in self.PoseMapping[action]['Hue'][light]:
-                            self.PoseMapping[action]['Hue'][light]['Color'] = "#ffffff"
-
-                if 'Yeelight' in self.PoseMapping[action]:
-                    for light in self.PoseMapping[action]['Yeelight']:
-                        if 'Brightness' not in self.PoseMapping[action]['Yeelight'][light]:
-                            self.PoseMapping[action]['Yeelight'][light]['Brightness'] = 50
-                        if 'Color' not in self.PoseMapping[action]['Yeelight'][light]:
-                            self.PoseMapping[action]['Yeelight'][light]['Color'] = "#ffffff"
-                        if 'Transition' not in self.PoseMapping[action]['Yeelight'][light]:
-                            self.PoseMapping[action]['Yeelight'][light]['Transition'] = True
-                        if 'TransitionTime' not in self.PoseMapping[action]['Yeelight'][light]:
-                            self.PoseMapping[action]['Yeelight'][light]['TransitionTime'] = 1000
+            if 'Yeelight' in self.PoseMapping[action]:
+                for light in self.PoseMapping[action]['Yeelight']:
+                    self.SetVariables(self.PoseMapping[action]['Yeelight'][light], defaults_posemapping_yeelight)
 
     # ---------------------------
     #   CheckSettingsDependencies
