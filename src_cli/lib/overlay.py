@@ -12,12 +12,12 @@
 #
 ##########################################################################
 
-import json
-import asyncio
-import threading
-import os
-import random
-import websockets
+from json import dumps as json_dumps
+from asyncio import get_event_loop as asyncio_get_event_loop, sleep as asyncio_sleep
+from threading import Thread
+from os import path
+from random import SystemRandom
+from websockets import serve, exceptions as websockets_exceptions
 
 
 #---------------------------
@@ -43,11 +43,11 @@ class Overlay:
     #---------------------------
     def Start(self):
         print("Starting overlay server...")
-        self.serverSocket = websockets.serve(self.Connection, self.bindIP, self.bindPort)
+        self.serverSocket = serve(self.Connection, self.bindIP, self.bindPort)
         print("Overlay server waiting for connection...")
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio_get_event_loop()
         self.loop.run_until_complete(self.serverSocket)
-        self.loopThread = threading.Thread(target=self.loop.run_forever)
+        self.loopThread = Thread(target=self.loop.run_forever)
         self.loopThread.daemon = True
         self.loopThread.start()
         return
@@ -68,21 +68,21 @@ class Overlay:
         
         ## Check mascot image
         if 'mascot' in jsonData:
-            if os.path.isfile(jsonData["mascot"]):
+            if path.isfile(jsonData["mascot"]):
                 jsonData["mascot"] = "file:///" + jsonData["mascot"]
             else:
                 jsonData["mascot"] = ""
         
         ## Check audio
         if 'audio' in jsonData:
-            if os.path.isfile(jsonData["audio"]):
+            if path.isfile(jsonData["audio"]):
                 jsonData["audio"] = "file:///" + jsonData["audio"]
             else:
                 jsonData["audio"] = ""
         
         ## Check speech bubble image
         if 'image' in jsonData:
-            if os.path.isfile(jsonData["image"]):
+            if path.isfile(jsonData["image"]):
                 jsonData["image"] = "file:///" + jsonData["image"]
             else:
                 if jsonData["image"].find('https://') != 0:
@@ -113,7 +113,7 @@ class Overlay:
         if not self.sendQueue:
             ## Get default mascot image
             mascotIdleImage = self.settings.mascotImages['Idle']['Image']
-            if not os.path.isfile(mascotIdleImage):
+            if not path.isfile(mascotIdleImage):
                 mascotIdleImage = ""
             
             ## Load Idle pose mapping if available
@@ -121,7 +121,7 @@ class Overlay:
                 ## Reset Image to Idle
                 if 'Image' in self.settings.PoseMapping['Idle'] and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
                     tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-                    if os.path.isfile(tmp):
+                    if path.isfile(tmp):
                         mascotIdleImage = tmp
                 
                 ## Reset Nanoleaf to Idle
@@ -161,7 +161,7 @@ class Overlay:
                         ## Process inline randomizer
                         while jsonDataRaw['data']['message'].find("[") >= 0:
                             tmp = jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("[") + 1, jsonDataRaw['data']['message'].find("]"))]
-                            jsonDataRaw['data']['message'] = jsonDataRaw['data']['message'][slice(0, jsonDataRaw['data']['message'].find("["))] + random.SystemRandom().choice(tmp.split(";")) + jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("]") + 1, 9999)]
+                            jsonDataRaw['data']['message'] = jsonDataRaw['data']['message'][slice(0, jsonDataRaw['data']['message'].find("["))] + SystemRandom().choice(tmp.split(";")) + jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("]") + 1, 9999)]
                         
                         chatbotMsg = jsonDataRaw['data']['message']
                         ## Process substrings for chatbot
@@ -178,8 +178,8 @@ class Overlay:
                         self.chatbot.Send(chatbotMsg)
                     
                     ## Send message to overlay
-                    await websocket.send(json.dumps(jsonDataRaw))
-                except websockets.exceptions.ConnectionClosed:
+                    await websocket.send(json_dumps(jsonDataRaw))
+                except websockets_exceptions.ConnectionClosed:
                     ## Connection failed
                     print("Connection closed by overlay...")
                     self.active = self.active - 1
@@ -190,13 +190,13 @@ class Overlay:
             ## Queue empty, send keepalive
             else:
                 if pingSend >= 40:
-                    jsonDataRaw = json.dumps({
+                    jsonDataRaw = json_dumps({
                         "event": "EVENT_PING",
                         "data": ""
                     })
                     try:
                         await websocket.send(jsonDataRaw)
-                    except websockets.exceptions.ConnectionClosed:
+                    except websockets_exceptions.ConnectionClosed:
                         ## Connection failed
                         self.active = self.active - 1
                         if self.active == 0:
@@ -205,7 +205,7 @@ class Overlay:
                     else:
                         pingSend = 0
             
-            await asyncio.sleep(0.5)
+            await asyncio_sleep(0.5)
         return
         
     #---------------------------
