@@ -12,10 +12,10 @@
 #
 ##########################################################################
 
-import codecs
-import json
-import os
-import time
+from json import load as json_load, dump as json_dump
+from codecs import open
+from os import path
+from time import time
 from sys import exit, platform
 from lib.helper import get_var_default
 from lib.dependencies import CheckSettingsDependencies
@@ -45,14 +45,14 @@ class Settings:
         # Check paths
         self.pathRoot = pathRoot + self.slash
         self.configFile = self.pathRoot + "settings.json"
-        if not os.path.isdir(self.pathRoot):
+        if not path.isdir(self.pathRoot):
             print("Working directory not detected.")
             exit(1)
-        if not os.path.isfile(self.pathRoot + "wooferbot.py") and not os.path.isfile(
-                self.pathRoot + "wooferbot_cli.exe") and not os.path.isfile(self.pathRoot + "wooferbot_cli"):
+        if not path.isfile(self.pathRoot + "wooferbot.py") and not path.isfile(
+                self.pathRoot + "wooferbot_cli.exe") and not path.isfile(self.pathRoot + "wooferbot_cli"):
             print("Working directory incorrect.")
             exit(1)
-        if not os.path.isfile(self.configFile):
+        if not path.isfile(self.configFile):
             print("Configuration file is missing, recreating with defaults.")
 
         self.Reload()
@@ -69,9 +69,9 @@ class Settings:
 
         # Load mascot config
         try:
-            with codecs.open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json",
+            with open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json",
                              encoding=self.encoding, mode="r") as f:
-                data = json.load(f, encoding=self.encoding)
+                data = json_load(f, encoding=self.encoding)
                 for key, value in data.items():
                     self.__dict__[key] = value
         except:
@@ -153,10 +153,10 @@ class Settings:
         #
         # Load config
         #
-        if os.path.isfile(self.configFile):
+        if path.isfile(self.configFile):
             try:
-                with codecs.open(self.configFile, encoding=self.encoding, mode="r") as f:
-                    data = json.load(f, encoding=self.encoding)
+                with open(self.configFile, encoding=self.encoding, mode="r") as f:
+                    data = json_load(f, encoding=self.encoding)
                     for key, value in data.items():
                         self.__dict__[key] = value
 
@@ -182,11 +182,11 @@ class Settings:
         # Reset time on all ScheduledMessages
         #
         for action in self.ScheduledMessages:
-            self.scheduleTable[action['Name']] = int(time.time())
+            self.scheduleTable[action['Name']] = int(time())
 
         self.AutofillSettings()
 
-        if not os.path.isfile(self.configFile):
+        if not path.isfile(self.configFile):
             self.Save()
             print("Default configuration file has been created.")
             exit(0)
@@ -321,16 +321,16 @@ class Settings:
 
         # Save config
         try:
-            with codecs.open(self.configFile, encoding=self.encoding, mode="w+") as f:
-                json.dump(tmp, f, indent=4, ensure_ascii=False)
+            with open(self.configFile, encoding=self.encoding, mode="w+") as f:
+                json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             print("Failed to save settings.json")
             exit(1)
 
         # Save config copy
         try:
-            with codecs.open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
-                json.dump(tmp, f, indent=4, ensure_ascii=False)
+            with open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
+                json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             print("Failed to save settings.bak")
             exit(1)
