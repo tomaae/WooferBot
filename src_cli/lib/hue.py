@@ -12,8 +12,8 @@
 #
 ##########################################################################
 
-import json
-import requests
+from json import dumps as json_dumps
+from requests import get as requests_get, put as requests_put, post as requests_post
 from lib.helper import ssdp_discovery, hex_to_hue, portup
 
 
@@ -49,7 +49,7 @@ class Hue:
         # Token not set
         #
         url = "http://{}:80/api/{}".format(self.ip, self.token)
-        result = requests.get(url, data=json.dumps({'devicetype': 'wooferbot'}), timeout=5)
+        result = requests_get(url, data=json_dumps({'devicetype': 'wooferbot'}), timeout=5)
         output_json = result.json()
         if result.status_code != 200 or len(output_json) == 0:
             print("Philips HUE Bridge did not responding correctly")
@@ -72,7 +72,7 @@ class Hue:
             settings.HueToken = self.token
 
         url = "http://{}:80/api/{}".format(self.ip, self.token)
-        result = requests.get(url, data=json.dumps({'devicetype': 'wooferbot'}), timeout=5)
+        result = requests.get(url, data=json_dumps({'devicetype': 'wooferbot'}), timeout=5)
         output_json = result.json()
         if result.status_code == 200 and 'config' in output_json and 'bridgeid' in output_json['config'] and len(
                 output_json['config']['bridgeid']) > 2:
@@ -125,14 +125,14 @@ class Hue:
 
         # Send API request to Hue Bridge
         url = "http://{}:80/api/{}/lights/{}/state".format(self.ip, self.token, str(self.lights[device]))
-        requests.put(url, data=json.dumps(data), timeout=5)
+        requests_put(url, data=json_dumps(data), timeout=5)
 
     # ---------------------------
     #   detect_lights
     # ---------------------------
     def detect_lights(self):
         url = "http://{}:80/api/{}/lights".format(self.ip, self.token)
-        result = requests.get(url, timeout=5)
+        result = requests_get(url, timeout=5)
 
         if result.status_code == 200:
             output_json = result.json()
@@ -158,7 +158,7 @@ class Hue:
         # Send API request
         data = {'devicetype': 'wooferbot'}
         url = "http://{}:80/api".format(self.ip)
-        result = requests.post(url, data=json.dumps(data), timeout=5)
+        result = requests_post(url, data=json_dumps(data), timeout=5)
 
         if result.status_code == 200:
             output_json = result.json()
