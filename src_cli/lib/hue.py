@@ -72,7 +72,7 @@ class Hue:
             settings.HueToken = self.token
 
         url = "http://{}:80/api/{}".format(self.ip, self.token)
-        result = requests.get(url, data=json_dumps({'devicetype': 'wooferbot'}), timeout=5)
+        result = requests_get(url, data=json_dumps({'devicetype': 'wooferbot'}), timeout=5)
         output_json = result.json()
         if result.status_code == 200 and 'config' in output_json and 'bridgeid' in output_json['config'] and len(
                 output_json['config']['bridgeid']) > 2:
