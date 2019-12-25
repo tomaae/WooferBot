@@ -12,8 +12,8 @@
 #
 ##########################################################################
 
-import json
-import requests
+from json import dumps as json_dumps
+from requests import put as requests_put, post as requests_post, exceptions as requests_exceptions
 from lib.helper import portup, ssdp_discovery
 
 
@@ -107,8 +107,8 @@ class Nanoleaf:
     def put_request(self, endpoint, data: dict):
         url = "http://{}:16021/api/v1/{}/{}".format(self.ip, self.token, endpoint)
         try:
-            result = requests.put(url, data=json.dumps(data), timeout=1)
-        except requests.exceptions.RequestException as e:
+            result = requests_put(url, data=json_dumps(data), timeout=1)
+        except requests_exceptions.RequestException as e:
             print(e)
 
         if result.status_code == 403:
@@ -131,7 +131,7 @@ class Nanoleaf:
         print("Auth with nanoleaf...")
         # Send API request
         url = "http://{}:16021/api/v1/new".format(self.ip)
-        result = requests.post(url)
+        result = requests_post(url)
 
         # Authorization successful
         if result.status_code == 200:
