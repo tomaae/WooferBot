@@ -101,7 +101,7 @@ class Overlay:
     # ---------------------------
     #   Connection
     # ---------------------------
-    async def Connection(self, websocket, path):
+    async def Connection(self, websocket, _):
         print("Initializing overlay...")
         self.active = self.active + 1
 
