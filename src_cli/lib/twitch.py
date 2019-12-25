@@ -82,15 +82,15 @@ class Twitch:
     #   Send
     # ---------------------------
     def Send(self, message):
-        ## Send over linked account in set
+        # Send over linked account in set
         if self.linkTwitch:
             self.linkTwitch.Send(message)
 
-        ## Do nothing if not connected
+        # Do nothing if not connected
         if not self.connected:
             return False
 
-        ## Send message to chat
+        # Send message to chat
         self.con.send(bytes("PRIVMSG #" + self.settings.TwitchChannel + ' :' + message + '\r\n', self.chrset))
         return True
 
@@ -98,7 +98,7 @@ class Twitch:
     #   Connection
     # ---------------------------
     def Connection(self):
-        ## Set login
+        # Set login
         if self.bot:
             TwitchLogin = self.settings.TwitchBotChannel
             TwitchOAUTH = self.settings.TwitchBotOAUTH
@@ -173,7 +173,7 @@ class Twitch:
                     self.con.send(bytes('PONG %s\r\n' % line[1], self.chrset))
                     continue
 
-                ## Bot check
+                # Bot check
                 if self.bot:
                     continue
                 # print(line)
