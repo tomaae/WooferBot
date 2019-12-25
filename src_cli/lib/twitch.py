@@ -276,6 +276,7 @@ class Twitch:
     # ---------------------------
     #   fill_tags
     # ---------------------------
+    @classmethod
     def fill_tags(self):
         result = {
             "vip": "0",
@@ -309,6 +310,7 @@ class Twitch:
     # ---------------------------
     #   parse_tags
     # ---------------------------
+    @classmethod
     def parse_tags(self, jsonData, msg):
         tags = msg.split(";")
         for tag in tags:
@@ -333,6 +335,7 @@ class Twitch:
     # ---------------------------
     #   get_sender
     # ---------------------------
+    @classmethod
     def get_sender(self, msg):
         result = ""
         for char in msg:
@@ -345,6 +348,7 @@ class Twitch:
     # ---------------------------
     #   get_message
     # ---------------------------
+    @classmethod
     def get_message(self, msg):
         result = ""
         i = 4
@@ -359,6 +363,7 @@ class Twitch:
     # ---------------------------
     #   remove_emotes
     # ---------------------------
+    @classmethod
     def remove_emotes(self, msg, emotes):
         if not emotes:
             return msg
