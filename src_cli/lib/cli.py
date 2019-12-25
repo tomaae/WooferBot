@@ -23,7 +23,7 @@ class Cli:
         self.twitch = twitch
         self.chatbot = chatbot
 
-    def start(self):
+    def Start(self):
         print("Starting cli...")
         while True:
             cmd = input("")

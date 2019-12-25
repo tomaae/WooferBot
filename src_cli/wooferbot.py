@@ -72,7 +72,7 @@ watchdog = Watchdog(settings=settings, woofer=woofer)
 
 # Start CLI
 cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=twitchbot)
-cli.start()
+cli.Start()
 
 # Cleanup and exit
 overlay.Stop()
