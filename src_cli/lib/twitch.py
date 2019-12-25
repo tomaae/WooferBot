@@ -100,6 +100,7 @@ class Twitch:
         else:
             TwitchLogin = self.settings.TwitchChannel
             TwitchOAUTH = self.settings.TwitchOAUTH
+
         self.TwitchLogin = TwitchLogin
 
         print("Connecting {} to Twitch...".format(TwitchLogin))
@@ -119,11 +120,13 @@ class Twitch:
             print("Unable to connect {} to Twitch...".format(TwitchLogin))
             self.connected = False
             return 1
+
         print("Connected {} to Twitch...".format(TwitchLogin))
         self.connected = True
         self.lastPing = int(time())
         if self.conCheckTimer.is_alive():
             self.conCheckTimer.cancel()
+
         self.conCheckTimer = Timer(30, self.ConnectionChecker)
         self.conCheckTimer.start()
 
@@ -184,19 +187,16 @@ class Twitch:
                     if jsonData["message"].find(self.settings.HostMessage) == 0:
                         jsonData["custom-tag"] = "host"
                         self.woofer.ProcessJson(jsonData)
-                        continue
 
                     # AUTOHOST
-                    if jsonData["message"].find(self.settings.AutohostMessage) == 0:
+                    elif jsonData["message"].find(self.settings.AutohostMessage) == 0:
                         jsonData["custom-tag"] = "autohost"
                         self.woofer.ProcessJson(jsonData)
-                        continue
-                    continue
 
                 #
                 # CHAT
                 #
-                if len(line) >= 3 and line[2] == "PRIVMSG":
+                elif len(line) >= 3 and line[2] == "PRIVMSG":
                     jsonData = self.parse_tags(jsonData, line[0])
                     jsonData["sender"] = self.get_sender(line[1])
                     jsonData["message"] = self.get_message(line)
@@ -210,17 +210,15 @@ class Twitch:
                             jsonData["command_parameter"] = val[1]
                         jsonData["custom-tag"] = "command"
                         self.woofer.ProcessJson(jsonData)
-                        continue
                     else:
                         # NORMAL MESSAGE
                         jsonData["custom-tag"] = "message"
                         self.woofer.ProcessJson(jsonData)
-                        continue
 
                 #
                 # USERNOTICE
                 #
-                if len(line) >= 3 and line[2] == "USERNOTICE":
+                elif len(line) >= 3 and line[2] == "USERNOTICE":
                     if line[0].find("@") == 0:
                         jsonData = self.parse_tags(jsonData, line[0])
 
@@ -231,46 +229,40 @@ class Twitch:
                         if "msg-param-viewerCount" in jsonData:
                             jsonData["viewers"] = jsonData["msg-param-viewerCount"]
                         self.woofer.ProcessJson(jsonData)
-                        continue
 
                     # SUB
-                    if jsonData["msg-id"] == "sub" or jsonData["msg-id"] == "resub" or jsonData["msg-id"] == "subgift" \
-                            or jsonData["msg-id"] == "anonsubgift":
+                    elif jsonData["msg-id"] in ["sub", "resub", "subgift", "anonsubgift"]:
                         jsonData["custom-tag"] = jsonData["msg-id"]
 
                         if jsonData["msg-param-sub-plan"] == "Prime":
                             jsonData["sub_tier"] = "Prime"
-                        if jsonData["msg-param-sub-plan"] == "1000":
+                        elif jsonData["msg-param-sub-plan"] == "1000":
                             jsonData["sub_tier"] = "Tier 1"
-                        if jsonData["msg-param-sub-plan"] == "2000":
+                        elif jsonData["msg-param-sub-plan"] == "2000":
                             jsonData["sub_tier"] = "Tier 2"
-                        if jsonData["msg-param-sub-plan"] == "3000":
+                        elif jsonData["msg-param-sub-plan"] == "3000":
                             jsonData["sub_tier"] = "Tier 3"
 
-                        if jsonData["msg-id"] == "sub" or jsonData["msg-id"] == "resub":
+                        if jsonData["msg-id"] in ["sub", "resub"]:
                             if jsonData["msg-param-cumulative-months"]:
                                 jsonData["months"] = jsonData["msg-param-cumulative-months"]
                             if jsonData["msg-param-streak-months"]:
                                 jsonData["months_streak"] = jsonData["msg-param-streak-months"]
 
                         self.woofer.ProcessJson(jsonData)
-                        continue
 
                     # MASS SUBGIFT
-                    if jsonData["msg-id"] == "submysterygift":
+                    elif jsonData["msg-id"] == "submysterygift":
                         jsonData["custom-tag"] = "submysterygift"
+                        # TODO: Mass gift subs
                         # self.woofer.ProcessJson(jsonData)
-                        continue
 
                     # RITUAL NEW CHATTER
-                    if jsonData["msg-id"] == "ritual" and jsonData["msg-param-ritual-name"] == "new_chatter":
+                    elif jsonData["msg-id"] == "ritual" and jsonData["msg-param-ritual-name"] == "new_chatter":
                         jsonData["sender"] = jsonData["display-name"]
                         jsonData["message"] = self.get_message(line)
                         jsonData["custom-tag"] = "new_chatter"
                         self.woofer.ProcessJson(jsonData)
-                        continue
-
-                    continue
 
     # ---------------------------
     #   fill_tags
@@ -319,16 +311,18 @@ class Twitch:
                 badges = tag[1].split(",")
                 for badge in badges:
                     badge = badge.split("/")
-                    if badge[0] in ["broadcaster", "moderator", "subscriber", "vip"] and badge[0] in jsonData:
+                    if badge[0] in ["broadcaster", "moderator", "subscriber", "vip"]:
                         jsonData[badge[0]] = badge[1]
-                        if badge[0] == "broadcaster":
-                            jsonData["moderator"] = "1"
-                            jsonData["broadcaster"] = "1"
+
                     if badge[0] == "bits":
                         jsonData["bits_total"] = badge[1]
             else:
                 if tag[0] in jsonData:
                     jsonData[tag[0]] = tag[1]
+
+        if jsonData["broadcaster"] == 1:
+            jsonData["moderator"] = "1"
+
         return jsonData
 
     # ---------------------------
@@ -340,8 +334,10 @@ class Twitch:
         for char in msg:
             if char == "!":
                 break
+
             if char != ":":
                 result += char
+
         return result
 
     # ---------------------------
@@ -355,6 +351,7 @@ class Twitch:
         while i < length:
             result += msg[i] + " "
             i += 1
+
         result = result.lstrip(":")
         result = result.strip()
         return result
@@ -372,7 +369,9 @@ class Twitch:
         for emote in reversed(emotes):
             if emote.find(":") >= 0:
                 emote = emote.split(":")[1]
+
             emote = emote.split("-")
             msg = msg[:int(emote[0])] + msg[int(emote[1]) + 1:]
+
         # print(msg)
         return msg
