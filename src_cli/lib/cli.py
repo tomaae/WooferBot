@@ -13,9 +13,9 @@
 ##########################################################################
 
 
-#---------------------------
+# ---------------------------
 #   CLI Handling
-#---------------------------
+# ---------------------------
 class Cli:
     def __init__(self, settings, woofer, twitch, chatbot):
         self.woofer = woofer
@@ -44,142 +44,142 @@ class Cli:
                 print("10 - Resub")
                 print("11 - Subgift")
                 print("r  - Reconnect to twitch")
-            
+
             #
             # Start
             #
             elif cmd == "0":
                 self.woofer.woofer_commands({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "broadcaster"  : 1,
-                    "command"      : "!start",
-                    "custom-tag"   : "!start"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "broadcaster": 1,
+                    "command": "!start",
+                    "custom-tag": "!start"
                 })
-            
+
             #
             # Follow
             #
             elif cmd == "1":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "custom-tag"   : "follow"
+                    "display-name": "testname",
+                    "custom-tag": "follow"
                 })
-            
+
             #
             # Greet
             #
             elif cmd == "2":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "custom-tag"   : "greet"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "custom-tag": "greet"
                 })
-            
+
             #
             # Shoutout
             #
             elif cmd == "3":
                 self.woofer.woofer_shoutout({
-                    "subscriber"        : "1",
-                    "vip"               : "1",
-                    "moderator"         : "1",
-                    "broadcaster"       : "1",
-                    "display-name"      : "testname",
-                    "sender"            : "testname",
-                    "command_parameter" : "testname",
-                    "custom-tag"        : "shoutout"
+                    "subscriber": "1",
+                    "vip": "1",
+                    "moderator": "1",
+                    "broadcaster": "1",
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "command_parameter": "testname",
+                    "custom-tag": "shoutout"
                 })
-            
+
             #
             # Lurk
             #
             elif cmd == "4":
                 self.woofer.woofer_lurk({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "custom-tag"   : "lurk"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "custom-tag": "lurk"
                 })
-            
+
             #
             # Bits
             #
             elif cmd == "5":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "bits"         : "1000",
-                    "custom-tag"   : "bits"
+                    "display-name": "testname",
+                    "bits": "1000",
+                    "custom-tag": "bits"
                 })
-            
+
             #
             # New chatter
             #
             elif cmd == "6":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "custom-tag"   : "new_chatter"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "custom-tag": "new_chatter"
                 })
-            
+
             #
             # Raid
             #
             elif cmd == "7":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "viewers"      : "1",
-                    "custom-tag"   : "raid"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "viewers": "1",
+                    "custom-tag": "raid"
                 })
-            
+
             #
             # Host
             #
             elif cmd == "8":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "custom-tag"   : "host"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "custom-tag": "host"
                 })
-            
+
             #
             # Sub
             #
             elif cmd == "9":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "sub_tier"     : "Tier 2",
-                    "months"       : "4",
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "sub_tier": "Tier 2",
+                    "months": "4",
                     "months_streak": "4",
-                    "custom-tag"   : "sub"
+                    "custom-tag": "sub"
                 })
-            
+
             #
             # Resub
             #
             elif cmd == "10":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "sub_tier"     : "Tier 3",
-                    "months"       : "4",
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "sub_tier": "Tier 3",
+                    "months": "4",
                     "months_streak": "4",
-                    "custom-tag"   : "resub"
+                    "custom-tag": "resub"
                 })
-            
+
             #
             # Subgift
             #
             elif cmd == "11":
                 self.woofer.woofer_alert({
-                    "display-name" : "testname",
-                    "sender"       : "testname",
-                    "sub_tier"     : "Tier 2",
-                    "msg-param-recipient-display-name" : "testname2",
-                    "custom-tag"   : "subgift"
+                    "display-name": "testname",
+                    "sender": "testname",
+                    "sub_tier": "Tier 2",
+                    "msg-param-recipient-display-name": "testname2",
+                    "custom-tag": "subgift"
                 })
-            
+
             #
             # Reconnect to twitch
             #
@@ -188,5 +188,5 @@ class Cli:
                     self.twitch.Disconnect()
                 if self.chatbot.connected:
                     self.chatbot.Disconnect()
-            
+
             # print(cmd)
