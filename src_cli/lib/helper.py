@@ -11,8 +11,8 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 ##########################################################################
-import socket
-from re import search
+from socket import socket, gethostname, inet_aton, inet_pton, error as socket_error, AF_INET, SOCK_STREAM, SOCK_DGRAM, IPPROTO_IP, IP_MULTICAST_TTL, AF_INET6
+from re import search as re_search
 from select import select
 from time import time
 
@@ -67,7 +67,7 @@ def hex_to_hue(h):
 # ---------------------------
 def portup(ip, port):
     # socket.setdefaulttimeout(0.01)
-    socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    socket_obj = socket(AF_INET, SOCK_STREAM)
     if socket_obj.connect_ex((ip, port)) == 0:
         socket_obj.close()
         return True
@@ -94,9 +94,9 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
     #
     # Send broadcast
     #
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ssdp_mx)
-    sock.bind((socket.gethostname(), 9090))
+    sock = socket(AF_INET, SOCK_DGRAM)
+    sock.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, ssdp_mx)
+    sock.bind((gethostname(), 9090))
     sock.sendto(req, (ssdp_ip, ssdp_port))
     sock.setblocking(False)
 
@@ -119,11 +119,11 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
             # Parse IP from location entry
             for line in response.lower().split("\n"):
                 if "location:" in line:
-                    ip = search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
+                    ip = re_search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
                     if ip not in devices and is_valid_ip_address(ip):
                         devices.append(ip)
 
-        except socket.error as err:
+        except socket_error as err:
             print("Socket error while discovering SSDP devices!")
             print(err)
             break
@@ -146,14 +146,14 @@ def is_valid_ip_address(ip):
 # ---------------------------
 def is_valid_ipv4_address(address):
     try:
-        socket.inet_pton(socket.AF_INET, address)
+        inet_pton(AF_INET, address)
     except AttributeError:  # no inet_pton here, sorry
         try:
-            socket.inet_aton(address)
-        except socket.error:
+            inet_aton(address)
+        except socket_error:
             return False
         return address.count('.') == 3
-    except socket.error:  # not a valid address
+    except socket_error:  # not a valid address
         return False
     return True
 
@@ -163,8 +163,8 @@ def is_valid_ipv4_address(address):
 # ---------------------------
 def is_valid_ipv6_address(address):
     try:
-        socket.inet_pton(socket.AF_INET6, address)
-    except socket.error:  # not a valid address
+        inet_pton(AF_INET6, address)
+    except socket_error:  # not a valid address
         return False
     return True
 
