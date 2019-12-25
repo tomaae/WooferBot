@@ -12,7 +12,7 @@
 #
 ##########################################################################
 
-import os
+from os import path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -84,9 +84,9 @@ class Watchdog:
             if not action['Enabled']:
                 continue
 
-            path, filename = os.path.split(action['Filename'])
+            filepath, filename = path.split(action['Filename'])
             self.watchdogs[action['Name']] = Observer()
-            self.watchdogs[action['Name']].schedule(_WatchdogCustomHandler(settings, woofer, action['Name']), path,
+            self.watchdogs[action['Name']].schedule(_WatchdogCustomHandler(settings, woofer, action['Name']), filepath,
                                                     recursive=False)
             self.watchdogs[action['Name']].start()
 
