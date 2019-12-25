@@ -126,7 +126,7 @@ class Overlay:
                 
                 ## Reset Nanoleaf to Idle
                 if 'Nanoleaf' in self.settings.PoseMapping['Idle']:
-                    self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
+                    self.nanoleaf.scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
                 
                 ## Reset Hue to Idle
                 if 'Hue' in self.settings.PoseMapping['Idle']:

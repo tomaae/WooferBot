@@ -283,7 +283,7 @@ class Woofer:
         # Turn on Nanoleaf
         #
         if 'nanoleaf' in jsonData and jsonData['nanoleaf'] != "":
-            self.nanoleaf.Scene(jsonData['nanoleaf'])
+            self.nanoleaf.scene(jsonData['nanoleaf'])
             if 'nanoleafpersistent' in jsonData and jsonData['nanoleafpersistent']:
                 self.changedLightsNanoleaf = jsonData['nanoleaf']
         
@@ -350,13 +350,13 @@ class Woofer:
         if 'nanoleaf' in old_jsonData and old_jsonData['nanoleaf']:
             ## Reset to persistent lights
             if self.changedLightsNanoleaf:
-                self.nanoleaf.Scene(self.changedLightsNanoleaf)
+                self.nanoleaf.scene(self.changedLightsNanoleaf)
             ## Reset to Idle lights
             elif 'Idle' in self.settings.PoseMapping and 'Nanoleaf' in self.settings.PoseMapping['Idle']:
-                self.nanoleaf.Scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
+                self.nanoleaf.scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
             ## Turn off lights
             else:
-                self.nanoleaf.Scene()
+                self.nanoleaf.scene()
         
         #
         # Reset Hue to Idle
