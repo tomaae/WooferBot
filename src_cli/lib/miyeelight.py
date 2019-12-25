@@ -12,8 +12,7 @@
 #
 ##########################################################################
 
-from yeelight import discover_bulbs
-from yeelight import Bulb
+from yeelight import discover_bulbs, Bulb
 from lib.helper import hex_to_rgb
 
 
