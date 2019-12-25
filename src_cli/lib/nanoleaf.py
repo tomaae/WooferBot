@@ -12,12 +12,9 @@
 #
 ##########################################################################
 
-import socket
-import time
-import select
-import re
 import json
 import requests
+from lib.helper import portup, ssdp_discovery
 
 
 # ---------------------------
@@ -43,11 +40,12 @@ class Nanoleaf:
         #
         # IP Not set
         #
-        if not self.ip or not self.portup(self.ip, 16021):
+        if not self.ip or not portup(self.ip, 16021):
             ip_list = []
             discovery_time = 5
             while len(ip_list) == 0:
-                ip_list = self.ssdp_discovery(discovery_time)
+                print("Starting Nanoleaf discovery.")
+                ip_list = ssdp_discovery(searchstr="nanoleaf", discovery_time=discovery_time)
                 if len(ip_list) == 0:
                     print("Nanoleaf not found")
                     print("Press C to cancel or any key to scan again")
@@ -83,97 +81,6 @@ class Nanoleaf:
             settings.NanoleafToken = self.token
 
         self.active = True
-
-    # ---------------------------
-    #   ssdp_discovery
-    # ---------------------------
-    def ssdp_discovery(self, discovery_time: float = 5):
-        devices = []
-
-        #
-        # Set request
-        #
-        ssdp_ip = "239.255.255.250"
-        ssdp_port = 1900
-        ssdp_mx = 10
-        req = ['M-SEARCH * HTTP/1.1', 'HOST: ' + ssdp_ip + ':' + str(ssdp_port), 'MAN: "ssdp:discover"',
-               'MX: ' + str(ssdp_mx), 'ST: ssdp:all']
-        req = '\r\n'.join(req).encode('utf-8')
-
-        #
-        # Send broadcast
-        #
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ssdp_mx)
-        sock.bind((socket.gethostname(), 9090))
-        sock.sendto(req, (ssdp_ip, ssdp_port))
-        sock.setblocking(False)
-
-        #
-        # Detection loop
-        #
-        timeout = time.time() + discovery_time
-        print("Starting Nanoleaf discovery.")
-        while time.time() < timeout:
-            try:
-                # Get data from socket
-                ready = select.select([sock], [], [], 5)
-                if not ready[0]:
-                    continue
-
-                response = sock.recv(1024).decode("utf-8")
-                # Process only a response from Nanoleaf
-                if 'nanoleaf' not in response.lower():
-                    continue
-
-                # Parse IP from location entry
-                for line in response.lower().split("\n"):
-                    if "location:" in line:
-                        ip = re.search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
-                        if ip not in devices and self.is_valid_ip_address(ip):
-                            devices.append(ip)
-
-            except socket.error as err:
-                print("Socket error while discovering SSDP devices!")
-                print(err)
-                break
-
-        sock.close()
-        return devices
-
-    # ---------------------------
-    #   is_valid_ip_address
-    # ---------------------------
-    def is_valid_ip_address(self, ip):
-        if self.is_valid_ipv4_address(ip) or self.is_valid_ipv6_address(ip):
-            return True
-        return False
-
-    # ---------------------------
-    #   is_valid_ipv4_address
-    # ---------------------------
-    def is_valid_ipv4_address(self, address):
-        try:
-            socket.inet_pton(socket.AF_INET, address)
-        except AttributeError:  # no inet_pton here, sorry
-            try:
-                socket.inet_aton(address)
-            except socket.error:
-                return False
-            return address.count('.') == 3
-        except socket.error:  # not a valid address
-            return False
-        return True
-
-    # ---------------------------
-    #   is_valid_ipv6_address
-    # ---------------------------
-    def is_valid_ipv6_address(self, address):
-        try:
-            socket.inet_pton(socket.AF_INET6, address)
-        except socket.error:  # not a valid address
-            return False
-        return True
 
     # ---------------------------
     #   scene
@@ -237,15 +144,3 @@ class Nanoleaf:
             print("Nanoleaf not in discovery mode.")
             print("Hold down power button for ~5 seconds until led starts blinking.")
             return False
-
-    # ---------------------------
-    #   portup
-    # ---------------------------
-    def portup(self, ip, port):
-        # socket.setdefaulttimeout(0.01)
-        socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        if socket_obj.connect_ex((ip, port)) == 0:
-            socket_obj.close()
-            return True
-        socket_obj.close()
-        return False

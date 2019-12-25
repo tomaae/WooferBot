@@ -14,6 +14,51 @@
 
 from yeelight import discover_bulbs
 from yeelight import Bulb
+from lib.helper import hex_to_rgb
+
+
+# ---------------------------
+#   set_light_name
+# ---------------------------
+def set_light_name(ip, light_model, light_id):
+    print("Name not defined for Yeelight {}, ID: {}".format(light_model, light_id))
+
+    # Identify light for user
+    try:
+        bulb = Bulb(ip)
+        bulb.turn_off()
+        bulb.effect = "sudden"
+        bulb.turn_on()
+        bulb.set_brightness(100)
+        bulb.set_rgb(0, 0, 255)
+        bulb.effect = "smooth"
+        bulb.duration = 10000
+        bulb.set_rgb(255, 0, 0)
+    except:
+        print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
+        return ""
+
+    # Get user input for light name
+    print("This device will change color from blue to red over 10 seconds.")
+    print("Enter name for this device or press enter to skip it:")
+    input_char = input()
+    if input_char == '':
+        try:
+            bulb.turn_off()
+        except:
+            print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
+            return ""
+        return ""
+
+    # Set light name
+    device_name = input_char
+    try:
+        bulb.set_name(device_name)
+    except:
+        print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
+        return ""
+
+    return device_name
 
 
 # ---------------------------
@@ -107,7 +152,7 @@ class Yeelight:
             # Turn light on
             try:
                 self.lights[device].turn_on()
-                tmp = self.hex_to_rgb(color)
+                tmp = hex_to_rgb(color)
                 self.lights[device].set_brightness(brightness)
                 self.lights[device].set_rgb(tmp[0], tmp[1], tmp[2])
             except:
@@ -143,8 +188,8 @@ class Yeelight:
 
             # Check if device has a name
             if device_name == "":
-                device_name = self.set_light_name(light['ip'], light['capabilities']['model'],
-                                                  light['capabilities']['id'])
+                device_name = set_light_name(light['ip'], light['capabilities']['model'],
+                                             light['capabilities']['id'])
                 if device_name == "":
                     continue
 
@@ -158,57 +203,3 @@ class Yeelight:
                 print("Communication failed with Yeelight {}, light disabled".format(device_name))
                 del self.lights[device_name]
                 continue
-
-    # ---------------------------
-    #   set_light_name
-    # ---------------------------
-    def set_light_name(self, ip, light_model, light_id):
-        print("Name not defined for Yeelight {}, ID: {}".format(light_model, light_id))
-
-        # Identify light for user
-        try:
-            bulb = Bulb(ip)
-            bulb.turn_off()
-            bulb.effect = "sudden"
-            bulb.turn_on()
-            bulb.set_brightness(100)
-            bulb.set_rgb(0, 0, 255)
-            bulb.effect = "smooth"
-            bulb.duration = 10000
-            bulb.set_rgb(255, 0, 0)
-        except:
-            print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
-            return ""
-
-        # Get user input for light name
-        print("This device will change color from blue to red over 10 seconds.")
-        print("Enter name for this device or press enter to skip it:")
-        input_char = input()
-        if input_char == '':
-            try:
-                bulb.turn_off()
-            except:
-                print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
-                return ""
-            return ""
-
-        # Set light name
-        device_name = input_char
-        try:
-            bulb.set_name(device_name)
-        except:
-            print("Communication failed with Yeelight {}, ID: {}".format(light_model, light_id))
-            return ""
-
-        return device_name
-
-    # ---------------------------
-    #   hex_to_rgb
-    # ---------------------------
-    def hex_to_rgb(self, h):
-        h = h.lstrip('#')
-        r = int(h[0:2], 16)
-        g = int(h[2:4], 16)
-        b = int(h[4:6], 16)
-
-        return r, g, b
