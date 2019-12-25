@@ -255,57 +255,6 @@ class Settings:
                     self.SetVariables(self.PoseMapping[action]['Yeelight'][light], defaults_posemapping_yeelight)
 
     # ---------------------------
-    #   UpgradeSettingsFile
-    # ---------------------------
-    def UpgradeSettingsFile(self):
-        #
-        # CurrectMascot fix v1.1
-        #
-        if hasattr(self, 'CurrectMascot'):
-            self.CurrentMascot = self.CurrectMascot
-            del self.CurrectMascot
-
-        #
-        # ScheduledMessages Messages and remove LastShown v1.2
-        #
-        for action in self.ScheduledMessages:
-            if 'LastShown' in action:
-                del action['LastShown']
-            if 'Message' in action:
-                if action['Name'] in self.Messages:
-                    print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(action['Name']))
-                    exit(1)
-                else:
-                    self.Messages[action['Name']] = action['Message']
-                    del action['Message']
-
-        #
-        # Commands Messages v1.2
-        #
-        for action in self.Commands:
-            if 'Message' in self.Commands[action]:
-                if action in self.Messages:
-                    print("Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(action))
-                    exit(1)
-                else:
-                    self.Messages[action] = self.Commands[action]['Message']
-                    del self.Commands[action]['Message']
-
-        #
-        # CustomGreets v1.2
-        #
-        if hasattr(self, 'CustomGreets'):
-            for action in self.CustomGreets:
-                if action in self.Messages:
-                    print("Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(action))
-                    exit(1)
-
-            for action in self.CustomGreets:
-                self.Messages["viewer_" + action] = self.CustomGreets[action]
-
-            del self.CustomGreets
-
-    # ---------------------------
     #   Save
     # ---------------------------
     def Save(self):
@@ -362,3 +311,54 @@ class Settings:
 
         if code:
             exit(code)
+
+    # ---------------------------
+    #   UpgradeSettingsFile
+    # ---------------------------
+    def UpgradeSettingsFile(self):
+        #
+        # CurrectMascot fix v1.1
+        #
+        if hasattr(self, 'CurrectMascot'):
+            self.CurrentMascot = self.CurrectMascot
+            del self.CurrectMascot
+
+        #
+        # ScheduledMessages Messages and remove LastShown v1.2
+        #
+        for action in self.ScheduledMessages:
+            if 'LastShown' in action:
+                del action['LastShown']
+            if 'Message' in action:
+                if action['Name'] in self.Messages:
+                    print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(action['Name']))
+                    exit(1)
+                else:
+                    self.Messages[action['Name']] = action['Message']
+                    del action['Message']
+
+        #
+        # Commands Messages v1.2
+        #
+        for action in self.Commands:
+            if 'Message' in self.Commands[action]:
+                if action in self.Messages:
+                    print("Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(action))
+                    exit(1)
+                else:
+                    self.Messages[action] = self.Commands[action]['Message']
+                    del self.Commands[action]['Message']
+
+        #
+        # CustomGreets v1.2
+        #
+        if hasattr(self, 'CustomGreets'):
+            for action in self.CustomGreets:
+                if action in self.Messages:
+                    print("Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(action))
+                    exit(1)
+
+            for action in self.CustomGreets:
+                self.Messages["viewer_" + action] = self.CustomGreets[action]
+
+            del self.CustomGreets
