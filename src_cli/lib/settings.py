@@ -536,6 +536,7 @@ class Settings:
                     tmp[key] = self.__dict__[key]
         except:
             print("Failed to export configuration")
+            exit(1)
 
         # Save config
         try:
