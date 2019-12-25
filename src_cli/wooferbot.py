@@ -11,28 +11,22 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 ##########################################################################
-wooferbotVersion = 'v1.3.2'
+from sys import exit
+from os import path
+from lib.settings import Settings
+from lib.overlay import Overlay
+from lib.woofer import Woofer
+from lib.twitch import Twitch
+from lib.filewatchdog import Watchdog
+from lib.cli import Cli
+from lib.nanoleaf import Nanoleaf
+from lib.hue import Hue
+from lib.miyeelight import Yeelight
 
-import sys
-import os
-
-pathRoot = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(pathRoot, "lib"))  # point at lib folder for classes / references
-
-from settings import Settings
-from overlay import Overlay
-from woofer import Woofer
-from twitch import Twitch
-from filewatchdog import Watchdog
-from cli import Cli
-from nanoleaf import Nanoleaf
-from hue import Hue
-from miyeelight import Yeelight
-
-#---------------------------
+# ---------------------------
 #  Main
-#---------------------------
-
+# ---------------------------
+wooferbotVersion = 'v1.3.2'
 print('WooferBot ' + wooferbotVersion + '  Copyright (C) 2019  Tomaae')
 print('This program comes with ABSOLUTELY NO WARRANTY.')
 print('This is free software, and you are welcome to redistribute it')
@@ -41,6 +35,7 @@ print('By using this program, you accept the terms of the software license agree
 print('')
 
 # Initialize settings
+pathRoot = path.dirname(path.realpath(__file__))
 settings = Settings(pathRoot=pathRoot)
 
 # Initialize nanoleaf
@@ -63,7 +58,6 @@ if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.Twitc
 overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
 overlay.Start()
 
-
 # Initialize woofer
 woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
 
@@ -82,4 +76,4 @@ cli.start()
 
 # Cleanup and exit
 overlay.Stop()
-sys.exit(0)
+exit(0)
