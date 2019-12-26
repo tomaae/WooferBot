@@ -237,12 +237,12 @@ class Twitch:
                     # HOST
                     if jsonData["message"].find(self.settings.HostMessage) == 0:
                         jsonData["custom-tag"] = "host"
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
 
                     # AUTOHOST
                     elif jsonData["message"].find(self.settings.AutohostMessage) == 0:
                         jsonData["custom-tag"] = "autohost"
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
 
                 #
                 # CHAT
@@ -260,11 +260,11 @@ class Twitch:
                         if len(val) >= 2:
                             jsonData["command_parameter"] = val[1]
                         jsonData["custom-tag"] = "command"
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
                     else:
                         # NORMAL MESSAGE
                         jsonData["custom-tag"] = "message"
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
 
                 #
                 # USERNOTICE
@@ -279,7 +279,7 @@ class Twitch:
                         jsonData["viewers"] = ""
                         if "msg-param-viewerCount" in jsonData:
                             jsonData["viewers"] = jsonData["msg-param-viewerCount"]
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
 
                     # SUB
                     elif jsonData["msg-id"] in ["sub", "resub", "subgift", "anonsubgift"]:
@@ -300,7 +300,7 @@ class Twitch:
                             if jsonData["msg-param-streak-months"]:
                                 jsonData["months_streak"] = jsonData["msg-param-streak-months"]
 
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
 
                     # MASS SUBGIFT
                     elif jsonData["msg-id"] == "submysterygift":
@@ -313,7 +313,7 @@ class Twitch:
                         jsonData["sender"] = jsonData["display-name"]
                         jsonData["message"] = self.get_message(line)
                         jsonData["custom-tag"] = "new_chatter"
-                        self.woofer.ProcessJson(jsonData)
+                        self.woofer.process_json(jsonData)
 
     # ---------------------------
     #   fill_tags

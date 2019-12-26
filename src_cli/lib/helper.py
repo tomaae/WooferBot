@@ -220,3 +220,35 @@ def get_var_default(vartype):
         tmp = []
 
     return tmp
+
+
+# ---------------------------
+#   has_access_rights
+# ---------------------------
+def has_access_rights(json_data, access_list):
+    if int(json_data["broadcaster"]) == 1:
+        if access_list not in \
+                ["sub", "subs", "subscriber", "subscribers",
+                 "vip", "vips",
+                 "mod", "mods", "moderator", "moderators",
+                 "broadcaster"]:
+            return False
+    elif int(json_data["moderator"]) == 1:
+        if access_list not in \
+                ["sub", "subs", "subscriber", "subscribers",
+                 "vip", "vips",
+                 "mod", "mods", "moderator", "moderators"]:
+            return False
+    elif int(json_data["vip"]) == 1:
+        if access_list not in \
+                ["sub", "subs", "subscriber", "subscribers",
+                 "vip", "vips"]:
+            return False
+    elif int(json_data["subscriber"]) == 1:
+        if access_list not in \
+                ["sub", "subs", "subscriber", "subscribers"]:
+            return False
+    else:
+        return False
+
+    return True
