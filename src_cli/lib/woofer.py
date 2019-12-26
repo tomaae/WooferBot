@@ -168,7 +168,7 @@ class Woofer:
         # Execute custom scripts
         #
         if "script" in jsonData and jsonData["script"] != "":
-            system("\"" + jsonData["script"] + "\"")
+            system("\"{}\"".format(jsonData["script"]))
 
         #
         # Execute hotkey
@@ -213,8 +213,10 @@ class Woofer:
         #
         if "hue" in jsonData:
             for device in jsonData["hue"]:
-                if "Brightness" in jsonData["hue"][device] and jsonData["hue"][device]["Brightness"] >= 1 and \
-                        "Color" in jsonData["hue"][device] and 6 <= len(jsonData["hue"][device]["Color"]) <= 7:
+                if "Brightness" in jsonData["hue"][device] and \
+                        jsonData["hue"][device]["Brightness"] >= 1 and \
+                        "Color" in jsonData["hue"][device] and \
+                        6 <= len(jsonData["hue"][device]["Color"]) <= 7:
                     self.hue.state(device=device,
                                    bri=jsonData["hue"][device]["Brightness"],
                                    col=jsonData["hue"][device]["Color"])
@@ -227,8 +229,9 @@ class Woofer:
         #
         if "yeelight" in jsonData:
             for device in jsonData["yeelight"]:
-                if "Brightness" in jsonData["yeelight"][device] and jsonData["yeelight"][device]["Brightness"] >= 1 \
-                        and "Color" in jsonData["yeelight"][device] and \
+                if "Brightness" in jsonData["yeelight"][device] and \
+                        jsonData["yeelight"][device]["Brightness"] >= 1 and \
+                        "Color" in jsonData["yeelight"][device] and \
                         6 <= len(jsonData["yeelight"][device]["Color"]) <= 7:
                     self.yeelight.state(device=device,
                                         brightness=jsonData["yeelight"][device]["Brightness"],
@@ -258,7 +261,8 @@ class Woofer:
         #
         # Check mapping for custom Idle image
         #
-        if "Idle" in self.settings.PoseMapping and "Image" in self.settings.PoseMapping["Idle"] and \
+        if "Idle" in self.settings.PoseMapping and \
+                "Image" in self.settings.PoseMapping["Idle"] and \
                 self.settings.PoseMapping["Idle"]["Image"] in self.settings.mascotImages:
             tmp = self.settings.mascotImages[self.settings.PoseMapping["Idle"]["Image"]]["Image"]
             if path.isfile(tmp):
@@ -299,15 +303,17 @@ class Woofer:
                             self.changedLightsHue[device]["Brightness"] >= 1 and \
                             "Color" in self.changedLightsHue[device] and \
                             6 <= len(self.changedLightsHue[device]["Color"]) <= 7:
-                        self.hue.state(device=device, bri=self.changedLightsHue[device]["Brightness"],
+                        self.hue.state(device=device,
+                                       bri=self.changedLightsHue[device]["Brightness"],
                                        col=self.changedLightsHue[device]["Color"])
 
                 for device in old_jsonData["hue"]:
-                    if "Brightness" in old_jsonData["hue"][device] and old_jsonData["hue"][device]["Brightness"] >= 1 \
-                            and "Color" in old_jsonData["hue"][device] \
-                            and 6 <= len(old_jsonData["hue"][device]["Color"]) <= 7:
-                        if device not in self.changedLightsHue:
-                            self.hue.state(device=device)
+                    if "Brightness" in old_jsonData["hue"][device] and \
+                            old_jsonData["hue"][device]["Brightness"] >= 1 and \
+                            "Color" in old_jsonData["hue"][device] and \
+                            6 <= len(old_jsonData["hue"][device]["Color"]) <= 7 and \
+                            device not in self.changedLightsHue:
+                        self.hue.state(device=device)
 
             # Reset to Idle lights
             elif "Idle" in self.settings.PoseMapping and "Hue" in self.settings.PoseMapping["Idle"]:
@@ -321,17 +327,19 @@ class Woofer:
                                        col=self.settings.PoseMapping["Idle"]["Hue"][device]["Color"])
 
                 for device in old_jsonData["hue"]:
-                    if "Brightness" in old_jsonData["hue"][device] and old_jsonData["hue"][device]["Brightness"] >= 1 \
-                            and "Color" in old_jsonData["hue"][device] and \
-                            6 <= len(old_jsonData["hue"][device]["Color"]) <= 7:
-                        if device not in self.settings.PoseMapping["Idle"]["Hue"]:
-                            self.hue.state(device=device)
+                    if "Brightness" in old_jsonData["hue"][device] and \
+                            old_jsonData["hue"][device]["Brightness"] >= 1 and \
+                            "Color" in old_jsonData["hue"][device] and \
+                            6 <= len(old_jsonData["hue"][device]["Color"]) <= 7 and \
+                            device not in self.settings.PoseMapping["Idle"]["Hue"]:
+                        self.hue.state(device=device)
 
             # Turn off lights
             else:
                 for device in old_jsonData["hue"]:
-                    if "Brightness" in old_jsonData["hue"][device] and old_jsonData["hue"][device]["Brightness"] >= 1 \
-                            and "Color" in old_jsonData["hue"][device] and \
+                    if "Brightness" in old_jsonData["hue"][device] and \
+                            old_jsonData["hue"][device]["Brightness"] >= 1 and \
+                            "Color" in old_jsonData["hue"][device] and \
                             6 <= len(old_jsonData["hue"][device]["Color"]) <= 7:
                         self.hue.state(device=device)
 
@@ -355,9 +363,9 @@ class Woofer:
                     if "Brightness" in old_jsonData["yeelight"][device] and \
                             old_jsonData["yeelight"][device]["Brightness"] >= 1 and \
                             "Color" in old_jsonData["yeelight"][device] and \
-                            6 <= len(old_jsonData["yeelight"][device]["Color"]) <= 7:
-                        if device not in self.changedLightsYeelight:
-                            self.yeelight.state(device=device)
+                            6 <= len(old_jsonData["yeelight"][device]["Color"]) <= 7 and \
+                            device not in self.changedLightsYeelight:
+                        self.yeelight.state(device=device)
 
             # Reset to Idle lights
             elif "Idle" in self.settings.PoseMapping and "Yeelight" in self.settings.PoseMapping["Idle"]:
@@ -376,9 +384,9 @@ class Woofer:
                     if "Brightness" in old_jsonData["yeelight"][device] and \
                             old_jsonData["yeelight"][device]["Brightness"] >= 1 and \
                             "Color" in old_jsonData["yeelight"][device] and \
-                            6 <= len(old_jsonData["yeelight"][device]["Color"]) <= 7:
-                        if device not in self.settings.PoseMapping["Idle"]["Yeelight"]:
-                            self.yeelight.state(device=device)
+                            6 <= len(old_jsonData["yeelight"][device]["Color"]) <= 7 and \
+                            device not in self.settings.PoseMapping["Idle"]["Yeelight"]:
+                        self.yeelight.state(device=device)
 
             # Turn off lights
             else:
