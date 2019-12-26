@@ -117,7 +117,7 @@ class Woofer:
 
             # Channel points custom w/message
             elif jsonData["custom-reward-id"]:
-                print("Channel points, claimed custom reward: " + jsonData["custom-reward-id"])
+                print("Channel points, claimed custom reward: {}".format(jsonData["custom-reward-id"]))
 
             # Bits
             elif int(jsonData["bits"]) > 0 and int(jsonData["bits"]) >= self.settings.MinBits:
@@ -145,7 +145,7 @@ class Woofer:
         # Check if overlay is connected
         #
         if self.overlay.active < 1:
-            print("waiting")
+            print("waiting for overlay")
             Timer(3, self.woofer_queue, args=(queue_id, jsonData)).start()
             return
 
@@ -213,12 +213,12 @@ class Woofer:
                     try:
                         self.keyboard.press(keylist[key])
                     except:
-                        print("Invalid hotkey in " + jsonData['id'])
+                        print("Invalid hotkey in {}".format(jsonData['id']))
                 else:
                     try:
                         self.keyboard.press(key)
                     except:
-                        print("Invalid hotkey in " + jsonData['id'])
+                        print("Invalid hotkey in {}".format(jsonData['id']))
 
             sleep(0.05)
 
@@ -227,12 +227,12 @@ class Woofer:
                     try:
                         self.keyboard.release(keylist[key])
                     except:
-                        print("Invalid hotkey in " + jsonData['id'])
+                        print("Invalid hotkey in {}".format(jsonData['id']))
                 else:
                     try:
                         self.keyboard.release(key)
                     except:
-                        print("Invalid hotkey in " + jsonData['id'])
+                        print("Invalid hotkey in {}".format(jsonData['id']))
 
         #
         # Turn on Nanoleaf
@@ -432,7 +432,7 @@ class Woofer:
     #   woofer_addtoqueue
     # ---------------------------
     def woofer_addtoqueue(self, jsonResponse):
-        print("{0}: {1}".format(jsonResponse['id'], jsonResponse['sender']))
+        print("{}: {}".format(jsonResponse['id'], jsonResponse['sender']))
 
         if 'message' not in jsonResponse or jsonResponse["message"] == "":
             if jsonResponse["id"] in self.settings.Messages:
@@ -886,7 +886,7 @@ class Woofer:
 
         # Check exit code
         if result.status_code != 200:
-            print("lookup user: {0}".format(jsonResult))
+            print("lookup user: {}".format(jsonResult))
             return ""
 
         # User defined in result json
@@ -902,7 +902,7 @@ class Woofer:
     def twitchGetLastActivity(self, userId):
         # Get channel activity from API
         headers = {'Client-ID': self.settings.twitchClientID, 'Accept': 'application/vnd.twitchtv.v5+json'}
-        result = requests_get("https://api.twitch.tv/kraken/channels/{0}".format(userId), headers=headers)
+        result = requests_get("https://api.twitch.tv/kraken/channels/{}".format(userId), headers=headers)
 
         # Check encoding
         if result.encoding is None:
