@@ -12,7 +12,8 @@
 #
 ##########################################################################
 
-from socket import socket, gethostname, inet_aton, inet_pton, error as socket_error, AF_INET, SOCK_STREAM, SOCK_DGRAM, IPPROTO_IP, IP_MULTICAST_TTL, AF_INET6
+from socket import socket, gethostname, inet_aton, inet_pton, error as socket_error, \
+    AF_INET, SOCK_STREAM, SOCK_DGRAM, IPPROTO_IP, IP_MULTICAST_TTL, AF_INET6
 from re import search as re_search
 from select import select
 from time import time
@@ -149,21 +150,21 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
                 continue
 
             response = sock.recv(1024).decode("utf-8")
-            # Process only a response from Nanoleaf
-            if searchstr not in response.lower():
-                continue
-
-            # Parse IP from location entry
-            for line in response.lower().split("\n"):
-                if "location:" in line:
-                    ip = re_search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
-                    if ip not in devices and is_valid_ip_address(ip):
-                        devices.append(ip)
-
         except socket_error as err:
             print("Socket error while discovering SSDP devices!")
             print(err)
             break
+
+        # Process only a response from Nanoleaf
+        if searchstr not in response.lower():
+            continue
+
+        # Parse IP from location entry
+        for line in response.lower().split("\n"):
+            if "location:" in line:
+                ip = re_search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
+                if ip not in devices and is_valid_ip_address(ip):
+                    devices.append(ip)
 
     sock.close()
     return devices
@@ -210,9 +211,8 @@ def is_valid_ipv6_address(address):
 #   get_var_default
 # ---------------------------
 def get_var_default(vartype):
-    if isinstance(vartype, str):
-        tmp = ""
-    elif type(vartype) == int or type(vartype) == float:
+    tmp = ""
+    if type(vartype) == int or type(vartype) == float:
         tmp = 0
     elif type(vartype) == bool:
         tmp = False
