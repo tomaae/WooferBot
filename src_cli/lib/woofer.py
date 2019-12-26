@@ -12,14 +12,13 @@
 #
 ##########################################################################
 
-from json import loads as json_loads
 from uuid import uuid4
 from random import SystemRandom
 from threading import Timer, Thread
 from time import time, sleep
 from os import path, system
-from requests import get as requests_get
 from pynput.keyboard import Key, Controller
+from lib.twitch import twitch_get_user, twitch_get_last_activity
 
 
 # ---------------------------
@@ -841,7 +840,7 @@ class Woofer:
         #
         # Get user info
         #
-        jsonResult = self.twitchGetUser(jsonData["command_parameter"])
+        jsonResult = twitch_get_user(self.settings.twitchClientID, jsonData["command_parameter"])
         if not jsonResult:
             return
 
@@ -854,7 +853,7 @@ class Woofer:
         #
         # Get channel last game
         #
-        activity = self.twitchGetLastActivity(jsonResult["_id"])
+        activity = twitch_get_last_activity(self.settings.twitchClientID, jsonResult["_id"])
         activity_text = ""
         if activity:
             activity_text = SystemRandom().choice(self.settings.Activities["Game"])
@@ -869,53 +868,6 @@ class Woofer:
             "image": jsonResult["logo"],
             "id": "shoutout"
         })
-
-    # ---------------------------
-    #   twitchGetUser
-    # ---------------------------
-    def twitchGetUser(self, targetUser):
-        # Get user info from API
-        headers = {"Client-ID": self.settings.twitchClientID, "Accept": "application/vnd.twitchtv.v5+json"}
-        result = requests_get("https://api.twitch.tv/kraken/users?login={0}".format(targetUser.lower()),
-                              headers=headers)
-
-        # Check encoding
-        if result.encoding is None:
-            result.encoding = "utf-8"
-
-        jsonResult = json_loads(result.text)
-
-        # Check exit code
-        if result.status_code != 200:
-            print("lookup user: {}".format(jsonResult))
-            return ""
-
-        # User defined in result json
-        if "users" not in jsonResult and not jsonResult["users"]:
-            print("Unknown Twitch Username")
-            return ""
-
-        return jsonResult["users"][0]
-
-    # ---------------------------
-    #   twitchGetLastActivity
-    # ---------------------------
-    def twitchGetLastActivity(self, userId):
-        # Get channel activity from API
-        headers = {"Client-ID": self.settings.twitchClientID, "Accept": "application/vnd.twitchtv.v5+json"}
-        result = requests_get("https://api.twitch.tv/kraken/channels/{}".format(userId), headers=headers)
-
-        # Check encoding
-        if result.encoding is None:
-            result.encoding = "utf-8"
-
-        jsonResult = json_loads(result.text)
-
-        # Check exit code
-        if result.status_code != 200:
-            return ""
-
-        return jsonResult["game"]
 
     # ---------------------------
     #   mascotImagesFile

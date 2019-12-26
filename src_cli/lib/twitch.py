@@ -16,6 +16,57 @@ from socket import socket, error as socket_error, timeout as socket_timeout
 from threading import Timer, Thread
 from re import split as re_split
 from time import time
+from json import loads as json_loads
+from requests import get as requests_get
+
+
+# ---------------------------
+#   twitchGetUser
+# ---------------------------
+def twitch_get_user(twitchClientID, targetUser):
+    # Get user info from API
+    headers = {"Client-ID": twitchClientID, "Accept": "application/vnd.twitchtv.v5+json"}
+    result = requests_get("https://api.twitch.tv/kraken/users?login={0}".format(targetUser.lower()),
+                          headers=headers)
+
+    # Check encoding
+    if result.encoding is None:
+        result.encoding = "utf-8"
+
+    jsonResult = json_loads(result.text)
+
+    # Check exit code
+    if result.status_code != 200:
+        print("lookup user: {}".format(jsonResult))
+        return ""
+
+    # User defined in result json
+    if "users" not in jsonResult and not jsonResult["users"]:
+        print("Unknown Twitch Username")
+        return ""
+
+    return jsonResult["users"][0]
+
+
+# ---------------------------
+#   twitchGetLastActivity
+# ---------------------------
+def twitch_get_last_activity(twitchClientID, userId):
+    # Get channel activity from API
+    headers = {"Client-ID": twitchClientID, "Accept": "application/vnd.twitchtv.v5+json"}
+    result = requests_get("https://api.twitch.tv/kraken/channels/{}".format(userId), headers=headers)
+
+    # Check encoding
+    if result.encoding is None:
+        result.encoding = "utf-8"
+
+    jsonResult = json_loads(result.text)
+
+    # Check exit code
+    if result.status_code != 200:
+        return ""
+
+    return jsonResult["game"]
 
 
 # ---------------------------
