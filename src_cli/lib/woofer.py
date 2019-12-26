@@ -55,7 +55,6 @@ class Woofer:
 
         # Start timer for ScheduledMessages
         threading.Timer(300, self.woofer_timers).start()
-        return
 
     # ---------------------------
     #   ProcessJson
@@ -176,8 +175,6 @@ class Woofer:
         if jsonData['custom-tag'] == 'anonsubgift' and self.settings.Enabled["anonsubgift"]:
             self.woofer_alert(jsonData)
             return
-
-        return
 
     # ---------------------------
     #   woofer_queue
@@ -324,7 +321,6 @@ class Woofer:
         # Reset to default after X seconds
         #
         threading.Timer(jsonData['time'] / 1000, self.woofer_queue_default, args=(queue_id, jsonData)).start()
-        return
 
     # ---------------------------
     #   woofer_queue_default
@@ -477,8 +473,6 @@ class Woofer:
         if self.queue:
             self.queue.remove(queue_id)
 
-        return
-
     # ---------------------------
     #   woofer_addtoqueue
     # ---------------------------
@@ -507,7 +501,6 @@ class Woofer:
         queue_id = uuid.uuid4()
         self.queue.append(queue_id)
         threading.Thread(target=self.woofer_queue, args=(queue_id, jsonResponse)).start()
-        return
 
     # ---------------------------
     #   woofer_alert
@@ -589,17 +582,14 @@ class Woofer:
         jsonFeed['id'] = customId
         self.woofer_addtoqueue(jsonFeed)
 
-        if customId in ('host', 'raid'):
-            if self.settings.AutoShoutout:
-                jsonData['subscriber'] = '1'
-                jsonData['vip'] = '1'
-                jsonData['moderator'] = '1'
-                jsonData['broadcaster'] = '1'
-                jsonData['command_parameter'] = jsonData['display-name']
-                jsonData['custom-tag'] = 'shoutout'
-                threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
-
-        return
+        if customId in ('host', 'raid') and self.settings.AutoShoutout:
+            jsonData['subscriber'] = '1'
+            jsonData['vip'] = '1'
+            jsonData['moderator'] = '1'
+            jsonData['broadcaster'] = '1'
+            jsonData['command_parameter'] = jsonData['display-name']
+            jsonData['custom-tag'] = 'shoutout'
+            threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
 
     # ---------------------------
     #   woofer_timers
@@ -675,7 +665,6 @@ class Woofer:
 
         # Reset to default after X seconds
         threading.Timer(30, self.woofer_timers).start()
-        return
 
     # ---------------------------
     #   woofer_commands
@@ -781,7 +770,6 @@ class Woofer:
             "sender": jsonData['display-name'],
             "id": jsonData['command']
         })
-        return
 
     # ---------------------------
     #   woofer_greet
@@ -808,7 +796,6 @@ class Woofer:
             "sender": jsonData['display-name'],
             "id": customId
         })
-        return
 
     # ---------------------------
     #   woofer_lurk
@@ -826,7 +813,6 @@ class Woofer:
             "sender": jsonData['display-name'],
             "id": 'lurk'
         })
-        return
 
     # ---------------------------
     #   woofer_unlurk
@@ -849,7 +835,6 @@ class Woofer:
             "sender": jsonData['display-name'],
             "id": 'unlurk'
         })
-        return
 
     # ---------------------------
     #   woofer_shoutout
@@ -916,7 +901,6 @@ class Woofer:
             "image": jsonResult['logo'],
             "id": 'shoutout'
         })
-        return
 
     # ---------------------------
     #   twitchGetUser
@@ -980,12 +964,13 @@ class Woofer:
     #   mascotImagesMouthHeight
     # ---------------------------
     def mascotImagesMouthHeight(self, action):
-        if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Image'] in self.settings.mascotImages:
-            if 'MouthHeight' in self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]:
-                MouthHeight = self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]['MouthHeight']
-                if MouthHeight in ("", 0):
-                    return 80
-                return MouthHeight - 5
+        if action in self.settings.PoseMapping and \
+                self.settings.PoseMapping[action]['Image'] in self.settings.mascotImages and \
+                'MouthHeight' in self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]:
+            MouthHeight = self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]['MouthHeight']
+            if MouthHeight in ("", 0):
+                return 80
+            return MouthHeight - 5
 
         return self.settings.mascotImages[self.settings.PoseMapping['DEFAULT']['Image']]['MouthHeight'] - 5
 
