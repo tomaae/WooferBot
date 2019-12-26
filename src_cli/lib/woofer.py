@@ -68,12 +68,13 @@ class Woofer:
             if jsonData["command"] in ["!so", "!shoutout"]:
                 self.woofer_shoutout(jsonData)
 
-            # Lurk/unlurk
-            elif jsonData["command"] in ["!lurk", "!unlurk", "!back"]:
-                if jsonData["command"] == "!lurk":
-                    self.woofer_lurk(jsonData)
-                else:
-                    self.woofer_unlurk(jsonData)
+            # Lurk
+            elif jsonData["command"] == "!lurk":
+                self.woofer_lurk(jsonData)
+
+            # Unlurk
+            elif jsonData["command"] in ["!unlurk", "!back"]:
+                self.woofer_unlurk(jsonData)
 
             # Custom commands
             elif jsonData["command"] in self.settings.Commands:
@@ -82,10 +83,9 @@ class Woofer:
             # Search command aliases
             else:
                 for action in self.settings.Commands:
-                    for alias in self.settings.Commands[action]["Aliases"]:
-                        if jsonData["command"] == alias:
-                            jsonData["command"] = action
-                            self.woofer_commands(jsonData)
+                    if jsonData["command"] in self.settings.Commands[action]["Aliases"]:
+                        jsonData["command"] = action
+                        self.woofer_commands(jsonData)
 
         #
         # Messages
@@ -93,6 +93,10 @@ class Woofer:
         elif jsonData["custom-tag"] == "message":
             common_bots = set(self.settings.commonBots)
             custom_bots = set(self.settings.Bots)
+
+            # MinLines increase for timers
+            self.settings.scheduleLines += 1
+
             # Alerts from chatbots
             if jsonData["sender"] in common_bots or jsonData["sender"] in custom_bots:
                 # Follow
@@ -103,9 +107,6 @@ class Woofer:
                     self.woofer_alert(jsonData)
 
                 return
-
-            # MinLines increase for timers
-            self.settings.scheduleLines += 1
 
             # Greeting
             if jsonData["sender"] not in common_bots and jsonData["sender"] not in custom_bots:
@@ -125,7 +126,7 @@ class Woofer:
                 self.woofer_alert(jsonData)
 
         #
-        # Rituals
+        # Standard alerts
         #
         elif jsonData["custom-tag"] in \
                 ["new_chatter", "raid", "host", "autohost", "sub", "resub", "subgift", "anonsubgift"]:
