@@ -29,7 +29,7 @@ class Cli:
             cmd = input("")
 
             if cmd == "x":
-                print("exit")
+                break
             elif cmd == "h":
                 print(" === WooferBot Help ===")
                 print(" 1 - Follow")
@@ -44,6 +44,7 @@ class Cli:
                 print("10 - Resub")
                 print("11 - Subgift")
                 print("r  - Reconnect to twitch")
+                print("x  - Exit")
 
             #
             # Start

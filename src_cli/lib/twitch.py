@@ -206,6 +206,7 @@ class Twitch:
         self.host = "irc.twitch.tv"  # Hostname of the IRC-Server in this case twitch's
         self.port = 6667  # Default IRC-Port
         self.chrset = "UTF-8"
+        self.loopThread = None
         self.con = socket()
         self.conCheckTimer = Timer(30, self.connection_checker)
         self.lastPing = 0
@@ -217,7 +218,9 @@ class Twitch:
     #   connect
     # ---------------------------
     def connect(self):
-        Thread(target=self.connection).start()
+        self.loopThread = Thread(target=self.connection)
+        self.loopThread.daemon = True
+        self.loopThread.start()
 
     # ---------------------------
     #   disconnect

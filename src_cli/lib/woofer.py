@@ -54,7 +54,9 @@ class Woofer:
         self.changedLightsYeelight = {}
 
         # Start timer for ScheduledMessages
-        Timer(300, self.woofer_timers).start()
+        timer = Timer(300, self.woofer_timers)
+        timer.daemon = True
+        timer.start()
 
     # ---------------------------
     #   process_json
@@ -147,21 +149,27 @@ class Woofer:
         #
         if self.overlay.active < 1:
             print("waiting for overlay")
-            Timer(3, self.woofer_queue, args=(queue_id, json_data)).start()
+            timer = Timer(3, self.woofer_queue, args=(queue_id, json_data))
+            timer.daemon = True
+            timer.start()
             return
 
         #
         # Check if our turn in queue
         #
         if self.queue[0] != queue_id:
-            Timer(0.5, self.woofer_queue, args=(queue_id, json_data)).start()
+            timer = Timer(0.5, self.woofer_queue, args=(queue_id, json_data))
+            timer.daemon = True
+            timer.start()
             return
 
         #
         # Send to overlay, retry later if overlay buffer is full
         #
         if self.overlay.send("EVENT_WOOFERBOT", json_data) == 1:
-            Timer(1, self.woofer_queue, args=(queue_id, json_data)).start()
+            timer = Timer(1, self.woofer_queue, args=(queue_id, json_data))
+            timer.daemon = True
+            timer.start()
             return
 
         #
@@ -247,7 +255,9 @@ class Woofer:
         #
         # Reset to default after X seconds
         #
-        Timer(json_data["time"] / 1000, self.woofer_queue_default, args=(queue_id, json_data)).start()
+        timer = Timer(json_data["time"] / 1000, self.woofer_queue_default, args=(queue_id, json_data))
+        timer.daemon = True
+        timer.start()
 
     # ---------------------------
     #   woofer_queue_default
@@ -277,7 +287,9 @@ class Woofer:
             "mascot": mascot_idle_image
         }
         if self.overlay.send("EVENT_WOOFERBOT", json_data) == 1:
-            Timer(1, self.woofer_queue_default, args=(queue_id, old_json_data)).start()
+            timer = Timer(1, self.woofer_queue_default, args=(queue_id, old_json_data))
+            timer.daemon = True
+            timer.start()
             return
 
         #
@@ -535,7 +547,9 @@ class Woofer:
             json_data["broadcaster"] = "1"
             json_data["command_parameter"] = json_data["display-name"]
             json_data["custom-tag"] = "shoutout"
-            Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[json_data]).start()
+            timer = Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[json_data])
+            timer.daemon = True
+            timer.start()
 
     # ---------------------------
     #   woofer_timers
@@ -543,7 +557,9 @@ class Woofer:
     def woofer_timers(self):
         # Check if overlay is connected
         if self.overlay.active < 1:
-            Timer(30, self.woofer_timers).start()
+            timer = Timer(30, self.woofer_timers)
+            timer.daemon = True
+            timer.start()
             return
 
         # Check if timer is enabled
@@ -617,7 +633,9 @@ class Woofer:
                     })
 
         # Reset to default after X seconds
-        Timer(30, self.woofer_timers).start()
+        timer = Timer(30, self.woofer_timers)
+        timer.daemon = True
+        timer.start()
 
     # ---------------------------
     #   woofer_commands

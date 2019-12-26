@@ -14,6 +14,7 @@
 
 from sys import exit
 from os import path
+from signal import signal, SIGINT, SIGTERM, SIGBREAK
 from lib.settings import Settings
 from lib.overlay import Overlay
 from lib.woofer import Woofer
@@ -23,6 +24,16 @@ from lib.cli import Cli
 from lib.nanoleaf import Nanoleaf
 from lib.hue import Hue
 from lib.miyeelight import Yeelight
+
+
+# ---------------------------
+#  exit_gracefully
+# ---------------------------
+def exit_gracefully(signum=None, frame=None):
+    print("Closing WooferBot...")
+    overlay.stop()
+    exit(0)
+
 
 # ---------------------------
 #  Main
@@ -34,6 +45,10 @@ print('This is free software, and you are welcome to redistribute it')
 print('under certain conditions.')
 print('By using this program, you accept the terms of the software license agreement.')
 print('')
+
+signal(SIGINT, exit_gracefully)
+signal(SIGTERM, exit_gracefully)
+signal(SIGBREAK, exit_gracefully)
 
 # Initialize settings
 path_root = path.dirname(path.realpath(__file__))
@@ -51,30 +66,30 @@ yeelight = Yeelight(settings=settings)
 settings.save()
 
 # Initialize twitch chatbot
-twitchbot = Twitch(settings=settings, woofer=None, bot=True)
+chatbot = Twitch(settings=settings, woofer=None, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
-    twitchbot.connect()
+    chatbot.connect()
 
 # Initialize overlay
-overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
+overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot)
 overlay.start()
 
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
 twitch.connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
-    twitchbot.link_account(twitch)
+    chatbot.link_account(twitch)
 
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
 
 # Start CLI
-cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=twitchbot)
+cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=chatbot)
 cli.start()
 
 # Cleanup and exit
-overlay.stop()
+exit_gracefully()
 exit(0)

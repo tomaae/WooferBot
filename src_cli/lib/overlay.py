@@ -55,7 +55,8 @@ class Overlay:
     #   Stop
     # ---------------------------
     def stop(self):
-        self.loop.stop()
+        if self.loop:
+            self.loop.stop()
 
     # ---------------------------
     #   Send
