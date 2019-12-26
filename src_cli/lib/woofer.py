@@ -17,7 +17,8 @@ from random import SystemRandom
 from threading import Timer, Thread
 from time import time, sleep
 from os import path, system
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Controller
+from lib.helper import KEYLIST
 from lib.twitch import twitch_get_user, twitch_get_last_activity
 
 
@@ -172,45 +173,10 @@ class Woofer:
         # Execute hotkey
         #
         if "hotkey" in jsonData and jsonData["hotkey"] != "":
-            keylist = {"space": Key.space,
-                       "alt": Key.alt,
-                       "ctrl": Key.ctrl,
-                       "shift": Key.shift,
-                       "f1": Key.f1,
-                       "f2": Key.f2,
-                       "f3": Key.f3,
-                       "f4": Key.f4,
-                       "f5": Key.f5,
-                       "f6": Key.f6,
-                       "f7": Key.f7,
-                       "f8": Key.f8,
-                       "f9": Key.f9,
-                       "f10": Key.f10,
-                       "f11": Key.f11,
-                       "f12": Key.f12,
-                       "left": Key.left,
-                       "right": Key.right,
-                       "up": Key.up,
-                       "down": Key.down,
-                       "backspace": Key.backspace,
-                       "cmd": Key.cmd,
-                       "delete": Key.delete,
-                       "end": Key.end,
-                       "enter": Key.enter,
-                       "esc": Key.esc,
-                       "home": Key.home,
-                       "insert": Key.insert,
-                       "page_down": Key.page_down,
-                       "page_up": Key.page_up,
-                       "pause": Key.pause,
-                       "print_screen": Key.print_screen,
-                       "tab": Key.tab
-                       }
-
             for key in jsonData["hotkey"]:
-                if key in keylist:
+                if key in KEYLIST:
                     try:
-                        self.keyboard.press(keylist[key])
+                        self.keyboard.press(KEYLIST[key])
                     except:
                         print("Invalid hotkey in {}".format(jsonData["id"]))
                 else:
@@ -222,9 +188,9 @@ class Woofer:
             sleep(0.05)
 
             for key in reversed(jsonData["hotkey"]):
-                if key in keylist:
+                if key in KEYLIST:
                     try:
-                        self.keyboard.release(keylist[key])
+                        self.keyboard.release(KEYLIST[key])
                     except:
                         print("Invalid hotkey in {}".format(jsonData["id"]))
                 else:

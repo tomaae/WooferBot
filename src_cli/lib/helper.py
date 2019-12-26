@@ -16,6 +16,42 @@ from socket import socket, gethostname, inet_aton, inet_pton, error as socket_er
 from re import search as re_search
 from select import select
 from time import time
+from pynput.keyboard import Key
+
+KEYLIST = {"space": Key.space,
+           "alt": Key.alt,
+           "ctrl": Key.ctrl,
+           "shift": Key.shift,
+           "f1": Key.f1,
+           "f2": Key.f2,
+           "f3": Key.f3,
+           "f4": Key.f4,
+           "f5": Key.f5,
+           "f6": Key.f6,
+           "f7": Key.f7,
+           "f8": Key.f8,
+           "f9": Key.f9,
+           "f10": Key.f10,
+           "f11": Key.f11,
+           "f12": Key.f12,
+           "left": Key.left,
+           "right": Key.right,
+           "up": Key.up,
+           "down": Key.down,
+           "backspace": Key.backspace,
+           "cmd": Key.cmd,
+           "delete": Key.delete,
+           "end": Key.end,
+           "enter": Key.enter,
+           "esc": Key.esc,
+           "home": Key.home,
+           "insert": Key.insert,
+           "page_down": Key.page_down,
+           "page_up": Key.page_up,
+           "pause": Key.pause,
+           "print_screen": Key.print_screen,
+           "tab": Key.tab
+           }
 
 
 # ---------------------------
