@@ -63,118 +63,73 @@ class Woofer:
         #
         # Commands
         #
-        if jsonData['custom-tag'] == 'command':
+        if jsonData["custom-tag"] == "command":
             # Shoutout
-            if jsonData['command'] == '!so' or jsonData['command'] == '!shoutout':
-                if self.settings.Enabled["shoutout"]:
-                    self.woofer_shoutout(jsonData)
-                return
+            if jsonData["command"] in ["!so", "!shoutout"]:
+                self.woofer_shoutout(jsonData)
 
             # Lurk/unlurk
-            if self.settings.Enabled["lurk"]:
-                if jsonData['command'] == '!lurk':
+            elif jsonData["command"] in ["!lurk", "!unlurk", "!back"]:
+                if jsonData["command"] == "!lurk":
                     self.woofer_lurk(jsonData)
-                    return
-
-                if jsonData['command'] == '!unlurk' or jsonData['command'] == '!back':
+                else:
                     self.woofer_unlurk(jsonData)
-                    return
 
             # Custom commands
-            if jsonData['command'] in self.settings.Commands:
+            elif jsonData["command"] in self.settings.Commands:
                 self.woofer_commands(jsonData)
 
-            for action in self.settings.Commands:
-                for alias in self.settings.Commands[action]['Aliases']:
-                    if jsonData['command'] == alias:
-                        jsonData['command'] = action
-                        self.woofer_commands(jsonData)
-
-            return
+            # Search command aliases
+            else:
+                for action in self.settings.Commands:
+                    for alias in self.settings.Commands[action]["Aliases"]:
+                        if jsonData["command"] == alias:
+                            jsonData["command"] = action
+                            self.woofer_commands(jsonData)
 
         #
         # Messages
         #
-        if jsonData['custom-tag'] == 'message':
-            commonBots = set(self.settings.commonBots)
-            customBots = set(self.settings.Bots)
+        elif jsonData["custom-tag"] == "message":
+            common_bots = set(self.settings.commonBots)
+            custom_bots = set(self.settings.Bots)
             # Alerts from chatbots
-            if jsonData['sender'] == self.settings.TwitchChannel + "bot" or jsonData['sender'] in commonBots or \
-                    jsonData['sender'] in customBots:
+            if jsonData["sender"] in common_bots or jsonData["sender"] in custom_bots:
                 # Follow
-                if jsonData['message'].find(self.settings.FollowMessage) > 0 and self.settings.Enabled["follow"]:
-                    line = jsonData['message'].split(" ")
-                    jsonData['display-name'] = line[0].rstrip(',')
-                    jsonData['custom-tag'] = 'follow'
+                if jsonData["message"].find(self.settings.FollowMessage) > 0:
+                    line = jsonData["message"].split(" ")
+                    jsonData["display-name"] = line[0].rstrip(",")
+                    jsonData["custom-tag"] = "follow"
                     self.woofer_alert(jsonData)
-                    return
+
                 return
 
             # MinLines increase for timers
             self.settings.scheduleLines += 1
 
+            # Greeting
+            if jsonData["sender"] not in common_bots and jsonData["sender"] not in custom_bots:
+                self.woofer_greet(jsonData)
+
             # Channel points default
-            if jsonData['msg-id'] == 'highlighted-message':
+            elif jsonData["msg-id"] == "highlighted-message":
                 print("Channel points, claimed reward: Redeemed Highlight My Message")
 
             # Channel points custom w/message
-            if jsonData['custom-reward-id']:
-                print("Channel points, claimed custom reward: " + jsonData['custom-reward-id'])
-
-            # Greeting
-            if self.settings.Enabled["greet"] and jsonData['sender'] not in commonBots and jsonData[
-                'sender'] not in customBots:
-                self.woofer_greet(jsonData)
+            elif jsonData["custom-reward-id"]:
+                print("Channel points, claimed custom reward: " + jsonData["custom-reward-id"])
 
             # Bits
-            if int(jsonData['bits']) > 0 and int(jsonData['bits']) >= self.settings.MinBits and self.settings.Enabled[
-                "bits"]:
-                jsonData['custom-tag'] = 'bits'
+            elif int(jsonData["bits"]) > 0 and int(jsonData["bits"]) >= self.settings.MinBits:
+                jsonData["custom-tag"] = "bits"
                 self.woofer_alert(jsonData)
-                return
-
-            return
 
         #
         # Rituals
         #
-        if jsonData['custom-tag'] == 'new_chatter' and self.settings.Enabled["new_chatter"]:
+        elif jsonData["custom-tag"] in \
+                ["new_chatter", "raid", "host", "autohost", "sub", "resub", "subgift", "anonsubgift"]:
             self.woofer_alert(jsonData)
-            return
-
-        #
-        # Raid/host/autohost
-        #
-        if jsonData['custom-tag'] == 'raid' and self.settings.Enabled["raid"]:
-            self.woofer_alert(jsonData)
-            return
-
-        if jsonData['custom-tag'] == 'host' and self.settings.Enabled["host"]:
-            self.woofer_alert(jsonData)
-            return
-
-        if jsonData['custom-tag'] == 'autohost' and self.settings.Enabled["autohost"]:
-            self.woofer_alert(jsonData)
-            return
-
-        #
-        # Sub
-        #
-        if jsonData['custom-tag'] == 'sub' and self.settings.Enabled["sub"]:
-            self.woofer_alert(jsonData)
-            return
-
-        if jsonData['custom-tag'] == 'resub' and self.settings.Enabled["resub"]:
-            self.woofer_alert(jsonData)
-            return
-
-        if jsonData['custom-tag'] == 'subgift' and self.settings.Enabled["subgift"]:
-            self.woofer_alert(jsonData)
-            return
-
-        if jsonData['custom-tag'] == 'anonsubgift' and self.settings.Enabled["anonsubgift"]:
-            self.woofer_alert(jsonData)
-            return
 
     # ---------------------------
     #   woofer_queue
@@ -507,6 +462,9 @@ class Woofer:
     # ---------------------------
     def woofer_alert(self, jsonData):
         customId = jsonData['custom-tag']
+        if not self.settings.Enabled[customId]:
+            return
+
         jsonFeed = {
             "sender": jsonData['display-name']
         }
@@ -775,6 +733,9 @@ class Woofer:
     #   woofer_greet
     # ---------------------------
     def woofer_greet(self, jsonData):
+        if not self.settings.Enabled["greet"]:
+            return
+
         # Check if user was already greeted
         s = set(self.greetedUsers)
         if jsonData['sender'] in s:
@@ -801,6 +762,8 @@ class Woofer:
     #   woofer_lurk
     # ---------------------------
     def woofer_lurk(self, jsonData):
+        if not self.settings.Enabled["lurk"]:
+            return
 
         # Check if user was already lurking
         s = set(self.lurkingUsers)
@@ -818,6 +781,8 @@ class Woofer:
     #   woofer_unlurk
     # ---------------------------
     def woofer_unlurk(self, jsonData):
+        if not self.settings.Enabled["lurk"]:
+            return
 
         # Check if user was already lurking
         s = set(self.lurkingUsers)
@@ -840,6 +805,8 @@ class Woofer:
     #   woofer_shoutout
     # ---------------------------
     def woofer_shoutout(self, jsonData):
+        if not self.settings.Enabled["shoutout"]:
+            return
         #
         # Check access rights
         #
