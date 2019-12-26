@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Assistant");
 
 @font-face {
-    font-family: "Abingdon";
+    font-family: "Abingdon", sans-serif;
     src: url("../../assets/fonts/Abingdon Regular.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     src: url("../../assets/fonts/Bookman Sans.otf") format("opentype");
 }
 
@@ -19,7 +19,7 @@ html, body {
 }
 
 body {
-    font-family: Assistant;
+    font-family: Assistant, sans-serif;
     font-size: 18px;
     color: #454545;
     padding:0;
@@ -77,7 +77,7 @@ header ul li a {
     color: #757178;
     padding: 7px 14px 5px 14px;
     border-radius:10px;
-    font-family: "Abingdon";
+    font-family: "Abingdon", sans-serif;
     font-size: 26px;
 }
 
@@ -110,7 +110,7 @@ footer {
     flex-shrink: 0;
     color: #757178;
     background-color:#e9e9e9;
-    font-family: "Abingdon";
+    font-family: "Abingdon", sans-serif;
     font-size: 18px;
 }
 
@@ -155,8 +155,8 @@ a:hover {
 }
 
 section ul {
-    list-style-position: inside;
     list-style: disc;
+    list-style-position: inside;
     margin-left:-3px;
 }
 
@@ -214,7 +214,7 @@ section>.heading>span:first-of-type svg text {
 }
 
 section>.heading>span:first-of-type{
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     font-size: 48px;
     display:inline-block;
     color:#ffffff;
@@ -355,7 +355,6 @@ section.home .about {
 }
 
 section.home .about>div {
-    display: inline-block;
     width:50%;
     display: table-cell;
 }
@@ -370,7 +369,7 @@ section.home .about>div:nth-child(2) {
 }
 
 section.home .about>div>span:first-child {
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     display: block;
     font-size: 36px;
     font-weight: bold;
@@ -436,7 +435,7 @@ section.mascots>div:nth-child(2){
 }
 
 section.mascots>div:nth-child(2) .caption{
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     display: block;
     font-size: 36px;
     font-weight: bold;
@@ -487,7 +486,7 @@ section.mascots .list_m>div:nth-child(2), section.contacts .list_t>div:nth-child
 }
 
 section.mascots .list_m>div:nth-child(2)>div:first-of-type, section.contacts .list_t>div:nth-child(2)>div:first-of-type {
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     font-size:24px;
     border-bottom: 1px solid #454545;
     padding-bottom:6px;
@@ -559,7 +558,7 @@ section.contacts>div:nth-child(2){
 }
 
 section.contacts .team .caption {
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     display: block;
     font-size: 36px;
     font-weight: bold;
@@ -639,7 +638,7 @@ section.changelog>div.caption {
 }
 
 section.changelog>.caption>span:first-of-type{
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     font-size: 36px;
     font-weight: bold;
     padding-left:48px;
@@ -701,7 +700,7 @@ section.changelog>.dllist a:hover {
 section.changelog>.dllist a>span{
     display:inline-block;
     line-height:43px;
-    font-family: "Abingdon";
+    font-family: "Abingdon", sans-serif;
     font-size: 26px;
     position: relative;
     margin-left:15px;
@@ -729,7 +728,7 @@ section.lic li {
 }
 
 section.lic>blockquote:nth-child(4){
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     font-size: 30px;
     font-weight: bold;
 }
@@ -748,7 +747,7 @@ section.doc img.pawsep {
 }
 
 section.doc>h2{
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     display: block;
     font-size: 36px;
     font-weight: bold;
@@ -769,7 +768,7 @@ section.doc>h2:before {
 }
 
 section.doc>h3{
-    font-family: "Bookman Sans";
+    font-family: "Bookman Sans", sans-serif;
     display: block;
     font-size: 24px;
     font-weight: bold;
@@ -800,7 +799,6 @@ section.doc>.language-plaintext code{
 }
 
 section .icon.idea {
-    padding-left:18px;
     position:relative;
     display:block;
     margin:20px auto;
