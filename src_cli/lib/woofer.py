@@ -12,13 +12,13 @@
 #
 ##########################################################################
 
-import json
-import uuid
-import random
-import threading
-import time
-import os
-import requests
+from json import loads as json_loads
+from uuid import uuid4
+from random import SystemRandom
+from threading import Timer, Thread
+from time import time, sleep
+from os import path, system
+from requests import get as requests_get
 from pynput.keyboard import Key, Controller
 
 
@@ -54,7 +54,7 @@ class Woofer:
         self.changedLightsYeelight = {}
 
         # Start timer for ScheduledMessages
-        threading.Timer(300, self.woofer_timers).start()
+        Timer(300, self.woofer_timers).start()
 
     # ---------------------------
     #   ProcessJson
@@ -191,28 +191,28 @@ class Woofer:
         #
         if self.overlay.active < 1:
             print("waiting")
-            threading.Timer(3, self.woofer_queue, args=(queue_id, jsonData)).start()
+            Timer(3, self.woofer_queue, args=(queue_id, jsonData)).start()
             return
 
         #
         # Check if our turn in queue
         #
         if self.queue[0] != queue_id:
-            threading.Timer(0.5, self.woofer_queue, args=(queue_id, jsonData)).start()
+            Timer(0.5, self.woofer_queue, args=(queue_id, jsonData)).start()
             return
 
         #
         # Send to overlay, retry later if overlay buffer is full
         #
         if self.overlay.Send("EVENT_WOOFERBOT", jsonData) == 1:
-            threading.Timer(1, self.woofer_queue, args=(queue_id, jsonData)).start()
+            Timer(1, self.woofer_queue, args=(queue_id, jsonData)).start()
             return
 
         #
         # Execute custom scripts
         #
         if 'script' in jsonData and jsonData['script'] != "":
-            os.system("\"" + jsonData['script'] + "\"")
+            system("\"" + jsonData['script'] + "\"")
 
         #
         # Execute hotkey
@@ -265,7 +265,7 @@ class Woofer:
                     except:
                         print("Invalid hotkey in " + jsonData['id'])
 
-            time.sleep(0.05)
+            sleep(0.05)
 
             for key in reversed(jsonData['hotkey']):
                 if key in keylist:
@@ -320,7 +320,7 @@ class Woofer:
         #
         # Reset to default after X seconds
         #
-        threading.Timer(jsonData['time'] / 1000, self.woofer_queue_default, args=(queue_id, jsonData)).start()
+        Timer(jsonData['time'] / 1000, self.woofer_queue_default, args=(queue_id, jsonData)).start()
 
     # ---------------------------
     #   woofer_queue_default
@@ -330,7 +330,7 @@ class Woofer:
         # Set default Idle image
         #
         mascotIdleImage = self.settings.mascotImages['Idle']['Image']
-        if not os.path.isfile(mascotIdleImage):
+        if not path.isfile(mascotIdleImage):
             mascotIdleImage = ""
 
         #
@@ -339,7 +339,7 @@ class Woofer:
         if 'Idle' in self.settings.PoseMapping and 'Image' in self.settings.PoseMapping['Idle'] and \
                 self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
             tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-            if os.path.isfile(tmp):
+            if path.isfile(tmp):
                 mascotIdleImage = tmp
 
         #
@@ -349,7 +349,7 @@ class Woofer:
             "mascot": mascotIdleImage
         }
         if self.overlay.Send("EVENT_WOOFERBOT", jsonData) == 1:
-            threading.Timer(1, self.woofer_queue_default, args=(queue_id, old_jsonData)).start()
+            Timer(1, self.woofer_queue_default, args=(queue_id, old_jsonData)).start()
             return
 
         #
@@ -481,7 +481,7 @@ class Woofer:
 
         if 'message' not in jsonResponse or jsonResponse["message"] == "":
             if jsonResponse["id"] in self.settings.Messages:
-                jsonResponse["message"] = random.SystemRandom().choice(self.settings.Messages[jsonResponse["id"]])
+                jsonResponse["message"] = SystemRandom().choice(self.settings.Messages[jsonResponse["id"]])
             else:
                 jsonResponse["message"] = ""
 
@@ -498,9 +498,9 @@ class Woofer:
         jsonResponse["yeelightpersistent"] = self.mascotYeelightPersistent(jsonResponse["id"])
 
         # Add to queue
-        queue_id = uuid.uuid4()
+        queue_id = uuid4()
         self.queue.append(queue_id)
-        threading.Thread(target=self.woofer_queue, args=(queue_id, jsonResponse)).start()
+        Thread(target=self.woofer_queue, args=(queue_id, jsonResponse)).start()
 
     # ---------------------------
     #   woofer_alert
@@ -589,7 +589,7 @@ class Woofer:
             jsonData['broadcaster'] = '1'
             jsonData['command_parameter'] = jsonData['display-name']
             jsonData['custom-tag'] = 'shoutout'
-            threading.Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
+            Timer(self.settings.AutoShoutoutTime, self.woofer_shoutout, args=[jsonData]).start()
 
     # ---------------------------
     #   woofer_timers
@@ -597,7 +597,7 @@ class Woofer:
     def woofer_timers(self):
         # Check if overlay is connected
         if self.overlay.active < 1:
-            threading.Timer(30, self.woofer_timers).start()
+            Timer(30, self.woofer_timers).start()
             return
 
         # Check if timer is enabled
@@ -606,7 +606,7 @@ class Woofer:
             if not action['Enabled']:
                 continue
 
-            currentEpoch = int(time.time())
+            currentEpoch = int(time())
             if (currentEpoch - self.settings.scheduleTable[action['Name']]) >= (action['Timer'] * 60):
 
                 # Timers without MinLines limits
@@ -623,7 +623,7 @@ class Woofer:
                         })
                     else:
                         self.woofer_addtoqueue({
-                            "message": random.SystemRandom().choice(self.settings.Messages[action['Name']]),
+                            "message": SystemRandom().choice(self.settings.Messages[action['Name']]),
                             "image": self.settings.pathRoot + self.settings.slash + "images" + self.settings.slash + action['Image'],
                             "sender": "",
                             "customtag": "ScheduledMessage",
@@ -645,7 +645,7 @@ class Woofer:
                     continue
 
                 self.settings.scheduleLines = 0
-                self.settings.scheduleTable[action['Name']] = int(time.time())
+                self.settings.scheduleTable[action['Name']] = int(time())
                 if 'Command' in action:
                     self.woofer_commands({
                         "command": action['Command'],
@@ -656,7 +656,7 @@ class Woofer:
                     })
                 else:
                     self.woofer_addtoqueue({
-                        "message": random.SystemRandom().choice(self.settings.Messages[action['Name']]),
+                        "message": SystemRandom().choice(self.settings.Messages[action['Name']]),
                         "image": self.settings.pathRoot + self.settings.slash + "images" + self.settings.slash + action['Image'],
                         "sender": "",
                         "customtag": "ScheduledMessage",
@@ -664,7 +664,7 @@ class Woofer:
                     })
 
         # Reset to default after X seconds
-        threading.Timer(30, self.woofer_timers).start()
+        Timer(30, self.woofer_timers).start()
 
     # ---------------------------
     #   woofer_commands
@@ -719,7 +719,7 @@ class Woofer:
         # ViewerTimeout
         #
         if self.settings.Commands[jsonData['command']]['ViewerTimeout'] > 0:
-            currentEpoch = int(time.time())
+            currentEpoch = int(time())
 
             if jsonData['command'] in self.commandsViewerTimeout and \
                     jsonData['sender'] in self.commandsViewerTimeout[jsonData['command']] and \
@@ -735,7 +735,7 @@ class Woofer:
         # GlobalTimeout
         #
         if self.settings.Commands[jsonData['command']]['GlobalTimeout'] > 0:
-            currentEpoch = int(time.time())
+            currentEpoch = int(time())
             if jsonData['command'] in self.commandsGlobalTimeout and (
                     currentEpoch - self.commandsGlobalTimeout[jsonData['command']]) < \
                     self.settings.Commands[jsonData['command']]['GlobalTimeout']:
@@ -750,7 +750,7 @@ class Woofer:
         if self.settings.Commands[jsonData['command']]['Image'] != "":
             image = self.settings.pathRoot + self.settings.slash + "images" + self.settings.slash + \
                     self.settings.Commands[jsonData['command']]['Image']
-            if not os.path.isfile(image):
+            if not path.isfile(image):
                 image = ""
 
         #
@@ -760,7 +760,7 @@ class Woofer:
         if self.settings.Commands[jsonData['command']]['Script'] != "":
             script = self.settings.pathRoot + self.settings.slash + "scripts" + self.settings.slash + \
                      self.settings.Commands[jsonData['command']]['Script']
-            if not os.path.isfile(script):
+            if not path.isfile(script):
                 script = ""
 
         self.woofer_addtoqueue({
@@ -785,7 +785,7 @@ class Woofer:
         # Check for custom greeting definitions
         customMessage = ""
         if 'viewer_' + jsonData['display-name'] in self.settings.Messages:
-            customMessage = random.SystemRandom().choice(self.settings.Messages['viewer_' + jsonData['display-name']])
+            customMessage = SystemRandom().choice(self.settings.Messages['viewer_' + jsonData['display-name']])
 
         customId = 'greet'
         if 'viewer_' + jsonData['display-name'] in self.settings.PoseMapping:
@@ -889,12 +889,12 @@ class Woofer:
         activity = self.twitchGetLastActivity(jsonResult['_id'])
         activity_text = ""
         if activity:
-            activity_text = random.SystemRandom().choice(self.settings.Activities["Game"])
+            activity_text = SystemRandom().choice(self.settings.Activities["Game"])
             if activity in self.settings.Activities:
-                activity_text = random.SystemRandom().choice(self.settings.Activities[activity])
+                activity_text = SystemRandom().choice(self.settings.Activities[activity])
 
         self.woofer_addtoqueue({
-            "message": random.SystemRandom().choice(self.settings.Messages['shoutout']) + activity_text,
+            "message": SystemRandom().choice(self.settings.Messages['shoutout']) + activity_text,
             "sender": jsonData['display-name'],
             "recipient": jsonResult['display_name'],
             "activity": activity,
@@ -908,14 +908,14 @@ class Woofer:
     def twitchGetUser(self, targetUser):
         # Get user info from API
         headers = {'Client-ID': self.settings.twitchClientID, 'Accept': 'application/vnd.twitchtv.v5+json'}
-        result = requests.get("https://api.twitch.tv/kraken/users?login={0}".format(targetUser.lower()),
+        result = requests_get("https://api.twitch.tv/kraken/users?login={0}".format(targetUser.lower()),
                               headers=headers)
 
         # Check encoding
         if result.encoding is None:
             result.encoding = 'utf-8'
 
-        jsonResult = json.loads(result.text)
+        jsonResult = json_loads(result.text)
 
         # Check exit code
         if result.status_code != 200:
@@ -935,13 +935,13 @@ class Woofer:
     def twitchGetLastActivity(self, userId):
         # Get channel activity from API
         headers = {'Client-ID': self.settings.twitchClientID, 'Accept': 'application/vnd.twitchtv.v5+json'}
-        result = requests.get("https://api.twitch.tv/kraken/channels/{0}".format(userId), headers=headers)
+        result = requests_get("https://api.twitch.tv/kraken/channels/{0}".format(userId), headers=headers)
 
         # Check encoding
         if result.encoding is None:
             result.encoding = 'utf-8'
 
-        jsonResult = json.loads(result.text)
+        jsonResult = json_loads(result.text)
 
         # Check exit code
         if result.status_code != 200:
@@ -955,7 +955,7 @@ class Woofer:
     def mascotImagesFile(self, action):
         if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Image'] in self.settings.mascotImages:
             tmp = self.settings.mascotImages[self.settings.PoseMapping[action]['Image']]['Image']
-            if os.path.isfile(tmp):
+            if path.isfile(tmp):
                 return tmp
 
         return self.settings.mascotImages[self.settings.PoseMapping['DEFAULT']['Image']]['Image']
@@ -988,12 +988,12 @@ class Woofer:
     # ---------------------------
     def mascotAudioFile(self, action):
         if action in self.settings.PoseMapping and self.settings.PoseMapping[action]['Audio'] in self.settings.mascotAudio:
-            tmp = random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Audio'])
-            if os.path.isfile(tmp):
+            tmp = SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping[action]['Audio']]['Audio'])
+            if path.isfile(tmp):
                 return tmp
 
         if self.settings.PoseMapping['DEFAULT']['Audio'] in self.settings.mascotAudio:
-            return random.SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping['DEFAULT']['Audio']]['Audio'])
+            return SystemRandom().choice(self.settings.mascotAudio[self.settings.PoseMapping['DEFAULT']['Audio']]['Audio'])
 
         return ""
 
