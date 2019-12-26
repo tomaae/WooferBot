@@ -449,8 +449,8 @@ class Woofer:
         #
         if customId in ("sub", "resub"):
             for customObj in self.settings.CustomSubs:
-                if customObj["Tier"] == "" and int(jsonData["months"]) >= int(customObj["From"]) and int(
-                        jsonData["months"]) <= int(customObj["To"]):
+                if customObj["Tier"] == "" and \
+                        int(customObj["From"]) <= int(jsonData["months"]) <= int(customObj["To"]):
                     customId = customObj["Name"]
 
             sub_tier = ""
@@ -464,8 +464,8 @@ class Woofer:
                 sub_tier = "prime"
 
             for customObj in self.settings.CustomSubs:
-                if sub_tier == customObj["Tier"] and int(jsonData["months"]) >= int(customObj["From"]) and int(
-                        jsonData["months"]) <= int(customObj["To"]):
+                if sub_tier == customObj["Tier"] and \
+                        int(customObj["From"]) <= int(jsonData["months"]) <= int(customObj["To"]):
                     customId = customObj["Name"]
 
             jsonFeed["months"] = jsonData["months"]
@@ -515,6 +515,7 @@ class Woofer:
         jsonFeed["id"] = customId
         self.woofer_addtoqueue(jsonFeed)
 
+        # Trigger autoshoutout if enabled
         if customId in ("host", "raid") and self.settings.AutoShoutout:
             jsonData["subscriber"] = "1"
             jsonData["vip"] = "1"
