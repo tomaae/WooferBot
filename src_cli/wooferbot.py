@@ -36,8 +36,8 @@ print('By using this program, you accept the terms of the software license agree
 print('')
 
 # Initialize settings
-pathRoot = path.dirname(path.realpath(__file__))
-settings = Settings(pathRoot=pathRoot)
+path_root = path.dirname(path.realpath(__file__))
+settings = Settings(path_root=path_root)
 
 # Initialize nanoleaf
 nanoleaf = Nanoleaf(settings=settings)
@@ -48,33 +48,33 @@ hue = Hue(settings=settings)
 # Initialize Philips HUE
 yeelight = Yeelight(settings=settings)
 
-settings.Save()
+settings.save()
 
 # Initialize twitch chatbot
 twitchbot = Twitch(settings=settings, woofer=None, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
-    twitchbot.Connect()
+    twitchbot.connect()
 
 # Initialize overlay
 overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
-overlay.Start()
+overlay.start()
 
 # Initialize woofer
 woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=twitchbot)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer)
-twitch.Connect()
+twitch.connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
-    twitchbot.LinkAccount(twitch)
+    twitchbot.link_account(twitch)
 
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
 
 # Start CLI
 cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=twitchbot)
-cli.Start()
+cli.start()
 
 # Cleanup and exit
-overlay.Stop()
+overlay.stop()
 exit(0)

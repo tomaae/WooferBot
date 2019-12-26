@@ -23,50 +23,176 @@ from requests import get as requests_get
 # ---------------------------
 #   twitchGetUser
 # ---------------------------
-def twitch_get_user(twitchClientID, targetUser):
+def twitch_get_user(twitch_client_id, target_user):
     # Get user info from API
-    headers = {"Client-ID": twitchClientID, "Accept": "application/vnd.twitchtv.v5+json"}
-    result = requests_get("https://api.twitch.tv/kraken/users?login={0}".format(targetUser.lower()),
+    headers = {"Client-ID": twitch_client_id, "Accept": "application/vnd.twitchtv.v5+json"}
+    result = requests_get("https://api.twitch.tv/kraken/users?login={0}".format(target_user.lower()),
                           headers=headers)
 
     # Check encoding
     if result.encoding is None:
         result.encoding = "utf-8"
 
-    jsonResult = json_loads(result.text)
+    json_result = json_loads(result.text)
 
     # Check exit code
     if result.status_code != 200:
-        print("lookup user: {}".format(jsonResult))
+        print("lookup user: {}".format(json_result))
         return ""
 
     # User defined in result json
-    if "users" not in jsonResult and not jsonResult["users"]:
+    if "users" not in json_result and not json_result["users"]:
         print("Unknown Twitch Username")
         return ""
 
-    return jsonResult["users"][0]
+    return json_result["users"][0]
 
 
 # ---------------------------
 #   twitchGetLastActivity
 # ---------------------------
-def twitch_get_last_activity(twitchClientID, userId):
+def twitch_get_last_activity(twitch_client_id, user_id):
     # Get channel activity from API
-    headers = {"Client-ID": twitchClientID, "Accept": "application/vnd.twitchtv.v5+json"}
-    result = requests_get("https://api.twitch.tv/kraken/channels/{}".format(userId), headers=headers)
+    headers = {"Client-ID": twitch_client_id, "Accept": "application/vnd.twitchtv.v5+json"}
+    result = requests_get("https://api.twitch.tv/kraken/channels/{}".format(user_id), headers=headers)
 
     # Check encoding
     if result.encoding is None:
         result.encoding = "utf-8"
 
-    jsonResult = json_loads(result.text)
+    json_result = json_loads(result.text)
 
     # Check exit code
     if result.status_code != 200:
         return ""
 
-    return jsonResult["game"]
+    return json_result["game"]
+
+
+# ---------------------------
+#   fill_tags
+# ---------------------------
+def fill_tags():
+    result = {
+        "vip": "0",
+        "moderator": "0",
+        "subscriber": "0",
+        "broadcaster": "0",
+        "bits_total": "0",
+        "bits": "0",
+        "sub_tier": "0",
+        "months": "0",
+        "months_streak": "0",
+        "display-name": "",
+        # Valid values: sub, resub, subgift, anonsubgift, raid, ritual.
+        "msg-id": "",
+        # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
+        "msg-param-viewerCount": "",
+        # (Sent only on subgift, anonsubgift) The display name of the subscription gift recipient.
+        "msg-param-recipient-display-name": "",
+        # (Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used.
+        # Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels
+        # of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
+        "msg-param-sub-plan": "",
+        # (Sent only on sub, resub) The total number of months the user has subscribed.
+        "msg-param-cumulative-months": "",
+        # (Sent only on sub, resub) The number of consecutive months the user has subscribed.
+        # This is 0 if msg-param-should-share-streak is 0.
+        "msg-param-streak-months": "",
+        # (Sent only on ritual) The name of the ritual this notice is for. Valid value: new_chatter.
+        "msg-param-ritual-name": "",
+        "login": "",
+        # <emote ID>:<first index>-<last index>,<another first index>-
+        # <another last index>/<another emote ID>:<first index>-<last index>...
+        "emotes": "",
+        "command": "",
+        "command_parameter": "",
+        "sender": "",
+        "message": "",
+        "custom-tag": "",
+        "custom-reward-id": ""
+    }
+    return result
+
+
+# ---------------------------
+#   parse_tags
+# ---------------------------
+def parse_tags(json_data, msg):
+    tags = msg.split(";")
+    for tag in tags:
+        tag = tag.split("=")
+        # "@badges": "", # Comma-separated list of chat badges and the version of each badge
+        # (each in the format <badge>/<version>.
+        # Valid badge values: admin, bits, broadcaster, global_mod, moderator, subscriber, vip, staff, turbo.
+        if tag[0] == "badges":
+            badges = tag[1].split(",")
+            for badge in badges:
+                badge = badge.split("/")
+                if badge[0] in ["broadcaster", "moderator", "subscriber", "vip"]:
+                    json_data[badge[0]] = badge[1]
+
+                if badge[0] == "bits":
+                    json_data["bits_total"] = badge[1]
+        else:
+            if tag[0] in json_data:
+                json_data[tag[0]] = tag[1]
+
+    if json_data["broadcaster"] == 1:
+        json_data["moderator"] = "1"
+
+    return json_data
+
+
+# ---------------------------
+#   get_sender
+# ---------------------------
+def get_sender(msg):
+    result = ""
+    for char in msg:
+        if char == "!":
+            break
+
+        if char != ":":
+            result += char
+
+    return result
+
+
+# ---------------------------
+#   get_message
+# ---------------------------
+def get_message(msg):
+    result = ""
+    i = 4
+    length = len(msg)
+    while i < length:
+        result += msg[i] + " "
+        i += 1
+
+    result = result.lstrip(":")
+    result = result.strip()
+    return result
+
+
+# ---------------------------
+#   remove_emotes
+# ---------------------------
+def remove_emotes(msg, emotes):
+    if not emotes:
+        return msg
+
+    emotes = emotes.replace("/", ",")
+    emotes = emotes.split(",")
+    for emote in reversed(emotes):
+        if emote.find(":") >= 0:
+            emote = emote.split(":")[1]
+
+        emote = emote.split("-")
+        msg = msg[:int(emote[0])] + msg[int(emote[1]) + 1:]
+
+    # print(msg)
+    return msg
 
 
 # ---------------------------
@@ -81,56 +207,56 @@ class Twitch:
         self.port = 6667  # Default IRC-Port
         self.chrset = "UTF-8"
         self.con = socket()
-        self.conCheckTimer = Timer(30, self.ConnectionChecker)
+        self.conCheckTimer = Timer(30, self.connection_checker)
         self.lastPing = 0
         self.connected = False
         self.linkTwitch = False
         self.TwitchLogin = ""
 
     # ---------------------------
-    #   Connect
+    #   connect
     # ---------------------------
-    def Connect(self):
-        Thread(target=self.Connection).start()
+    def connect(self):
+        Thread(target=self.connection).start()
 
     # ---------------------------
-    #   Disconnect
+    #   disconnect
     # ---------------------------
-    def Disconnect(self):
+    def disconnect(self):
         self.connected = False
         if self.conCheckTimer.is_alive():
             self.conCheckTimer.cancel()
         self.con.close()
 
     # ---------------------------
-    #   ConnectionChecker
+    #   connection_checker
     # ---------------------------
-    def ConnectionChecker(self):
+    def connection_checker(self):
         if not self.connected:
             return
 
         if int(time()) > (self.lastPing + 400):
             print("Connection {} to Twitch not responding, reconnecting...".format(self.TwitchLogin))
             self.connected = False
-            self.Disconnect()
+            self.disconnect()
             return
 
-        self.conCheckTimer = Timer(30, self.ConnectionChecker)
+        self.conCheckTimer = Timer(30, self.connection_checker)
         self.conCheckTimer.start()
 
     # ---------------------------
-    #   LinkTwitch
+    #   link_account
     # ---------------------------
-    def LinkAccount(self, account):
+    def link_account(self, account):
         self.linkTwitch = account
 
     # ---------------------------
-    #   Send
+    #   send
     # ---------------------------
-    def Send(self, message):
+    def send(self, message):
         # Send over linked account in set
         if self.linkTwitch:
-            self.linkTwitch.Send(message)
+            self.linkTwitch.send(message)
 
         # Do nothing if not connected
         if not self.connected:
@@ -143,18 +269,18 @@ class Twitch:
     # ---------------------------
     #   Connection
     # ---------------------------
-    def Connection(self):
+    def connection(self):
         # Set login
         if self.bot:
-            TwitchLogin = self.settings.TwitchBotChannel
-            TwitchOAUTH = self.settings.TwitchBotOAUTH
+            twitch_login = self.settings.TwitchBotChannel
+            twitch_oauth = self.settings.TwitchBotOAUTH
         else:
-            TwitchLogin = self.settings.TwitchChannel
-            TwitchOAUTH = self.settings.TwitchOAUTH
+            twitch_login = self.settings.TwitchChannel
+            twitch_oauth = self.settings.TwitchOAUTH
 
-        self.TwitchLogin = TwitchLogin
+        self.TwitchLogin = twitch_login
 
-        print("Connecting {} to Twitch...".format(TwitchLogin))
+        print("Connecting {} to Twitch...".format(twitch_login))
 
         #
         # Log in
@@ -162,23 +288,23 @@ class Twitch:
         try:
             self.con = socket()
             self.con.connect((self.host, self.port))
-            self.con.send(bytes("PASS %s\r\n" % TwitchOAUTH, self.chrset))  # www.twitchapps.com/tmi/ will help to retrieve the required authkey
-            self.con.send(bytes("NICK %s\r\n" % TwitchLogin, self.chrset))
+            self.con.send(bytes("PASS %s\r\n" % twitch_oauth, self.chrset))
+            self.con.send(bytes("NICK %s\r\n" % twitch_login, self.chrset))
             self.con.send(bytes("JOIN #%s\r\n" % self.settings.TwitchChannel, self.chrset))
             if not self.bot:
                 self.con.send(bytes("CAP REQ :twitch.tv/tags twitch.tv/commands\r\n", self.chrset))
         except:
-            print("Unable to connect {} to Twitch...".format(TwitchLogin))
+            print("Unable to connect {} to Twitch...".format(twitch_login))
             self.connected = False
             return 1
 
-        print("Connected {} to Twitch...".format(TwitchLogin))
+        print("Connected {} to Twitch...".format(twitch_login))
         self.connected = True
         self.lastPing = int(time())
         if self.conCheckTimer.is_alive():
             self.conCheckTimer.cancel()
 
-        self.conCheckTimer = Timer(30, self.ConnectionChecker)
+        self.conCheckTimer = Timer(30, self.connection_checker)
         self.conCheckTimer.start()
 
         #
@@ -190,24 +316,24 @@ class Twitch:
                 data = data + self.con.recv(1024).decode(self.chrset)
                 data_split = re_split(r"[~\r\n]+", data)
                 data = data_split.pop()
-                Thread(target=self.ProcessData, args=(data_split,)).start()
+                Thread(target=self.process_data, args=(data_split,)).start()
             except socket_error:
-                print("Twitch {} socket error".format(TwitchLogin))
+                print("Twitch {} socket error".format(twitch_login))
                 self.connected = False
-                self.Connect()
+                self.connect()
                 break
             except socket_timeout:
-                print("Twitch {} socket timeout".format(TwitchLogin))
+                print("Twitch {} socket timeout".format(twitch_login))
                 self.connected = False
-                self.Connect()
+                self.connect()
                 break
 
-        self.Disconnect()
+        self.disconnect()
 
     # ---------------------------
     #   ProcessData
     # ---------------------------
-    def ProcessData(self, data):
+    def process_data(self, data):
         for line in data:
             line = line.strip()
             line = line.split(" ")
@@ -226,203 +352,91 @@ class Twitch:
                     continue
                 # print(line)
 
-                jsonData = self.fill_tags()
+                json_data = fill_tags()
                 #
                 # DM
                 #
                 if len(line) >= 2 and line[1] == "PRIVMSG":
-                    jsonData["sender"] = self.get_sender(line[3])
-                    jsonData["message"] = self.get_message(line)
+                    json_data["sender"] = get_sender(line[3])
+                    json_data["message"] = get_message(line)
 
                     # HOST
-                    if jsonData["message"].find(self.settings.HostMessage) == 0:
-                        jsonData["custom-tag"] = "host"
-                        self.woofer.process_json(jsonData)
+                    if json_data["message"].find(self.settings.HostMessage) == 0:
+                        json_data["custom-tag"] = "host"
+                        self.woofer.process_json(json_data)
 
                     # AUTOHOST
-                    elif jsonData["message"].find(self.settings.AutohostMessage) == 0:
-                        jsonData["custom-tag"] = "autohost"
-                        self.woofer.process_json(jsonData)
+                    elif json_data["message"].find(self.settings.AutohostMessage) == 0:
+                        json_data["custom-tag"] = "autohost"
+                        self.woofer.process_json(json_data)
 
                 #
                 # CHAT
                 #
                 elif len(line) >= 3 and line[2] == "PRIVMSG":
-                    jsonData = self.parse_tags(jsonData, line[0])
-                    jsonData["sender"] = self.get_sender(line[1])
-                    jsonData["message"] = self.get_message(line)
-                    # jsonData["message"] = self.remove_emotes(jsonData["message"], jsonData["emotes"])
+                    json_data = parse_tags(json_data, line[0])
+                    json_data["sender"] = get_sender(line[1])
+                    json_data["message"] = get_message(line)
+                    # json_data["message"] = self.remove_emotes(json_data["message"], json_data["emotes"])
 
                     # COMMAND
-                    if jsonData["message"].find("!") == 0:
-                        val = jsonData["message"].split(" ", 1)
-                        jsonData["command"] = val[0]
+                    if json_data["message"].find("!") == 0:
+                        val = json_data["message"].split(" ", 1)
+                        json_data["command"] = val[0]
                         if len(val) >= 2:
-                            jsonData["command_parameter"] = val[1]
-                        jsonData["custom-tag"] = "command"
-                        self.woofer.process_json(jsonData)
+                            json_data["command_parameter"] = val[1]
+                        json_data["custom-tag"] = "command"
+                        self.woofer.process_json(json_data)
                     else:
                         # NORMAL MESSAGE
-                        jsonData["custom-tag"] = "message"
-                        self.woofer.process_json(jsonData)
+                        json_data["custom-tag"] = "message"
+                        self.woofer.process_json(json_data)
 
                 #
                 # USERNOTICE
                 #
                 elif len(line) >= 3 and line[2] == "USERNOTICE":
                     if line[0].find("@") == 0:
-                        jsonData = self.parse_tags(jsonData, line[0])
+                        json_data = parse_tags(json_data, line[0])
 
                     # RAID
-                    if jsonData["msg-id"] == "raid":
-                        jsonData["custom-tag"] = "raid"
-                        jsonData["viewers"] = ""
-                        if "msg-param-viewerCount" in jsonData:
-                            jsonData["viewers"] = jsonData["msg-param-viewerCount"]
-                        self.woofer.process_json(jsonData)
+                    if json_data["msg-id"] == "raid":
+                        json_data["custom-tag"] = "raid"
+                        json_data["viewers"] = ""
+                        if "msg-param-viewerCount" in json_data:
+                            json_data["viewers"] = json_data["msg-param-viewerCount"]
+                        self.woofer.process_json(json_data)
 
                     # SUB
-                    elif jsonData["msg-id"] in ["sub", "resub", "subgift", "anonsubgift"]:
-                        jsonData["custom-tag"] = jsonData["msg-id"]
+                    elif json_data["msg-id"] in ["sub", "resub", "subgift", "anonsubgift"]:
+                        json_data["custom-tag"] = json_data["msg-id"]
 
-                        if jsonData["msg-param-sub-plan"] == "Prime":
-                            jsonData["sub_tier"] = "Prime"
-                        elif jsonData["msg-param-sub-plan"] == "1000":
-                            jsonData["sub_tier"] = "Tier 1"
-                        elif jsonData["msg-param-sub-plan"] == "2000":
-                            jsonData["sub_tier"] = "Tier 2"
-                        elif jsonData["msg-param-sub-plan"] == "3000":
-                            jsonData["sub_tier"] = "Tier 3"
+                        if json_data["msg-param-sub-plan"] == "Prime":
+                            json_data["sub_tier"] = "Prime"
+                        elif json_data["msg-param-sub-plan"] == "1000":
+                            json_data["sub_tier"] = "Tier 1"
+                        elif json_data["msg-param-sub-plan"] == "2000":
+                            json_data["sub_tier"] = "Tier 2"
+                        elif json_data["msg-param-sub-plan"] == "3000":
+                            json_data["sub_tier"] = "Tier 3"
 
-                        if jsonData["msg-id"] in ["sub", "resub"]:
-                            if jsonData["msg-param-cumulative-months"]:
-                                jsonData["months"] = jsonData["msg-param-cumulative-months"]
-                            if jsonData["msg-param-streak-months"]:
-                                jsonData["months_streak"] = jsonData["msg-param-streak-months"]
+                        if json_data["msg-id"] in ["sub", "resub"]:
+                            if json_data["msg-param-cumulative-months"]:
+                                json_data["months"] = json_data["msg-param-cumulative-months"]
+                            if json_data["msg-param-streak-months"]:
+                                json_data["months_streak"] = json_data["msg-param-streak-months"]
 
-                        self.woofer.process_json(jsonData)
+                        self.woofer.process_json(json_data)
 
                     # MASS SUBGIFT
-                    elif jsonData["msg-id"] == "submysterygift":
-                        jsonData["custom-tag"] = "submysterygift"
+                    elif json_data["msg-id"] == "submysterygift":
+                        json_data["custom-tag"] = "submysterygift"
                         # TODO: Mass gift subs
-                        # self.woofer.ProcessJson(jsonData)
+                        # self.woofer.ProcessJson(json_data)
 
                     # RITUAL NEW CHATTER
-                    elif jsonData["msg-id"] == "ritual" and jsonData["msg-param-ritual-name"] == "new_chatter":
-                        jsonData["sender"] = jsonData["display-name"]
-                        jsonData["message"] = self.get_message(line)
-                        jsonData["custom-tag"] = "new_chatter"
-                        self.woofer.process_json(jsonData)
-
-    # ---------------------------
-    #   fill_tags
-    # ---------------------------
-    @classmethod
-    def fill_tags(self):
-        result = {
-            "vip": "0",
-            "moderator": "0",
-            "subscriber": "0",
-            "broadcaster": "0",
-            "bits_total": "0",
-            "bits": "0",
-            "sub_tier": "0",
-            "months": "0",
-            "months_streak": "0",
-            "display-name": "",
-            "msg-id": "",  # Valid values: sub, resub, subgift, anonsubgift, raid, ritual.
-            "msg-param-viewerCount": "",  # (Sent only on raid) The number of viewers watching the source channel raiding this channel.
-            "msg-param-recipient-display-name": "",  # (Sent only on subgift, anonsubgift) The display name of the subscription gift recipient.
-            "msg-param-sub-plan": "",  # (Sent only on sub, resub, subgift, anonsubgift) The type of subscription plan being used. Valid values: Prime, 1000, 2000, 3000. 1000, 2000, and 3000 refer to the first, second, and third levels of paid subscriptions, respectively (currently $4.99, $9.99, and $24.99).
-            "msg-param-cumulative-months": "",  # (Sent only on sub, resub) The total number of months the user has subscribed.
-            "msg-param-streak-months": "",  # (Sent only on sub, resub) The number of consecutive months the user has subscribed. This is 0 if msg-param-should-share-streak is 0.
-            "msg-param-ritual-name": "",  # (Sent only on ritual) The name of the ritual this notice is for. Valid value: new_chatter.
-            "login": "",
-            "emotes": "",  # <emote ID>:<first index>-<last index>,<another first index>-<another last index>/<another emote ID>:<first index>-<last index>...
-            "command": "",
-            "command_parameter": "",
-            "sender": "",
-            "message": "",
-            "custom-tag": "",
-            "custom-reward-id": ""
-        }
-        return result
-
-    # ---------------------------
-    #   parse_tags
-    # ---------------------------
-    @classmethod
-    def parse_tags(self, jsonData, msg):
-        tags = msg.split(";")
-        for tag in tags:
-            tag = tag.split("=")
-            # "@badges": "", # Comma-separated list of chat badges and the version of each badge (each in the format <badge>/<version>. Valid badge values: admin, bits, broadcaster, global_mod, moderator, subscriber, vip, staff, turbo.
-            if tag[0] == "badges":
-                badges = tag[1].split(",")
-                for badge in badges:
-                    badge = badge.split("/")
-                    if badge[0] in ["broadcaster", "moderator", "subscriber", "vip"]:
-                        jsonData[badge[0]] = badge[1]
-
-                    if badge[0] == "bits":
-                        jsonData["bits_total"] = badge[1]
-            else:
-                if tag[0] in jsonData:
-                    jsonData[tag[0]] = tag[1]
-
-        if jsonData["broadcaster"] == 1:
-            jsonData["moderator"] = "1"
-
-        return jsonData
-
-    # ---------------------------
-    #   get_sender
-    # ---------------------------
-    @classmethod
-    def get_sender(self, msg):
-        result = ""
-        for char in msg:
-            if char == "!":
-                break
-
-            if char != ":":
-                result += char
-
-        return result
-
-    # ---------------------------
-    #   get_message
-    # ---------------------------
-    @classmethod
-    def get_message(self, msg):
-        result = ""
-        i = 4
-        length = len(msg)
-        while i < length:
-            result += msg[i] + " "
-            i += 1
-
-        result = result.lstrip(":")
-        result = result.strip()
-        return result
-
-    # ---------------------------
-    #   remove_emotes
-    # ---------------------------
-    @classmethod
-    def remove_emotes(self, msg, emotes):
-        if not emotes:
-            return msg
-
-        emotes = emotes.replace("/", ",")
-        emotes = emotes.split(",")
-        for emote in reversed(emotes):
-            if emote.find(":") >= 0:
-                emote = emote.split(":")[1]
-
-            emote = emote.split("-")
-            msg = msg[:int(emote[0])] + msg[int(emote[1]) + 1:]
-
-        # print(msg)
-        return msg
+                    elif json_data["msg-id"] == "ritual" and json_data["msg-param-ritual-name"] == "new_chatter":
+                        json_data["sender"] = json_data["display-name"]
+                        json_data["message"] = get_message(line)
+                        json_data["custom-tag"] = "new_chatter"
+                        self.woofer.process_json(json_data)

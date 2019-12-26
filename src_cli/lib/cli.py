@@ -23,7 +23,7 @@ class Cli:
         self.twitch = twitch
         self.chatbot = chatbot
 
-    def Start(self):
+    def start(self):
         print("Starting cli...")
         while True:
             cmd = input("")
@@ -185,8 +185,8 @@ class Cli:
             #
             elif cmd == "r":
                 if self.twitch.connected:
-                    self.twitch.Disconnect()
+                    self.twitch.disconnect()
                 if self.chatbot.connected:
-                    self.chatbot.Disconnect()
+                    self.chatbot.disconnect()
 
             # print(cmd)

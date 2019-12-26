@@ -160,7 +160,7 @@ class Woofer:
         #
         # Send to overlay, retry later if overlay buffer is full
         #
-        if self.overlay.Send("EVENT_WOOFERBOT", json_data) == 1:
+        if self.overlay.send("EVENT_WOOFERBOT", json_data) == 1:
             Timer(1, self.woofer_queue, args=(queue_id, json_data)).start()
             return
 
@@ -276,7 +276,7 @@ class Woofer:
         json_data = {
             "mascot": mascot_idle_image
         }
-        if self.overlay.Send("EVENT_WOOFERBOT", json_data) == 1:
+        if self.overlay.send("EVENT_WOOFERBOT", json_data) == 1:
             Timer(1, self.woofer_queue_default, args=(queue_id, old_json_data)).start()
             return
 
@@ -810,7 +810,7 @@ class Woofer:
         #
         # Get user info
         #
-        json_result = twitch_get_user(self.settings.twitchClientID, json_data["command_parameter"])
+        json_result = twitch_get_user(self.settings.twitch_client_id, json_data["command_parameter"])
         if not json_result:
             return
 
@@ -823,7 +823,7 @@ class Woofer:
         #
         # Get channel last game
         #
-        activity = twitch_get_last_activity(self.settings.twitchClientID, json_result["_id"])
+        activity = twitch_get_last_activity(self.settings.twitch_client_id, json_result["_id"])
         activity_text = ""
         if activity:
             if activity in self.settings.Activities:

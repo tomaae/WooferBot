@@ -26,7 +26,51 @@ from lib.defaults import *
 #   Settings Handling
 # ---------------------------
 class Settings:
-    def __init__(self, pathRoot=None):
+    def __init__(self, path_root=None):
+        self.TwitchChannel = ""
+        self.TwitchOAUTH = ""
+        self.TwitchBotChannel = ""
+        self.TwitchBotOAUTH = ""
+        self.UseChatbot = False
+        self.CurrentMascot = ""
+        self.AlignMascot = ""
+        self.HostMessage = ""
+        self.AutohostMessage = ""
+        self.FollowMessage = ""
+        self.MinBits = 0
+        self.AutoShoutout = False
+        self.AutoShoutoutTime = 10
+        self.ShoutoutAccess = "mod"
+        self.GlobalVolume = 0.2
+        self.NanoleafEnabled = False
+        self.NanoleafIP = ""
+        self.NanoleafToken = ""
+        self.HueEnabled = False
+        self.HueIP = ""
+        self.HueToken = ""
+        self.YeelightEnabled = False
+
+        self.Styles = {}
+        self.Activities = {}
+        self.Enabled = {}
+        self.Commands = {}
+        self.Messages = {}
+        self.PoseMapping = {}
+        self.Bots = []
+        self.ScheduledMessages = []
+        self.CustomBits = []
+        self.CustomSubs = []
+        self.Watchdog = []
+        self.scheduleTable = {}
+        self.scheduleLines = 0
+
+        self.mascotImages = {}
+        self.mascotAudio = {}
+        self.mascotStyles = {}
+
+        self.twitch_client_id = "zpm94cuvrntu030mauvxvz9cv2ldja"
+        self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot",
+                           "moobot"]
         self.encoding = "utf-8-sig"
         # Detect OS
         if platform.startswith('win'):
@@ -43,7 +87,7 @@ class Settings:
             exit(1)
 
         # Check paths
-        self.pathRoot = pathRoot + self.slash
+        self.pathRoot = path_root + self.slash
         self.configFile = self.pathRoot + "settings.json"
         if not path.isdir(self.pathRoot):
             print("Working directory not detected.")
@@ -55,13 +99,13 @@ class Settings:
         if not path.isfile(self.configFile):
             print("Configuration file is missing, recreating with defaults.")
 
-        self.Reload()
-        self.ReloadMascot()
+        self.reload()
+        self.reload_mascot()
 
     # ---------------------------
-    #   ReloadMascot
+    #   reload_mascot
     # ---------------------------
-    def ReloadMascot(self):
+    def reload_mascot(self):
         print("Loading mascot settings...")
         self.mascotImages = {}
         self.mascotAudio = {}
@@ -70,7 +114,7 @@ class Settings:
         # Load mascot config
         try:
             with open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json",
-                             encoding=self.encoding, mode="r") as f:
+                      encoding=self.encoding, mode="r") as f:
                 data = json_load(f, encoding=self.encoding)
                 for key, value in data.items():
                     self.__dict__[key] = value
@@ -84,9 +128,12 @@ class Settings:
                 print("Mascot Image variable is missing for action: {}".format(action))
                 exit(1)
 
-            self.mascotImages[action][
-                'Image'] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash + \
-                           self.mascotImages[action]['Image']
+            self.mascotImages[action]['Image'] = "{}mascots{}{}{}images{}{}".format(self.pathRoot,
+                                                                                    self.slash,
+                                                                                    self.CurrentMascot,
+                                                                                    self.slash,
+                                                                                    self.slash,
+                                                                                    self.mascotImages[action]['Image'])
 
         # Check mascot audio
         for action in self.mascotAudio:
@@ -95,60 +142,36 @@ class Settings:
                 exit(1)
 
             for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-                self.mascotAudio[action]['Audio'][
-                    idx] = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash + \
-                           self.mascotAudio[action]['Audio'][idx]
+                self.mascotAudio[action]['Audio'][idx] = "{}mascots{}{}{}audio{}{}".format(self.pathRoot,
+                                                                                           self.slash,
+                                                                                           self.CurrentMascot,
+                                                                                           self.slash,
+                                                                                           self.slash,
+                                                                                           self.mascotAudio[action]['Audio'][idx])
 
         CheckSettingsDependencies(self)
 
     # ---------------------------
     #   Reload
     # ---------------------------
-    def Reload(self):
+    def reload(self):
         print("Loading settings...")
-        self.TwitchChannel = ""
-        self.TwitchOAUTH = ""
-        self.TwitchBotChannel = ""
-        self.TwitchBotOAUTH = ""
-        self.UseChatbot = False
-        self.twitchClientID = "zpm94cuvrntu030mauvxvz9cv2ldja"
+        self.set_variables_defaults(self, defaults_root)
+
         self.Styles = {}
-        self.Messages = {}
         self.Activities = {}
         self.Enabled = {}
+        self.Commands = {}
+        self.Messages = {}
         self.PoseMapping = {}
-        self.CurrentMascot = ""
-        self.AlignMascot = ""
-        self.pathImages = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "images" + self.slash
-        self.pathAudio = self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "audio" + self.slash
-        self.HostMessage = ""
-        self.AutohostMessage = ""
-        self.FollowMessage = ""
-        self.GlobalVolume = 0.2
-        self.MinBits = 0
-        self.AutoShoutout = False
-        self.AutoShoutoutTime = 10
-        self.ShoutoutAccess = "mod"
         self.Bots = []
-        self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot",
-                           "moobot"]
         self.ScheduledMessages = []
-        self.scheduleTable = {}
-        self.scheduleLines = 0
         self.CustomBits = []
         self.CustomSubs = []
-        self.Commands = {}
         self.Watchdog = []
 
-        self.NanoleafEnabled = False
-        self.NanoleafIP = ""
-        self.NanoleafToken = ""
-
-        self.HueEnabled = False
-        self.HueIP = ""
-        self.HueToken = ""
-
-        self.YeelightEnabled = False
+        self.scheduleTable = {}
+        self.scheduleLines = 0
 
         #
         # Load config
@@ -164,7 +187,7 @@ class Settings:
                 print("Unable to load settings.json")
                 exit(1)
 
-            self.UpgradeSettingsFile()
+            self.upgrade_settings_file()
 
         #
         # CONVERT
@@ -184,20 +207,31 @@ class Settings:
         for action in self.ScheduledMessages:
             self.scheduleTable[action['Name']] = int(time())
 
-        self.AutofillSettings()
+        self.autofill_settings()
 
         if not path.isfile(self.configFile):
-            self.Save()
+            self.save()
             print("Default configuration file has been created.")
             exit(0)
 
-        self.VerifyLoginInformation()
+        self.verify_login_information()
 
     # ---------------------------
-    #   SetVariables
+    #   set_variables_defaults
     # ---------------------------
     @classmethod
-    def SetVariables(self, cls, defaults_list):
+    def set_variables_defaults(self, cls, defaults_list):
+        for var in defaults_list:
+            if type(cls) == dict:
+                cls[var] = get_var_default(defaults_list[var])
+            else:
+                setattr(cls, var, get_var_default(defaults_list[var]))
+
+    # ---------------------------
+    #   set_variables
+    # ---------------------------
+    @classmethod
+    def set_variables(self, cls, defaults_list):
         for var in defaults_list:
             var_found = True
             try:
@@ -222,23 +256,23 @@ class Settings:
     # ---------------------------
     #   AutofillSettings
     # ---------------------------
-    def AutofillSettings(self):
-        self.SetVariables(self, defaults_root)
-        self.SetVariables(self.Enabled, defaults_enabled)
-        self.SetVariables(self.Styles, defaults_styles)
-        self.SetVariables(self.Messages, defaults_messages)
-        self.SetVariables(self.Activities, defaults_activities)
+    def autofill_settings(self):
+        self.set_variables(self, defaults_root)
+        self.set_variables(self.Enabled, defaults_enabled)
+        self.set_variables(self.Styles, defaults_styles)
+        self.set_variables(self.Messages, defaults_messages)
+        self.set_variables(self.Activities, defaults_activities)
         for action in self.ScheduledMessages:
-            self.SetVariables(action, defaults_scheduledmessages)
+            self.set_variables(action, defaults_scheduledmessages)
 
         for action in self.Commands:
-            self.SetVariables(self.Commands[action], defaults_commands)
+            self.set_variables(self.Commands[action], defaults_commands)
 
         for action in self.CustomBits:
-            self.SetVariables(action, defaults_custombits)
+            self.set_variables(action, defaults_custombits)
 
         for action in self.CustomSubs:
-            self.SetVariables(action, defaults_customsubs)
+            self.set_variables(action, defaults_customsubs)
 
         if "DEFAULT" not in self.PoseMapping:
             self.PoseMapping['DEFAULT'] = {}
@@ -248,16 +282,16 @@ class Settings:
         for action in self.PoseMapping:
             if 'Hue' in self.PoseMapping[action]:
                 for light in self.PoseMapping[action]['Hue']:
-                    self.SetVariables(self.PoseMapping[action]['Hue'][light], defaults_posemapping_hue)
+                    self.set_variables(self.PoseMapping[action]['Hue'][light], defaults_posemapping_hue)
 
             if 'Yeelight' in self.PoseMapping[action]:
                 for light in self.PoseMapping[action]['Yeelight']:
-                    self.SetVariables(self.PoseMapping[action]['Yeelight'][light], defaults_posemapping_yeelight)
+                    self.set_variables(self.PoseMapping[action]['Yeelight'][light], defaults_posemapping_yeelight)
 
     # ---------------------------
     #   Save
     # ---------------------------
-    def Save(self):
+    def save(self):
         # Export config
         tmp = {}
         try:
@@ -287,7 +321,7 @@ class Settings:
     # ---------------------------
     #   VerifyLoginInformation
     # ---------------------------
-    def VerifyLoginInformation(self):
+    def verify_login_information(self):
         code = 0
         # Check user name
         if len(self.TwitchChannel) < 1:
@@ -305,7 +339,7 @@ class Settings:
             code = 1
 
         # Check twitch client ID
-        if len(self.twitchClientID) < 1:
+        if len(self.twitch_client_id) < 1:
             print("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
             code = 1
 
@@ -315,7 +349,7 @@ class Settings:
     # ---------------------------
     #   UpgradeSettingsFile
     # ---------------------------
-    def UpgradeSettingsFile(self):
+    def upgrade_settings_file(self):
         #
         # CurrectMascot fix v1.1
         #

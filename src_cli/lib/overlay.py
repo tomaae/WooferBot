@@ -41,9 +41,9 @@ class Overlay:
     # ---------------------------
     #   Start
     # ---------------------------
-    def Start(self):
+    def start(self):
         print("Starting overlay server...")
-        self.serverSocket = serve(self.Connection, self.bindIP, self.bindPort)
+        self.serverSocket = serve(self.connection, self.bindIP, self.bindPort)
         print("Overlay server waiting for connection...")
         self.loop = asyncio_get_event_loop()
         self.loop.run_until_complete(self.serverSocket)
@@ -54,54 +54,54 @@ class Overlay:
     # ---------------------------
     #   Stop
     # ---------------------------
-    def Stop(self):
+    def stop(self):
         self.loop.stop()
 
     # ---------------------------
     #   Send
     # ---------------------------
-    def Send(self, event, jsonData, init=0):
+    def send(self, event, json_data, init=0):
         if self.sendQueue:
             return 1
 
         # Check mascot image
-        if 'mascot' in jsonData:
-            if path.isfile(jsonData["mascot"]):
-                jsonData["mascot"] = f"file:///{jsonData['mascot']}"
+        if 'mascot' in json_data:
+            if path.isfile(json_data["mascot"]):
+                json_data["mascot"] = f"file:///{json_data['mascot']}"
             else:
-                jsonData["mascot"] = ""
+                json_data["mascot"] = ""
 
         # Check audio
-        if 'audio' in jsonData:
-            if path.isfile(jsonData["audio"]):
-                jsonData["audio"] = f"file:///{jsonData['audio']}"
+        if 'audio' in json_data:
+            if path.isfile(json_data["audio"]):
+                json_data["audio"] = f"file:///{json_data['audio']}"
             else:
-                jsonData["audio"] = ""
+                json_data["audio"] = ""
 
         # Check speech bubble image
-        if 'image' in jsonData:
-            if path.isfile(jsonData["image"]):
-                jsonData["image"] = f"file:///{jsonData['image']}"
+        if 'image' in json_data:
+            if path.isfile(json_data["image"]):
+                json_data["image"] = f"file:///{json_data['image']}"
             else:
-                if jsonData["image"].find('https://') != 0:
-                    jsonData["image"] = ""
+                if json_data["image"].find('https://') != 0:
+                    json_data["image"] = ""
 
-        jsonDataRaw = {
+        json_data_raw = {
             "event": event,
-            "data": jsonData
+            "data": json_data
         }
 
         # Append styles on overlay initialization
         if init == 1:
-            jsonDataRaw["styles"] = self.get_styles()
+            json_data_raw["styles"] = self.get_styles()
 
-        self.sendQueue = jsonDataRaw
+        self.sendQueue = json_data_raw
         return 0
 
     # ---------------------------
     #   Connection
     # ---------------------------
-    async def Connection(self, websocket, _):
+    async def connection(self, websocket, _):
         print("Initializing overlay...")
         self.active = self.active + 1
 
@@ -110,17 +110,18 @@ class Overlay:
         #
         if not self.sendQueue:
             # Get default mascot image
-            mascotIdleImage = self.settings.mascotImages['Idle']['Image']
-            if not path.isfile(mascotIdleImage):
-                mascotIdleImage = ""
+            mascot_idle_image = self.settings.mascotImages['Idle']['Image']
+            if not path.isfile(mascot_idle_image):
+                mascot_idle_image = ""
 
             # Load Idle pose mapping if available
             if 'Idle' in self.settings.PoseMapping:
                 # Reset Image to Idle
-                if 'Image' in self.settings.PoseMapping['Idle'] and self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
+                if 'Image' in self.settings.PoseMapping['Idle'] and \
+                        self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
                     tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
                     if path.isfile(tmp):
-                        mascotIdleImage = tmp
+                        mascot_idle_image = tmp
 
                 # Reset Nanoleaf to Idle
                 if 'Nanoleaf' in self.settings.PoseMapping['Idle']:
@@ -129,88 +130,88 @@ class Overlay:
                 # Reset Hue to Idle
                 if 'Hue' in self.settings.PoseMapping['Idle']:
                     for device in self.settings.PoseMapping['Idle']['Hue']:
-                        if 'Brightness' in self.settings.PoseMapping['Idle']['Hue'][device] and \
-                                self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'] >= 1 and 'Color' in \
-                                self.settings.PoseMapping['Idle']['Hue'][device] and len(
-                                self.settings.PoseMapping['Idle']['Hue'][device]['Color']) >= 6 and len(
-                                self.settings.PoseMapping['Idle']['Hue'][device]['Color']) <= 7:
+                        pose_light = self.settings.PoseMapping['Idle']['Hue'][device]
+                        if 'Brightness' in pose_light and \
+                                pose_light['Brightness'] >= 1 and \
+                                'Color' in pose_light and 6 <= len(pose_light['Color']) <= 7:
                             self.hue.state(device=device,
-                                           bri=self.settings.PoseMapping['Idle']['Hue'][device]['Brightness'],
-                                           col=self.settings.PoseMapping['Idle']['Hue'][device]['Color'])
+                                           bri=pose_light['Brightness'],
+                                           col=pose_light['Color'])
 
                 # Reset Yeelight to Idle
                 if 'Yeelight' in self.settings.PoseMapping['Idle']:
                     for device in self.settings.PoseMapping['Idle']['Yeelight']:
-                        if 'Brightness' in self.settings.PoseMapping['Idle']['Yeelight'][device] and \
-                                self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'] >= 1 and 'Color' in \
-                                self.settings.PoseMapping['Idle']['Yeelight'][device] and len(
-                                self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) >= 6 and len(
-                                self.settings.PoseMapping['Idle']['Yeelight'][device]['Color']) <= 7 and isinstance(
-                                self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'], int):
+                        pose_light = self.settings.PoseMapping['Idle']['Yeelight'][device]
+                        if 'Brightness' in pose_light and \
+                                pose_light['Brightness'] >= 1 and 'Color' in \
+                                pose_light and 6 <= len(pose_light['Color']) <= 7 and \
+                                isinstance(pose_light['TransitionTime'], int):
                             self.yeelight.state(device=device,
-                                                brightness=self.settings.PoseMapping['Idle']['Yeelight'][device]['Brightness'],
-                                                color=self.settings.PoseMapping['Idle']['Yeelight'][device]['Color'],
-                                                transition=self.settings.PoseMapping['Idle']['Yeelight'][device]['Transition'],
-                                                transitionTime=self.settings.PoseMapping['Idle']['Yeelight'][device]['TransitionTime'])
+                                                brightness=pose_light['Brightness'],
+                                                color=pose_light['Color'],
+                                                transition=pose_light['Transition'],
+                                                transitionTime=pose_light['TransitionTime'])
 
             # Send Idle payload
-            jsonData = {
-                "mascot": mascotIdleImage
+            json_data = {
+                "mascot": mascot_idle_image
             }
-            self.Send(event="EVENT_WOOFERBOT", jsonData=jsonData, init=1)
+            self.send(event="EVENT_WOOFERBOT", json_data=json_data, init=1)
 
         #
         # Overlay loop
         #
-        pingSend = 0
+        ping_send = 0
         while True:
-            pingSend = pingSend + 1
+            ping_send = ping_send + 1
             # Queue is not empty, process
             if self.sendQueue:
-                jsonDataRaw = self.sendQueue
+                json_data_raw = self.sendQueue
                 try:
                     # Process message
-                    if 'message' in jsonDataRaw['data']:
+                    if 'message' in json_data_raw['data']:
                         # Process inline randomizer
-                        while jsonDataRaw['data']['message'].find("[") >= 0:
-                            tmp = jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("[") + 1,
-                                                                       jsonDataRaw['data']['message'].find("]"))]
-                            jsonDataRaw['data']['message'] = jsonDataRaw['data']['message'][slice(0, jsonDataRaw['data']['message'].find("["))] + SystemRandom().choice(tmp.split(";")) + jsonDataRaw['data']['message'][slice(jsonDataRaw['data']['message'].find("]") + 1, 9999)]
+                        while json_data_raw['data']['message'].find("[") >= 0:
+                            tmp = json_data_raw['data']['message'][slice(json_data_raw['data']['message'].find("[") + 1,
+                                                                         json_data_raw['data']['message'].find("]"))]
+                            json_data_raw['data']['message'] = json_data_raw['data']['message'][slice(0, json_data_raw['data']['message'].find("["))] + \
+                                                               SystemRandom().choice(tmp.split(";")) + \
+                                                               json_data_raw['data']['message'][slice(json_data_raw['data']['message'].find("]") + 1, 9999)]
 
-                        chatbotMsg = jsonDataRaw['data']['message']
+                        chatbot_msg = json_data_raw['data']['message']
                         # Process substrings for chatbot
-                        if chatbotMsg.find("{") >= 0:
-                            while chatbotMsg.find("{") >= 0:
-                                tmp = chatbotMsg[slice(chatbotMsg.find("{") + 1, chatbotMsg.find("}"))]
+                        if chatbot_msg.find("{") >= 0:
+                            while chatbot_msg.find("{") >= 0:
+                                tmp = chatbot_msg[slice(chatbot_msg.find("{") + 1, chatbot_msg.find("}"))]
                                 tmp2 = ""
-                                if tmp in jsonDataRaw['data']:
-                                    tmp2 = jsonDataRaw['data'][tmp]
+                                if tmp in json_data_raw['data']:
+                                    tmp2 = json_data_raw['data'][tmp]
 
-                                chatbotMsg = chatbotMsg[slice(0, chatbotMsg.find("{"))] + tmp2 + chatbotMsg[
-                                    slice(chatbotMsg.find("}") + 1, 9999)]
+                                chatbot_msg = chatbot_msg[slice(0, chatbot_msg.find("{"))] + tmp2 + chatbot_msg[
+                                    slice(chatbot_msg.find("}") + 1, 9999)]
 
                         # Send message to chat
-                        self.chatbot.Send(chatbotMsg)
+                        self.chatbot.send(chatbot_msg)
 
                     # Send message to overlay
-                    await websocket.send(json_dumps(jsonDataRaw))
+                    await websocket.send(json_dumps(json_data_raw))
                 except websockets_exceptions.ConnectionClosed:
                     # Connection failed
                     print("Connection closed by overlay...")
                     self.active = self.active - 1
                     break
                 else:
-                    pingSend = 0
+                    ping_send = 0
                     self.sendQueue = None
             # Queue empty, send keepalive
             else:
-                if pingSend >= 40:
-                    jsonDataRaw = json_dumps({
+                if ping_send >= 40:
+                    json_data_raw = json_dumps({
                         "event": "EVENT_PING",
                         "data": ""
                     })
                     try:
-                        await websocket.send(jsonDataRaw)
+                        await websocket.send(json_data_raw)
                     except websockets_exceptions.ConnectionClosed:
                         # Connection failed
                         self.active = self.active - 1
@@ -218,7 +219,7 @@ class Overlay:
                             print("Connection closed by overlay...")
                         break
                     else:
-                        pingSend = 0
+                        ping_send = 0
 
             await asyncio_sleep(0.5)
 
@@ -256,9 +257,9 @@ class Overlay:
             css[".message::before|display"] = "none"
             css[".message div:last-child|display"] = "none"
 
-        HighlightTextStrokeColor = ""
-        HighlightTextShadowColor = ""
-        HighlightTextShadowOffset = ""
+        highlight_text_stroke_color = ""
+        highlight_text_shadow_color = ""
+        highlight_text_shadow_offset = ""
         for style in self.settings.Styles:
             val = self.settings.Styles[style]
 
@@ -285,7 +286,10 @@ class Overlay:
                     css[".message::after|border-right-color"] = "transparent"  # Not working
                     css[".message::before|border-right-color"] = "transparent"  # Not working
                 else:
-                    css[".message|box-shadow"] = "-1px -1px 0 " + val + ", 1px -1px 0 " + val + ", -1px 1px 0 " + val + ", 1px 1px 0 " + val
+                    css[".message|box-shadow"] = "-1px -1px 0 " + val + \
+                                                 ", 1px -1px 0 " + val + \
+                                                 ", -1px 1px 0 " + val + \
+                                                 ", 1px 1px 0 " + val
                     css[".message::after|border-right-color"] = val  # Not working
                     css[".message::before|border-right-color"] = val  # Not working
 
@@ -311,18 +315,31 @@ class Overlay:
                 css[".user|color"] = val
 
             if style == "HighlightTextStrokeColor":
-                HighlightTextStrokeColor = val
+                highlight_text_stroke_color = val
 
             if style == "HighlightTextShadowColor":
-                HighlightTextShadowColor = val
+                highlight_text_shadow_color = val
 
             if style == "HighlightTextShadowOffset":
-                HighlightTextShadowOffset = val
+                highlight_text_shadow_offset = val
 
-            if HighlightTextStrokeColor != "" and HighlightTextShadowColor != "" and HighlightTextShadowOffset != "":
-                HighlightTextShadowOffset = str(HighlightTextShadowOffset)
-                if HighlightTextShadowOffset != "0":
-                    HighlightTextShadowOffset = HighlightTextShadowOffset + "px"
-                css[".user|text-shadow"] = "-1px -1px 0 " + HighlightTextStrokeColor + ", 1px -1px 0 " + HighlightTextStrokeColor + ", -1px 0 0 " + HighlightTextStrokeColor + ", 1px 0 0 " + HighlightTextStrokeColor + ", -1px 1px 0 " + HighlightTextStrokeColor + ", 0 -1px 0 " + HighlightTextStrokeColor + ", 0 1px 0 " + HighlightTextStrokeColor + ", 1px 1px 0 " + HighlightTextStrokeColor + ", " + HighlightTextShadowOffset + " " + HighlightTextShadowOffset + " " + HighlightTextShadowOffset + " " + HighlightTextShadowColor
+            if highlight_text_stroke_color != "" and \
+                    highlight_text_shadow_color != "" and \
+                    highlight_text_shadow_offset != "":
+                highlight_text_shadow_offset = str(highlight_text_shadow_offset)
+                if highlight_text_shadow_offset != "0":
+                    highlight_text_shadow_offset = highlight_text_shadow_offset + "px"
+                css[".user|text-shadow"] = "-1px -1px 0 " + highlight_text_stroke_color + \
+                                           ", 1px -1px 0 " + highlight_text_stroke_color + \
+                                           ", -1px 0 0 " + highlight_text_stroke_color + \
+                                           ", 1px 0 0 " + highlight_text_stroke_color + \
+                                           ", -1px 1px 0 " + highlight_text_stroke_color + \
+                                           ", 0 -1px 0 " + highlight_text_stroke_color + \
+                                           ", 0 1px 0 " + highlight_text_stroke_color + \
+                                           ", 1px 1px 0 " + highlight_text_stroke_color + \
+                                           ", " + highlight_text_shadow_offset + \
+                                           " " + highlight_text_shadow_offset + \
+                                           " " + highlight_text_shadow_offset + \
+                                           " " + highlight_text_shadow_color
 
         return css
