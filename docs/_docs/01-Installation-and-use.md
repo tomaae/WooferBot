@@ -59,6 +59,6 @@ Add <span class="icon file">overlay.html</span> as <a class="icon website" href=
 <span class="icon idea">Note: This approach will prevent using multiple browser sources, which would require more system resources and cause possible conflicts or missed notifications.</span>
 
 ### Starting WooferBot
-To start WooferBot execute <span class="icon file">wooferbot.cmd</span>.
+To start WooferBot execute <span class="icon file">wooferbot_cli.exe</span>.
 
 To customize WooferBot, adjust "settings.json" as needed (see <a class="icon doc" href="{{ site.github.url }}/documentation#basic-configuration">Basic configuration</a> section).
