@@ -17,7 +17,7 @@ tags:
 
 > Version 1.0, October 2019
 
-> Copyright (C) 2019 WooferBot
+> Copyright (C) 2020 WooferBot
 
 > TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
