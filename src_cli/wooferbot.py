@@ -1,7 +1,7 @@
 ##########################################################################
 #
 #    WooferBot, an interactive BrowserSource Bot for streamers
-#    Copyright (C) 2019  Tomaae
+#    Copyright (C) 2020  Tomaae
 #    (https://wooferbot.com/)
 #
 #    This file is part of WooferBot.
@@ -38,8 +38,8 @@ def exit_gracefully(signum=None, frame=None):
 # ---------------------------
 #  Main
 # ---------------------------
-wooferbotVersion = 'v1.3.2'
-print('WooferBot ' + wooferbotVersion + '  Copyright (C) 2019  Tomaae')
+wooferbotVersion = 'v1.4'
+print('WooferBot ' + wooferbotVersion + '  Copyright (C) 2020  Tomaae')
 print('This program comes with ABSOLUTELY NO WARRANTY.')
 print('This is free software, and you are welcome to redistribute it')
 print('under certain conditions.')

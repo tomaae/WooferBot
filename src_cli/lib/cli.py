@@ -1,7 +1,7 @@
 ##########################################################################
 #
 #    WooferBot, an interactive BrowserSource Bot for streamers
-#    Copyright (C) 2019  Tomaae
+#    Copyright (C) 2020  Tomaae
 #    (https://wooferbot.com/)
 #
 #    This file is part of WooferBot.
