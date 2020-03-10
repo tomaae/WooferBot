@@ -651,7 +651,7 @@ class Woofer:
         # Check access rights
         #
         if self.settings.Commands[json_data["command"]]["Access"] != "" and \
-                has_access_rights(json_data, self.settings.Commands[json_data["command"]]["Access"]):
+                not has_access_rights(json_data, self.settings.Commands[json_data["command"]]["Access"]):
             return
 
         #
