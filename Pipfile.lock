@@ -181,12 +181,11 @@
         },
         "yeelight": {
             "hashes": [
-                "sha256:18a4f936116803b8c48ea4f0f0368a6b9915fb5bbee403bf26823f0974a8a681",
-                "sha256:d63f46d338aa5b5b6c6ed9a26d95e887a4d0a124f825e6a1f693d9da294d79d5",
-                "sha256:f8f161b19b5286260e5cd6f307d37614534a9864434fcc5912b2b4d673977b0c"
+                "sha256:049ad970e3d6c277e072658f6abf2e66bf1ae6e7c97fab4d79c66df0834e17af",
+                "sha256:8d49846f0cede1e312cbcd1d0e44c42073910bbcadb31b87ce2a7d24dea3af38"
             ],
             "index": "pypi",
-            "version": "==0.5.0"
+            "version": "==0.5.3"
         }
     },
     "develop": {
