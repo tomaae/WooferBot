@@ -88,11 +88,11 @@
         },
         "python-xlib": {
             "hashes": [
-                "sha256:a90667c70905c6ef0754c8a09fa61acbc1e1b7ddb946d527831800d7cbfe9348",
-                "sha256:b251d6679796af4ddabc02b170a5c38eda41f92a83d08fdcfeef5841c6467ac7"
+                "sha256:425f766173cdb30d0d61b416342ebecf312a1bf16c4d72ecd26b04667496067f",
+                "sha256:c0e9878ef936d9b8e331976f24bdcc0b1a03eb957401c7cd48047ba7c69dc922"
             ],
             "markers": "'linux' in sys_platform",
-            "version": "==0.27"
+            "version": "==0.28"
         },
         "pywin32": {
             "hashes": [
@@ -197,12 +197,11 @@
         },
         "yeelight": {
             "hashes": [
-                "sha256:18a4f936116803b8c48ea4f0f0368a6b9915fb5bbee403bf26823f0974a8a681",
-                "sha256:d63f46d338aa5b5b6c6ed9a26d95e887a4d0a124f825e6a1f693d9da294d79d5",
-                "sha256:f8f161b19b5286260e5cd6f307d37614534a9864434fcc5912b2b4d673977b0c"
+                "sha256:049ad970e3d6c277e072658f6abf2e66bf1ae6e7c97fab4d79c66df0834e17af",
+                "sha256:8d49846f0cede1e312cbcd1d0e44c42073910bbcadb31b87ce2a7d24dea3af38"
             ],
             "index": "pypi",
-            "version": "==0.5.0"
+            "version": "==0.5.3"
         }
     },
     "develop": {
@@ -230,10 +229,10 @@
         },
         "isort": {
             "hashes": [
-                "sha256:60a1b97e33f61243d12647aaaa3e6cc6778f5eb9f42997650f1cc975b6008750",
-                "sha256:d488ba1c5a2db721669cc180180d5acf84ebdc5af7827f7aaeaa75f73cf0e2b8"
+                "sha256:6187a9f1ce8784cbc6d1b88790a43e6083a6302f03e9ae482acc0f232a98c843",
+                "sha256:c16eaa7432a1c004c585d79b12ad080c6c421dd18fe27982ca11f95e6898e432"
             ],
-            "version": "==5.4.2"
+            "version": "==5.5.3"
         },
         "lazy-object-proxy": {
             "hashes": [
