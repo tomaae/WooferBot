@@ -28,13 +28,6 @@
             ],
             "version": "==3.0.4"
         },
-        "enum-compat": {
-            "hashes": [
-                "sha256:3677daabed56a6f724451d585662253d8fb4e5569845aafa8bb0da36b1a8751e",
-                "sha256:88091b617c7fc3bbbceae50db5958023c48dc40b50520005aa3bf27f8f7ea157"
-            ],
-            "version": "==0.0.3"
-        },
         "evdev": {
             "hashes": [
                 "sha256:b1c649b4fed7252711011da235782b2c260b32e004058d62473471e5cd30634d"
@@ -62,6 +55,13 @@
                 "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"
             ],
             "version": "==2.10"
+        },
+        "ifaddr": {
+            "hashes": [
+                "sha256:1f9e8a6ca6f16db5a37d3356f07b6e52344f6f9f7e806d618537731669eb1a94",
+                "sha256:d1f603952f0a71c9ab4e705754511e4e03b02565bc4cec7188ad6415ff534cd3"
+            ],
+            "version": "==0.1.7"
         },
         "pathtools": {
             "hashes": [
@@ -181,11 +181,11 @@
         },
         "yeelight": {
             "hashes": [
-                "sha256:049ad970e3d6c277e072658f6abf2e66bf1ae6e7c97fab4d79c66df0834e17af",
-                "sha256:8d49846f0cede1e312cbcd1d0e44c42073910bbcadb31b87ce2a7d24dea3af38"
+                "sha256:1e4c045ef636f5996ab4545e2a54a37f66acd5c97b9305b42cde1a3a4f596d46",
+                "sha256:21817e052a5ccc6ef06d9785b04451f0dfe92736cdcd7267cb8928144e97041c"
             ],
             "index": "pypi",
-            "version": "==0.5.3"
+            "version": "==0.5.4"
         }
     },
     "develop": {
@@ -206,10 +206,10 @@
         },
         "isort": {
             "hashes": [
-                "sha256:6187a9f1ce8784cbc6d1b88790a43e6083a6302f03e9ae482acc0f232a98c843",
-                "sha256:c16eaa7432a1c004c585d79b12ad080c6c421dd18fe27982ca11f95e6898e432"
+                "sha256:2f510f34ae18a8d0958c53eec51ef84fd099f07c4c639676525acbcd7b5bd3ff",
+                "sha256:dd3211f513f4a92ec1ec1876fc1dc3c686649c349d49523f5b5adbb0814e5960"
             ],
-            "version": "==5.5.3"
+            "version": "==5.6.1"
         },
         "lazy-object-proxy": {
             "hashes": [
