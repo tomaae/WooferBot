@@ -339,6 +339,7 @@ class Twitch:
     def process_data(self, data):
         for line in data:
             line = line.strip()
+            # print(self.TwitchLogin + "!" + line)
             line = line.split(" ")
 
             if len(line) >= 1:
