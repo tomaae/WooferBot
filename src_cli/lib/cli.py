@@ -47,18 +47,6 @@ class Cli:
                 print("x  - Exit")
 
             #
-            # Start
-            #
-            elif cmd == "0":
-                self.woofer.woofer_commands({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "broadcaster": 1,
-                    "command": "!start",
-                    "custom-tag": "!start"
-                })
-
-            #
             # Follow
             #
             elif cmd == "1":
