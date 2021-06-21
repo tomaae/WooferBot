@@ -49,6 +49,7 @@ class Settings:
         self.HueIP = ""
         self.HueToken = ""
         self.YeelightEnabled = False
+        self.GUIEnabled = True
 
         self.Styles = {}
         self.Activities = {}

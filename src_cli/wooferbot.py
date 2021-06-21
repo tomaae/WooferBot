@@ -21,6 +21,7 @@ from lib.woofer import Woofer
 from lib.twitch import Twitch
 from lib.filewatchdog import Watchdog
 from lib.cli import Cli
+from lib.gui import Gui
 from lib.nanoleaf import Nanoleaf
 from lib.hue import Hue
 from lib.miyeelight import Yeelight
@@ -86,22 +87,14 @@ if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.Twitc
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
 
-# from tkinter import *
-# ##Import of Tkinter module
-#
-# window = Tk()
-# ##Creates the window from the imported Tkinter module
-# window.geometry("600x400")
-# ##Creates the size of the window
-# window.title("Test :)")
-# ##Adds a title to the Windows GUI for the window
-#
-# window.mainloop()
-# ##Loops the window to prevent the window from just "flashing once"
-
-# Start CLI
-cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=chatbot)
-cli.start()
+if settings.GUIEnabled:
+    # Start GUI
+    gui = Gui(settings=settings, woofer=woofer, twitch=twitch, chatbot=chatbot)
+    gui.start()
+else:
+    # Start CLI
+    cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=chatbot)
+    cli.start()
 
 # Cleanup and exit
 exit_gracefully()
