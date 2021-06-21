@@ -24,7 +24,7 @@ from websockets import serve, exceptions as websockets_exceptions
 #   Overlay Handling
 # ---------------------------
 class Overlay:
-    def __init__(self, settings, nanoleaf, hue, yeelight, chatbot):
+    def __init__(self, settings, nanoleaf, hue, yeelight, chatbot, gui):
         self.bindIP = '127.0.0.1'
         self.bindPort = 3339
         self.active = 0
@@ -34,6 +34,7 @@ class Overlay:
         self.loopThread = None
         self.settings = settings
         self.chatbot = chatbot
+        self.gui = gui
         self.nanoleaf = nanoleaf
         self.hue = hue
         self.yeelight = yeelight
@@ -42,6 +43,7 @@ class Overlay:
     #   Start
     # ---------------------------
     def start(self):
+        self.gui.connected_overlay(False)
         print("Starting overlay server...")
         self.serverSocket = serve(self.connection, self.bindIP, self.bindPort)
         print("Overlay server waiting for connection...")
@@ -103,6 +105,7 @@ class Overlay:
     #   Connection
     # ---------------------------
     async def connection(self, websocket, _):
+        self.gui.connected_overlay(True)
         print("Initializing overlay...")
         self.active = self.active + 1
 
@@ -198,6 +201,7 @@ class Overlay:
                     await websocket.send(json_dumps(json_data_raw))
                 except websockets_exceptions.ConnectionClosed:
                     # Connection failed
+                    self.gui.connected_overlay(False)
                     print("Connection closed by overlay...")
                     self.active = self.active - 1
                     break
@@ -217,6 +221,7 @@ class Overlay:
                         # Connection failed
                         self.active = self.active - 1
                         if self.active == 0:
+                            self.gui.connected_overlay(False)
                             print("Connection closed by overlay...")
                         break
                     else:

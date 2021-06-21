@@ -26,13 +26,14 @@ from lib.twitch import twitch_get_user, twitch_get_last_activity
 #   Woofer logic
 # ---------------------------
 class Woofer:
-    def __init__(self, settings, overlay, nanoleaf, hue, yeelight, chatbot):
+    def __init__(self, settings, overlay, nanoleaf, hue, yeelight, chatbot, gui):
         self.settings = settings
         self.overlay = overlay
         self.nanoleaf = nanoleaf
         self.hue = hue
         self.yeelight = yeelight
         self.chatbot = chatbot
+        self.gui = gui
 
         self.keyboard = Controller()
 

@@ -55,6 +55,9 @@ signal(SIGBREAK, exit_gracefully)
 path_root = path.dirname(path.realpath(__file__))
 settings = Settings(path_root=path_root)
 
+# Initialize GUI
+gui = Gui(settings=settings)
+
 # Initialize nanoleaf
 nanoleaf = Nanoleaf(settings=settings)
 
@@ -67,32 +70,39 @@ yeelight = Yeelight(settings=settings)
 settings.save()
 
 # Initialize twitch chatbot
-chatbot = Twitch(settings=settings, woofer=None, bot=True)
+chatbot = Twitch(settings=settings, woofer=None, gui=gui, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
     chatbot.connect()
+    if settings.GUIEnabled:
+        gui.attach_chatbot(chatbot=chatbot)
 
 # Initialize overlay
-overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot)
+overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot, gui=gui)
 overlay.start()
 
 # Initialize woofer
-woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot)
+woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot, gui=gui)
+if settings.GUIEnabled:
+    gui.attach_woofer(woofer=woofer)
 
 # Initialize twitch
-twitch = Twitch(settings=settings, woofer=woofer)
+twitch = Twitch(settings=settings, woofer=woofer, gui=gui)
 twitch.connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
     chatbot.link_account(twitch)
 
+if settings.GUIEnabled:
+    gui.attach_twitch(twitch=twitch)
+
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
 
+# Start GUI
 if settings.GUIEnabled:
-    # Start GUI
-    gui = Gui(settings=settings, woofer=woofer, twitch=twitch, chatbot=chatbot)
     gui.start()
-else:
-    # Start CLI
+
+# Start CLI
+if not settings.GUIEnabled:
     cli = Cli(settings=settings, woofer=woofer, twitch=twitch, chatbot=chatbot)
     cli.start()
 

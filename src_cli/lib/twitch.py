@@ -199,10 +199,11 @@ def remove_emotes(msg, emotes):
 #   Twitch API
 # ---------------------------
 class Twitch:
-    def __init__(self, settings, woofer, bot=False):
+    def __init__(self, settings, woofer, gui, bot=False):
         self.bot = bot
         self.settings = settings
         self.woofer = woofer
+        self.gui = gui
         self.host = "irc.twitch.tv"  # Hostname of the IRC-Server in this case twitch's
         self.port = 6667  # Default IRC-Port
         self.chrset = "UTF-8"
@@ -239,6 +240,10 @@ class Twitch:
             return
 
         if int(time()) > (self.lastPing + 400):
+            if self.bot:
+                self.gui.connected_chatbot(False)
+            else:
+                self.gui.connected_twitch(False)
             print("Connection {} to Twitch not responding, reconnecting...".format(self.TwitchLogin))
             self.connected = False
             self.disconnect()
@@ -283,6 +288,10 @@ class Twitch:
 
         self.TwitchLogin = twitch_login
 
+        if self.bot:
+            self.gui.connected_chatbot(False)
+        else:
+            self.gui.connected_twitch(False)
         print("Connecting {} to Twitch...".format(twitch_login))
 
         #
@@ -299,8 +308,16 @@ class Twitch:
         except:
             print("Unable to connect {} to Twitch...".format(twitch_login))
             self.connected = False
+            if self.bot:
+                self.gui.connected_chatbot(False)
+            else:
+                self.gui.connected_twitch(False)
             return 1
 
+        if self.bot:
+            self.gui.connected_chatbot(True)
+        else:
+            self.gui.connected_twitch(True)
         print("Connected {} to Twitch...".format(twitch_login))
         self.connected = True
         self.lastPing = int(time())
@@ -321,11 +338,19 @@ class Twitch:
                 data = data_split.pop()
                 Thread(target=self.process_data, args=(data_split,)).start()
             except socket_error:
+                if self.bot:
+                    self.gui.connected_chatbot(False)
+                else:
+                    self.gui.connected_twitch(False)
                 print("Twitch {} socket error".format(twitch_login))
                 self.connected = False
                 self.connect()
                 break
             except socket_timeout:
+                if self.bot:
+                    self.gui.connected_chatbot(False)
+                else:
+                    self.gui.connected_twitch(False)
                 print("Twitch {} socket timeout".format(twitch_login))
                 self.connected = False
                 self.connect()
