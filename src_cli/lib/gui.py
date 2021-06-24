@@ -96,16 +96,28 @@ class Gui:
         frame_control = LabelFrame(tab1, text="Controls", padx=5, pady=5)
         frame_control.grid(row=0, column=1, padx=2, pady=2, sticky=["N", "S", "E"])
 
-        def test():
-            self.message_log.insert(END, "1")
-            self.message_log.insert(END, "2")
-            self.message_log.insert(END, "3")
-            self.message_log.insert(END, "4")
-            self.message_log.insert(END, "5")
-            self.message_log.yview(END)
+        def cmd_clear_notifications():
+            return
 
-        Button(frame_control, text="Clear queue", width=15, command=test).grid(row=0, column=0, sticky=E)
-        Button(frame_control, text="Pause queue", width=15).grid(row=1, column=0, sticky=E)
+        def cmd_pause_notifications():
+            return
+
+        def cmd_reconnect_twitch():
+            if self.twitch.connected:
+                self.twitch.disconnect()
+            if self.chatbot.connected:
+                self.chatbot.disconnect()
+            return
+
+        clear_notifications = Button(frame_control, text="Clear notifications", width=15, command=cmd_clear_notifications)
+        clear_notifications.tooltip = Hovertip(clear_notifications, "Clear all waiting notifications", hover_delay=100)
+        clear_notifications.grid(row=0, column=0, sticky=E)
+        pause_notifications = Button(frame_control, text="Pause notifications", width=15, command=cmd_pause_notifications)
+        pause_notifications.tooltip = Hovertip(pause_notifications, "Pause notifications", hover_delay=100)
+        pause_notifications.grid(row=1, column=0, sticky=E)
+        reconnect_twitch = Button(frame_control, text="Reconnect Twitch", width=15, command=cmd_reconnect_twitch)
+        reconnect_twitch.tooltip = Hovertip(reconnect_twitch, "Reconnect all connections to Twitch", hover_delay=100)
+        reconnect_twitch.grid(row=2, column=0, sticky=E)
 
     def start(self) -> None:
         print("Starting gui...")
