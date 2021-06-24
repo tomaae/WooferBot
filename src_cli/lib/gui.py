@@ -65,11 +65,14 @@ class Gui:
         statusbar_frame.grid(row=1, column=0, sticky=NSEW)
         statusbar_frame.grid_columnconfigure(3, weight=1)
 
-        self.statusbar_twitch = Label(statusbar_frame, text="Twitch", bd=1, fg="RED", width=10, relief=SUNKEN, anchor=W, padx=1, pady=1)
+        self.statusbar_twitch = Label(statusbar_frame, text="Twitch", bd=1, fg="GRAY", width=10, relief=SUNKEN, anchor=W, padx=1, pady=1)
+        self.statusbar_twitch.tooltip = Hovertip(self.statusbar_twitch, "Twitch disabled", hover_delay=100)
         self.statusbar_twitch.grid(row=0, column=0, sticky=W)
-        self.statusbar_chatbot = Label(statusbar_frame, text="Chatbot", bd=1, fg="RED", width=10, relief=SUNKEN, anchor=W, padx=1, pady=1)
+        self.statusbar_chatbot = Label(statusbar_frame, text="Chatbot", bd=1, fg="GRAY", width=10, relief=SUNKEN, anchor=W, padx=1, pady=1)
+        self.statusbar_chatbot.tooltip = Hovertip(self.statusbar_chatbot, "Chatbot disabled", hover_delay=100)
         self.statusbar_chatbot.grid(row=0, column=1, sticky=W)
-        self.statusbar_overlay = Label(statusbar_frame, text="Overlay", bd=1, fg="RED", width=10, relief=SUNKEN, anchor=W, padx=1, pady=1)
+        self.statusbar_overlay = Label(statusbar_frame, text="Overlay", bd=1, fg="GRAY", width=10, relief=SUNKEN, anchor=W, padx=1, pady=1)
+        self.statusbar_overlay.tooltip = Hovertip(self.statusbar_overlay, "Overlay disabled", hover_delay=100)
         self.statusbar_overlay.grid(row=0, column=2, sticky=W)
         Label(statusbar_frame, bd=1, relief=SUNKEN, anchor=W, padx=1, pady=1).grid(row=0, column=3, sticky=EW)
 
@@ -167,21 +170,12 @@ class Gui:
             tooltip = "disabled"
 
         if key == TWITCH:
-            if not hasattr(self.statusbar_twitch, 'tooltip'):
-                self.statusbar_twitch.tooltip = Hovertip(self.statusbar_twitch, "Twitch " + tooltip, hover_delay=100)
-
             self.statusbar_twitch.tooltip.text = "Twitch " + tooltip
             self.statusbar_twitch.config(fg=color)
         elif key == CHATBOT:
-            if not hasattr(self.statusbar_chatbot, 'tooltip'):
-                self.statusbar_chatbot.tooltip = Hovertip(self.statusbar_chatbot, "", hover_delay=100)
-
             self.statusbar_chatbot.tooltip.text = "Web overlay " + tooltip
             self.statusbar_chatbot.config(fg=color)
         elif key == OVERLAY:
-            if not hasattr(self.statusbar_overlay, 'tooltip'):
-                self.statusbar_overlay.tooltip = Hovertip(self.statusbar_overlay, "", hover_delay=100)
-
             self.statusbar_overlay.tooltip.text = "Web overlay " + tooltip
             self.statusbar_overlay.config(fg=color)
 
