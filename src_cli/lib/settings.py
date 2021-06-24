@@ -26,7 +26,9 @@ from lib.defaults import *
 #   Settings Handling
 # ---------------------------
 class Settings:
-    def __init__(self, path_root=None):
+    def __init__(self, gui, path_root=None):
+        self.gui = gui
+
         self.TwitchChannel = ""
         self.TwitchOAUTH = ""
         self.TwitchBotChannel = ""
@@ -84,30 +86,37 @@ class Settings:
             self.os = 'osx'
             self.slash = '/'
         else:
-            print("Failed to detect OS: {}".format(platform))
-            exit(1)
+            self.log("Failed to detect OS: {}".format(platform), error=True)
 
         # Check paths
         self.pathRoot = path_root + self.slash
         self.configFile = self.pathRoot + "settings.json"
         if not path.isdir(self.pathRoot):
-            print("Working directory not detected.")
-            exit(1)
+            self.log("Working directory not detected.", error=True)
         if not path.isfile(self.pathRoot + "wooferbot.py") and not path.isfile(
                 self.pathRoot + "wooferbot_cli.exe") and not path.isfile(self.pathRoot + "wooferbot_cli"):
-            print("Working directory incorrect.")
-            exit(1)
+            self.log("Working directory incorrect.", error=True)
         if not path.isfile(self.configFile):
-            print("Configuration file is missing, recreating with defaults.")
+            self.log("Configuration file is missing, recreating with defaults.")
 
         self.reload()
         self.reload_mascot()
 
     # ---------------------------
+    #   log
+    # ---------------------------
+    def log(self, message: str, error=False):
+        print(message)
+        if error and not self.settings.GUIEnabled:
+            exit(1)
+
+        self.gui.messagelog_add(message)
+
+    # ---------------------------
     #   reload_mascot
     # ---------------------------
     def reload_mascot(self):
-        print("Loading mascot settings...")
+        self.log("Loading mascot settings...")
         self.mascotImages = {}
         self.mascotAudio = {}
         self.mascotStyles = {}
@@ -120,14 +129,12 @@ class Settings:
                 for key, value in data.items():
                     self.__dict__[key] = value
         except:
-            print("Unable to load mascot.json")
-            exit(1)
+            self.log("Unable to load mascot.json", error=True)
 
         # Check mascot images
         for action in self.mascotImages:
             if 'Image' not in self.mascotImages[action]:
-                print("Mascot Image variable is missing for action: {}".format(action))
-                exit(1)
+                self.log("Mascot Image variable is missing for action: {}".format(action), error=True)
 
             self.mascotImages[action]['Image'] = "{}mascots{}{}{}images{}{}".format(self.pathRoot,
                                                                                     self.slash,
@@ -139,8 +146,7 @@ class Settings:
         # Check mascot audio
         for action in self.mascotAudio:
             if not isinstance(self.mascotAudio[action]['Audio'], list):
-                print("Mascot audio is not a list for action: {}".format(action))
-                exit(1)
+                self.log("Mascot audio is not a list for action: {}".format(action), error=True)
 
             for idx, val in enumerate(self.mascotAudio[action]['Audio']):
                 self.mascotAudio[action]['Audio'][idx] = "{}mascots{}{}{}audio{}{}".format(self.pathRoot,
@@ -156,7 +162,7 @@ class Settings:
     #   Reload
     # ---------------------------
     def reload(self):
-        print("Loading settings...")
+        self.log("Loading settings...")
         self.set_variables_defaults(self, defaults_root)
 
         self.Styles = {}
@@ -185,8 +191,7 @@ class Settings:
                         self.__dict__[key] = value
 
             except:
-                print("Unable to load settings.json")
-                exit(1)
+                self.log("Unable to load settings.json", error=True)
 
             self.upgrade_settings_file()
 
@@ -212,8 +217,7 @@ class Settings:
 
         if not path.isfile(self.configFile):
             self.save()
-            print("Default configuration file has been created.")
-            exit(0)
+            self.log("Default configuration file has been created.")
 
         self.verify_login_information()
 
@@ -300,24 +304,21 @@ class Settings:
                 if key[:1].isupper():
                     tmp[key] = self.__dict__[key]
         except:
-            print("Failed to export configuration")
-            exit(1)
+            self.log("Failed to export configuration", error=True)
 
         # Save config
         try:
             with open(self.configFile, encoding=self.encoding, mode="w+") as f:
                 json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
-            print("Failed to save settings.json")
-            exit(1)
+            self.log("Failed to save settings.json", error=True)
 
         # Save config copy
         try:
             with open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
                 json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
-            print("Failed to save settings.bak")
-            exit(1)
+            self.log("Failed to save settings.bak", error=True)
 
     # ---------------------------
     #   VerifyLoginInformation
@@ -326,22 +327,22 @@ class Settings:
         code = 0
         # Check user name
         if len(self.TwitchChannel) < 1:
-            print("Twitch channel not specified")
+            self.log("Twitch channel not specified")
             code = 1
 
         # Check OAUTH
         if self.TwitchOAUTH.find('oauth:') != 0:
-            print("Twitch OAUTH is invalid")
+            self.log("Twitch OAUTH is invalid")
             code = 1
 
         # Check chatbot
         if self.UseChatbot and len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
-            print("Twitch Bot OAUTH is invalid")
+            self.log("Twitch Bot OAUTH is invalid")
             code = 1
 
         # Check twitch client ID
         if len(self.twitch_client_id) < 1:
-            print("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
+            self.log("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
             code = 1
 
         if code:
@@ -366,8 +367,7 @@ class Settings:
                 del action['LastShown']
             if 'Message' in action:
                 if action['Name'] in self.Messages:
-                    print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(action['Name']))
-                    exit(1)
+                    self.log("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(action['Name']), error=True)
                 else:
                     self.Messages[action['Name']] = action['Message']
                     del action['Message']
@@ -378,8 +378,7 @@ class Settings:
         for action in self.Commands:
             if 'Message' in self.Commands[action]:
                 if action in self.Messages:
-                    print("Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(action))
-                    exit(1)
+                    self.log("Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(action), error=True)
                 else:
                     self.Messages[action] = self.Commands[action]['Message']
                     del self.Commands[action]['Message']
@@ -390,8 +389,7 @@ class Settings:
         if hasattr(self, 'CustomGreets'):
             for action in self.CustomGreets:
                 if action in self.Messages:
-                    print("Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(action))
-                    exit(1)
+                    self.log("Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(action), error=True)
 
             for action in self.CustomGreets:
                 self.Messages["viewer_" + action] = self.CustomGreets[action]

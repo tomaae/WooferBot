@@ -18,6 +18,17 @@ from threading import Thread
 from os import path
 from random import SystemRandom
 from websockets import serve, exceptions as websockets_exceptions
+from .const import (
+    TWITCH,
+    CHATBOT,
+    OVERLAY,
+
+    CONNECTING,
+    CONNECTED,
+    CONNECTION_FAILED,
+    DISCONNECTED,
+    DISABLED,
+)
 
 
 # ---------------------------
@@ -43,10 +54,10 @@ class Overlay:
     #   Start
     # ---------------------------
     def start(self):
-        self.gui.connected_overlay(False)
-        print("Starting overlay server...")
+        self.gui.statusbar(OVERLAY, CONNECTING)
+        self.settings.log("Starting overlay server...")
         self.serverSocket = serve(self.connection, self.bindIP, self.bindPort)
-        print("Overlay server waiting for connection...")
+        self.settings.log("Overlay server waiting for connection...")
         self.loop = asyncio_get_event_loop()
         self.loop.run_until_complete(self.serverSocket)
         self.loopThread = Thread(target=self.loop.run_forever)
@@ -105,8 +116,8 @@ class Overlay:
     #   Connection
     # ---------------------------
     async def connection(self, websocket, _):
-        self.gui.connected_overlay(True)
-        print("Initializing overlay...")
+        self.gui.statusbar(OVERLAY, CONNECTED)
+        self.settings.log("Initializing overlay...")
         self.active = self.active + 1
 
         #
@@ -201,8 +212,8 @@ class Overlay:
                     await websocket.send(json_dumps(json_data_raw))
                 except websockets_exceptions.ConnectionClosed:
                     # Connection failed
-                    self.gui.connected_overlay(False)
-                    print("Connection closed by overlay...")
+                    self.gui.statusbar(OVERLAY, CONNECTION_FAILED)
+                    self.settings.log("Connection closed by overlay...")
                     self.active = self.active - 1
                     break
                 else:
@@ -221,8 +232,8 @@ class Overlay:
                         # Connection failed
                         self.active = self.active - 1
                         if self.active == 0:
-                            self.gui.connected_overlay(False)
-                            print("Connection closed by overlay...")
+                            self.gui.statusbar(OVERLAY, CONNECTION_FAILED)
+                            self.settings.log("Connection closed by overlay...")
                         break
                     else:
                         ping_send = 0

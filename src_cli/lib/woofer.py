@@ -117,11 +117,11 @@ class Woofer:
 
             # Channel points default
             elif json_data["msg-id"] == "highlighted-message":
-                print("Channel points, claimed reward: Redeemed Highlight My Message")
+                self.settings.log("Channel points, claimed reward: Redeemed Highlight My Message")
 
             # Channel points custom w/message
             elif json_data["custom-reward-id"]:
-                print("Channel points, claimed custom reward: {}".format(json_data["custom-reward-id"]))
+                self.settings.log("Channel points, claimed custom reward: {}".format(json_data["custom-reward-id"]))
 
             # Bits
             elif int(json_data["bits"]) > 0 and int(json_data["bits"]) >= self.settings.MinBits:
@@ -149,7 +149,7 @@ class Woofer:
         # Check if overlay is connected
         #
         if self.overlay.active < 1:
-            print("waiting for overlay")
+            self.settings.log("waiting for overlay")
             timer = Timer(3, self.woofer_queue, args=(queue_id, json_data))
             timer.daemon = True
             timer.start()
@@ -188,12 +188,12 @@ class Woofer:
                     try:
                         self.keyboard.press(KEYLIST[key])
                     except:
-                        print("Invalid hotkey in {}".format(json_data["id"]))
+                        self.settings.log("Invalid hotkey in {}".format(json_data["id"]))
                 else:
                     try:
                         self.keyboard.press(key)
                     except:
-                        print("Invalid hotkey in {}".format(json_data["id"]))
+                        self.settings.log("Invalid hotkey in {}".format(json_data["id"]))
 
             sleep(0.05)
 
@@ -202,12 +202,12 @@ class Woofer:
                     try:
                         self.keyboard.release(KEYLIST[key])
                     except:
-                        print("Invalid hotkey in {}".format(json_data["id"]))
+                        self.settings.log("Invalid hotkey in {}".format(json_data["id"]))
                 else:
                     try:
                         self.keyboard.release(key)
                     except:
-                        print("Invalid hotkey in {}".format(json_data["id"]))
+                        self.settings.log("Invalid hotkey in {}".format(json_data["id"]))
 
         #
         # Turn on Nanoleaf
@@ -432,7 +432,7 @@ class Woofer:
     #   woofer_addtoqueue
     # ---------------------------
     def woofer_addtoqueue(self, json_response):
-        print("{}: {}".format(json_response["id"], json_response["sender"]))
+        self.settings.log("{}: {}".format(json_response["id"], json_response["sender"]))
 
         if "message" not in json_response or json_response["message"] == "":
             if json_response["id"] in self.settings.Messages:

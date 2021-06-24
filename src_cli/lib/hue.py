@@ -37,7 +37,7 @@ class Hue:
         elif self.settings.os == 'lx':
             from getch import getch
 
-        print("Initializing Philips HUE...")
+        self.settings.log("Initializing Philips HUE...")
         #
         # IP Not set
         #
@@ -52,7 +52,7 @@ class Hue:
         result = requests_get(url, data=json_dumps({'devicetype': 'wooferbot'}), timeout=5)
         output_json = result.json()
         if result.status_code != 200 or len(output_json) == 0:
-            print("Philips HUE Bridge did not responding correctly")
+            self.settings.log("Philips HUE Bridge did not responding correctly")
             return
 
         if isinstance(output_json, list) and 'error' in output_json[0] and \
@@ -60,7 +60,7 @@ class Hue:
                 (output_json[0]['error']['description'] == "unauthorized user"
                  or output_json[0]['error']['description'] == "method, GET, not available for resource, /"):
             while not self.auth():
-                print("Press C to cancel or any key to try again")
+                self.settings.log("Press C to cancel or any key to try again")
                 if self.settings.os == 'win':
                     input_char = getch().decode("utf-8").upper()
                 elif self.settings.os == 'lx':
@@ -92,7 +92,7 @@ class Hue:
             if 'Hue' in self.settings.PoseMapping[action]:
                 for light in self.settings.PoseMapping[action]['Hue']:
                     if light not in self.lights:
-                        print(
+                        self.settings.log(
                             "Error: Hue light \"{}\" defined in PoseMapping \"{}\" has not been detected.".format(
                                 light, action))
 
@@ -106,7 +106,7 @@ class Hue:
 
         # Check if light has been detected on startup
         if device not in self.lights:
-            print("Philips HUE Device \"{}\" does not detected".format(device))
+            self.settings.log("Philips HUE Device \"{}\" does not detected".format(device))
             return
 
         data = {}
@@ -141,7 +141,7 @@ class Hue:
             for items in output_json:
                 i = i + 1
                 if 'error' in items and output_json[i]['error']['type'] == 1:
-                    print("Philips HUE: Unauthorized user")
+                    self.settings.log("Philips HUE: Unauthorized user")
                     return False
 
                 if not output_json[items]['state']['reachable']:
@@ -154,7 +154,7 @@ class Hue:
     #   auth
     # ---------------------------
     def auth(self):
-        print("Registering HueBridge...")
+        self.settings.log("Registering HueBridge...")
         # Send API request
         data = {'devicetype': 'wooferbot'}
         url = "http://{}:80/api".format(self.ip)
@@ -169,17 +169,17 @@ class Hue:
                 if 'error' in items:
                     error_type = output_json[i]['error']['type']
                     if error_type == 101:
-                        print("Error: Press link button and try again")
+                        self.settings.log("Error: Press link button and try again")
                         return False
 
                 # Authorization successful
                 if 'success' in items:
                     self.token = output_json[i]['success']['username']
-                    print("Authorized successfully")
+                    self.settings.log("Authorized successfully")
                     return True
 
         # General error
-        print("Error connecting")
+        self.settings.log("Error connecting")
         return False
 
     # ---------------------------
@@ -194,11 +194,11 @@ class Hue:
         ip_list = []
         discovery_time = 5
         while len(ip_list) == 0:
-            print("Starting Hue Bridge discovery.")
+            self.settings.log("Starting Hue Bridge discovery.")
             ip_list = ssdp_discovery(searchstr="ipbridge", discovery_time=discovery_time)
             if len(ip_list) == 0:
-                print("Philips HUE Bridge not found")
-                print("Press C to cancel or any key to scan again")
+                self.settings.log("Philips HUE Bridge not found")
+                self.settings.log("Press C to cancel or any key to scan again")
                 if self.settings.os == 'win':
                     input_char = getch().decode("utf-8").upper()
                 elif self.settings.os == 'lx':

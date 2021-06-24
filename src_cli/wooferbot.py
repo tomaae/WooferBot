@@ -51,12 +51,13 @@ signal(SIGINT, exit_gracefully)
 signal(SIGTERM, exit_gracefully)
 signal(SIGBREAK, exit_gracefully)
 
+# Initialize GUI
+gui = Gui()
+
 # Initialize settings
 path_root = path.dirname(path.realpath(__file__))
-settings = Settings(path_root=path_root)
-
-# Initialize GUI
-gui = Gui(settings=settings)
+settings = Settings(gui=gui, path_root=path_root)
+gui.attach_settings(settings=settings)
 
 # Initialize nanoleaf
 nanoleaf = Nanoleaf(settings=settings)
@@ -73,8 +74,7 @@ settings.save()
 chatbot = Twitch(settings=settings, woofer=None, gui=gui, bot=True)
 if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.TwitchBotOAUTH.find('oauth:') == 0:
     chatbot.connect()
-    if settings.GUIEnabled:
-        gui.attach_chatbot(chatbot=chatbot)
+    gui.attach_chatbot(chatbot=chatbot)
 
 # Initialize overlay
 overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot, gui=gui)
@@ -82,24 +82,20 @@ overlay.start()
 
 # Initialize woofer
 woofer = Woofer(settings=settings, overlay=overlay, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot, gui=gui)
-if settings.GUIEnabled:
-    gui.attach_woofer(woofer=woofer)
+gui.attach_woofer(woofer=woofer)
 
 # Initialize twitch
 twitch = Twitch(settings=settings, woofer=woofer, gui=gui)
+gui.attach_twitch(twitch=twitch)
 twitch.connect()
 if settings.UseChatbot and len(settings.TwitchBotChannel) < 1 and settings.TwitchBotOAUTH.find('oauth:') != 0:
     chatbot.link_account(twitch)
-
-if settings.GUIEnabled:
-    gui.attach_twitch(twitch=twitch)
 
 # Start Watchdog
 watchdog = Watchdog(settings=settings, woofer=woofer)
 
 # Start GUI
-if settings.GUIEnabled:
-    gui.start()
+gui.start()
 
 # Start CLI
 if not settings.GUIEnabled:

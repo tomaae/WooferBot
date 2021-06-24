@@ -18,6 +18,16 @@ from re import split as re_split
 from time import time
 from json import loads as json_loads
 from requests import get as requests_get
+from .const import (
+    TWITCH,
+    CHATBOT,
+
+    CONNECTING,
+    CONNECTED,
+    CONNECTION_FAILED,
+    DISCONNECTED,
+    DISABLED,
+)
 
 
 # ---------------------------
@@ -241,10 +251,11 @@ class Twitch:
 
         if int(time()) > (self.lastPing + 400):
             if self.bot:
-                self.gui.connected_chatbot(False)
+                self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
             else:
-                self.gui.connected_twitch(False)
-            print("Connection {} to Twitch not responding, reconnecting...".format(self.TwitchLogin))
+                self.gui.statusbar(TWITCH, CONNECTION_FAILED)
+
+            self.settings.log("Connection {} to Twitch not responding, reconnecting...".format(self.TwitchLogin))
             self.connected = False
             self.disconnect()
             return
@@ -289,10 +300,11 @@ class Twitch:
         self.TwitchLogin = twitch_login
 
         if self.bot:
-            self.gui.connected_chatbot(False)
+            self.gui.statusbar(CHATBOT, CONNECTING)
         else:
-            self.gui.connected_twitch(False)
-        print("Connecting {} to Twitch...".format(twitch_login))
+            self.gui.statusbar(TWITCH, CONNECTING)
+
+        self.settings.log("Connecting {} to Twitch...".format(twitch_login))
 
         #
         # Log in
@@ -305,20 +317,23 @@ class Twitch:
             self.con.send(bytes("JOIN #%s\r\n" % self.settings.TwitchChannel, self.chrset))
             if not self.bot:
                 self.con.send(bytes("CAP REQ :twitch.tv/tags twitch.tv/commands\r\n", self.chrset))
+
         except:
-            print("Unable to connect {} to Twitch...".format(twitch_login))
+            self.settings.log("Unable to connect {} to Twitch...".format(twitch_login))
             self.connected = False
             if self.bot:
-                self.gui.connected_chatbot(False)
+                self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
             else:
-                self.gui.connected_twitch(False)
+                self.gui.statusbar(TWITCH, CONNECTION_FAILED)
+
             return 1
 
         if self.bot:
-            self.gui.connected_chatbot(True)
+            self.gui.statusbar(CHATBOT, CONNECTED)
         else:
-            self.gui.connected_twitch(True)
-        print("Connected {} to Twitch...".format(twitch_login))
+            self.gui.statusbar(TWITCH, CONNECTED)
+
+        self.settings.log("Connected {} to Twitch...".format(twitch_login))
         self.connected = True
         self.lastPing = int(time())
         if self.conCheckTimer.is_alive():
@@ -339,19 +354,19 @@ class Twitch:
                 Thread(target=self.process_data, args=(data_split,)).start()
             except socket_error:
                 if self.bot:
-                    self.gui.connected_chatbot(False)
+                    self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 else:
-                    self.gui.connected_twitch(False)
-                print("Twitch {} socket error".format(twitch_login))
+                    self.gui.statusbar(TWITCH, CONNECTION_FAILED)
+                self.settings.log("Twitch {} socket error".format(twitch_login))
                 self.connected = False
                 self.connect()
                 break
             except socket_timeout:
                 if self.bot:
-                    self.gui.connected_chatbot(False)
+                    self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 else:
-                    self.gui.connected_twitch(False)
-                print("Twitch {} socket timeout".format(twitch_login))
+                    self.gui.statusbar(TWITCH, CONNECTION_FAILED)
+                self.settings.log("Twitch {} socket timeout".format(twitch_login))
                 self.connected = False
                 self.connect()
                 break

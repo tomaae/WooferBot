@@ -78,12 +78,12 @@ class Yeelight:
         elif self.settings.os == 'lx':
             from getch import getch
 
-        print("Initializing Yeelight...")
+        self.settings.log("Initializing Yeelight...")
         while len(self.lights) == 0:
             self.detect_lights()
             if len(self.lights) == 0:
-                print("Yeelight not found")
-                print("Press C to cancel or any key to scan again")
+                self.settings.log("Yeelight not found")
+                self.settings.log("Press C to cancel or any key to scan again")
                 if self.settings.os == 'win':
                     input_char = getch().decode("utf-8").upper()
                 elif self.settings.os == 'lx':
@@ -109,7 +109,7 @@ class Yeelight:
             if 'Yeelight' in self.settings.PoseMapping[action]:
                 for light in self.settings.PoseMapping[action]['Yeelight']:
                     if light not in self.lights:
-                        print("Error: Yeelight \"{}\" defined in PoseMapping \"{}\" has not been detected.".format(light, action))
+                        self.settings.log("Error: Yeelight \"{}\" defined in PoseMapping \"{}\" has not been detected.".format(light, action))
 
     # ---------------------------
     #   state
@@ -121,7 +121,7 @@ class Yeelight:
 
         # Check if light has been detected on startup
         if device not in self.lights:
-            print("Yeelight Device \"{}\" does not detected".format(device))
+            self.settings.log("Yeelight Device \"{}\" does not detected".format(device))
             return
 
         # Set light transition transition
@@ -133,7 +133,7 @@ class Yeelight:
                 self.lights[device].effect = "sudden"
 
         except:
-            print("Communication failed with Yeelight {}, light disabled".format(device))
+            self.settings.log("Communication failed with Yeelight {}, light disabled".format(device))
             del self.lights[device]
             return
 
@@ -142,7 +142,7 @@ class Yeelight:
             try:
                 self.lights[device].turn_off()
             except:
-                print("Communication failed with Yeelight {}, light disabled".format(device))
+                self.settings.log("Communication failed with Yeelight {}, light disabled".format(device))
                 del self.lights[device]
                 return
             return
@@ -155,14 +155,14 @@ class Yeelight:
                 self.lights[device].set_brightness(brightness)
                 self.lights[device].set_rgb(tmp[0], tmp[1], tmp[2])
             except:
-                print("Communication failed with Yeelight {}, light disabled".format(device))
+                self.settings.log("Communication failed with Yeelight {}, light disabled".format(device))
                 del self.lights[device]
                 return
         else:
             try:
                 self.lights[device].set_brightness(brightness)
             except:
-                print("Communication failed with Yeelight {}, light disabled".format(device))
+                self.settings.log("Communication failed with Yeelight {}, light disabled".format(device))
                 del self.lights[device]
                 return
 
@@ -199,6 +199,6 @@ class Yeelight:
             try:
                 self.lights[device_name].turn_off()
             except:
-                print("Communication failed with Yeelight {}, light disabled".format(device_name))
+                self.settings.log("Communication failed with Yeelight {}, light disabled".format(device_name))
                 del self.lights[device_name]
                 continue
