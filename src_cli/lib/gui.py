@@ -97,6 +97,7 @@ class Gui:
         frame_control.grid(row=0, column=1, padx=2, pady=2, sticky=["N", "S", "E"])
 
         def cmd_clear_notifications():
+            self.woofer.queue.clear()
             return
 
         def cmd_pause_notifications():
