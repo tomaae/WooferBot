@@ -101,6 +101,15 @@ class Gui:
             return
 
         def cmd_pause_notifications():
+            self.woofer.queuePaused = True
+            self.pause_notifications['text'] = "Resume notifications"
+            self.pause_notifications['command'] = cmd_resume_notifications
+            return
+
+        def cmd_resume_notifications():
+            self.woofer.queuePaused = False
+            self.pause_notifications['text'] = "Pause notifications"
+            self.pause_notifications['command'] = cmd_pause_notifications
             return
 
         def cmd_reconnect_twitch():
@@ -113,9 +122,9 @@ class Gui:
         clear_notifications = Button(frame_control, text="Clear notifications", width=15, command=cmd_clear_notifications)
         clear_notifications.tooltip = Hovertip(clear_notifications, "Clear all waiting notifications", hover_delay=100)
         clear_notifications.grid(row=0, column=0, sticky=E)
-        pause_notifications = Button(frame_control, text="Pause notifications", width=15, command=cmd_pause_notifications)
-        pause_notifications.tooltip = Hovertip(pause_notifications, "Pause notifications", hover_delay=100)
-        pause_notifications.grid(row=1, column=0, sticky=E)
+        self.pause_notifications = Button(frame_control, text="Pause notifications", width=15, command=cmd_pause_notifications)
+        self.pause_notifications.tooltip = Hovertip(self.pause_notifications, "Pause notifications", hover_delay=100)
+        self.pause_notifications.grid(row=1, column=0, sticky=E)
         reconnect_twitch = Button(frame_control, text="Reconnect Twitch", width=15, command=cmd_reconnect_twitch)
         reconnect_twitch.tooltip = Hovertip(reconnect_twitch, "Reconnect all connections to Twitch", hover_delay=100)
         reconnect_twitch.grid(row=2, column=0, sticky=E)

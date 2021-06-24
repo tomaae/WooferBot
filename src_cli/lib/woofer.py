@@ -38,6 +38,7 @@ class Woofer:
         self.keyboard = Controller()
 
         self.queue = []
+        self.queuePaused = False
         self.greetedUsers = []
         self.greetedUsers.append(self.settings.TwitchChannel)
         self.greetedUsers.append(self.settings.TwitchChannel + "bot")
@@ -151,6 +152,15 @@ class Woofer:
         if self.overlay.active < 1:
             self.settings.log("waiting for overlay")
             timer = Timer(3, self.woofer_queue, args=(queue_id, json_data))
+            timer.daemon = True
+            timer.start()
+            return
+
+        #
+        # Check if queue is paused
+        #
+        if self.queuePaused:
+            timer = Timer(1, self.woofer_queue, args=(queue_id, json_data))
             timer.daemon = True
             timer.start()
             return
