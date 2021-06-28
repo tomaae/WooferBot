@@ -112,6 +112,9 @@ class Settings:
 
         self.gui.messagelog_add(message)
 
+        self.gui.app.update_idletasks();
+        self.gui.app.update();
+
     # ---------------------------
     #   reload_mascot
     # ---------------------------
