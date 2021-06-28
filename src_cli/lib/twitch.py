@@ -380,6 +380,11 @@ class Twitch:
         for line in data:
             line = line.strip()
             # print(self.TwitchLogin + "!" + line)
+
+            if line.find("Login authentication failed") > 0:
+                self.settings.log("Twitch login authentication failed")
+                return
+
             line = line.split(" ")
 
             if len(line) >= 1:
