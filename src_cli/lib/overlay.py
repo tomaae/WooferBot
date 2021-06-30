@@ -37,7 +37,7 @@ from .const import (
 class Overlay:
     def __init__(self, settings, nanoleaf, hue, yeelight, chatbot, gui):
         self.bindIP = '127.0.0.1'
-        self.bindPort = 3339
+        self.bindPort = 3338
         self.active = 0
         self.sendQueue = None
         self.serverSocket = None

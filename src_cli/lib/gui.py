@@ -211,7 +211,6 @@ class Gui:
         broadcaster_oauth_var = tk.StringVar()
         broadcaster_oauth_var.set(self.settings.TwitchOAUTH)
         broadcaster_oauth = Entry(frame_twitch, textvariable=broadcaster_oauth_var, show='*', width=30)
-        broadcaster_oauth.insert(0, self.settings.TwitchOAUTH)
         broadcaster_oauth.grid(row=1, column=1)
 
         broadcaster_save = Button(frame_twitch, text="Save", width=15, command=cmd_save_broadcaster)
