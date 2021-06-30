@@ -203,6 +203,9 @@ class Gui:
             self.settings.TwitchBotOAUTH = tmp_oauth
             self.settings.save()
 
+        def callback_url(url):
+            webbrowser.open_new(url)
+
         # [Tab] Login - Broadcaster
         frame_twitch = LabelFrame(tab2, text="Twitch account", padx=5, pady=5)
         frame_twitch.grid(row=0, column=0, padx=2, pady=2, sticky=["NSWE"])
@@ -222,8 +225,12 @@ class Gui:
         broadcaster_oauth = Entry(frame_twitch, textvariable=broadcaster_oauth_var, show='*', width=30)
         broadcaster_oauth.grid(row=1, column=1)
 
+        broadcaster_oauth_link = Label(frame_twitch, text="Obtain a Twitch OAUTH", fg="blue", cursor="hand2")
+        broadcaster_oauth_link.bind("<Button-1>", lambda e: callback_url("https://www.twitchapps.com/tmi/"))
+        broadcaster_oauth_link.grid(row=2, column=1, sticky=E)
+
         broadcaster_save = Button(frame_twitch, text="Save", width=15, command=cmd_save_broadcaster)
-        broadcaster_save.grid(row=2, column=1, sticky=E)
+        broadcaster_save.grid(row=3, column=1, sticky=E)
 
         broadcaster_reconnect = Button(frame_twitch, text="Reconnect Twitch", width=15,
                                        command=cmd_reconnect_broadcaster)
@@ -247,8 +254,12 @@ class Gui:
         chatbot_oauth = Entry(frame_chatbotbot, textvariable=chatbot_oauth_var, show='*', width=30)
         chatbot_oauth.grid(row=1, column=1)
 
+        chatbot_oauth_link = Label(frame_chatbotbot, text="Obtain a Twitch OAUTH", fg="blue", cursor="hand2")
+        chatbot_oauth_link.bind("<Button-1>", lambda e: callback_url("https://www.twitchapps.com/tmi/"))
+        chatbot_oauth_link.grid(row=2, column=1, sticky=E)
+
         chatbot_save = Button(frame_chatbotbot, text="Save", width=15, command=cmd_save_chatbot)
-        chatbot_save.grid(row=2, column=1, sticky=E)
+        chatbot_save.grid(row=3, column=1, sticky=E)
 
         chatbot_reconnect = Button(frame_chatbotbot, text="Reconnect Chatbot", width=15, command=cmd_reconnect_chatbot)
         chatbot_reconnect.tooltip = Hovertip(frame_chatbotbot, "Reconnect chatbot twitch account", hover_delay=100)
