@@ -383,6 +383,10 @@ class Twitch:
 
             if line.find("Login authentication failed") > 0:
                 self.settings.log("Twitch login authentication failed")
+                if self.bot:
+                    self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
+                else:
+                    self.gui.statusbar(TWITCH, CONNECTION_FAILED)
                 return
 
             line = line.split(" ")
