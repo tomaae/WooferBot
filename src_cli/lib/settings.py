@@ -107,13 +107,18 @@ class Settings:
     # ---------------------------
     def log(self, message: str, error=False):
         print(message)
-        if error and not self.settings.GUIEnabled:
-            exit(1)
 
         self.gui.messagelog_add(message)
 
-        self.gui.app.update_idletasks();
-        self.gui.app.update();
+        self.gui.app.update_idletasks()
+        self.gui.app.update()
+
+        if error:
+            print("WooferBot initialization failed.")
+            self.gui.messagelog_add("WooferBot initialization failed.")
+            self.gui.frame_control.grid_forget()
+            self.gui.start()
+            exit(1)
 
     # ---------------------------
     #   reload_mascot
