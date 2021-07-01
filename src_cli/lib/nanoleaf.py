@@ -13,7 +13,11 @@
 ##########################################################################
 
 from json import dumps as json_dumps
-from requests import put as requests_put, post as requests_post, exceptions as requests_exceptions
+from requests import (
+    put as requests_put,
+    post as requests_post,
+    exceptions as requests_exceptions,
+)
 from lib.helper import portup, ssdp_discovery
 
 
@@ -31,9 +35,9 @@ class Nanoleaf:
         if not self.enabled:
             return
 
-        if self.settings.os == 'win':
+        if self.settings.os == "win":
             from msvcrt import getch
-        elif self.settings.os == 'lx':
+        elif self.settings.os == "lx":
             from getch import getch
 
         self.settings.log("Initializing nanoleaf...")
@@ -45,19 +49,21 @@ class Nanoleaf:
             discovery_time = 5
             while len(ip_list) == 0:
                 self.settings.log("Starting Nanoleaf discovery.")
-                ip_list = ssdp_discovery(searchstr="nanoleaf", discovery_time=discovery_time)
+                ip_list = ssdp_discovery(
+                    searchstr="nanoleaf", discovery_time=discovery_time
+                )
                 if len(ip_list) == 0:
                     self.settings.log("Nanoleaf not found")
                     self.settings.log("Press C to cancel or any key to scan again")
-                    if self.settings.os == 'win':
+                    if self.settings.os == "win":
                         input_char = getch().decode("utf-8").upper()
-                    elif self.settings.os == 'lx':
+                    elif self.settings.os == "lx":
                         input_char = getch().upper()
 
                     if discovery_time < 20:
                         discovery_time = discovery_time + 5
 
-                    if input_char == 'C':
+                    if input_char == "C":
                         return
 
             self.ip = ip_list[0]
@@ -66,16 +72,16 @@ class Nanoleaf:
         #
         # Token not set
         #
-        result = self.put_request("state", {'on': {'value': False}})
+        result = self.put_request("state", {"on": {"value": False}})
         if self.token == "" or result.status_code == 401:
             while not self.auth():
                 self.settings.log("Press C to cancel or any key to try again")
-                if self.settings.os == 'win':
+                if self.settings.os == "win":
                     input_char = getch().decode("utf-8").upper()
-                elif self.settings.os == 'lx':
+                elif self.settings.os == "lx":
                     input_char = getch().upper()
 
-                if input_char == 'C':
+                if input_char == "C":
                     return
 
             settings.NanoleafToken = self.token
@@ -92,12 +98,12 @@ class Nanoleaf:
 
         if not name:
             # Turn nanoleaf off
-            data = {'on': {'value': False}}
+            data = {"on": {"value": False}}
             result = self.put_request("state", data)
             return result
 
         # Set nanoleaf scene
-        data = {'select': name}
+        data = {"select": name}
         result = self.put_request("effects", data)
         return result
 
@@ -136,11 +142,13 @@ class Nanoleaf:
         # Authorization successful
         if result.status_code == 200:
             self.settings.log("Authorized ok")
-            self.token = result.json()['auth_token']
+            self.token = result.json()["auth_token"]
             return True
 
         # Authorization requires hardware confirmation
         if result.status_code == 403:
             self.settings.log("Nanoleaf not in discovery mode.")
-            self.settings.log("Hold down power button for ~5 seconds until led starts blinking.")
+            self.settings.log(
+                "Hold down power button for ~5 seconds until led starts blinking."
+            )
             return False

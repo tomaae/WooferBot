@@ -12,54 +12,66 @@
 #
 ##########################################################################
 
-from socket import socket, gethostname, inet_aton, inet_pton, error as socket_error, \
-    AF_INET, SOCK_STREAM, SOCK_DGRAM, IPPROTO_IP, IP_MULTICAST_TTL, AF_INET6
+from socket import (
+    socket,
+    gethostname,
+    inet_aton,
+    inet_pton,
+    error as socket_error,
+    AF_INET,
+    SOCK_STREAM,
+    SOCK_DGRAM,
+    IPPROTO_IP,
+    IP_MULTICAST_TTL,
+    AF_INET6,
+)
 from re import search as re_search
 from select import select
 from time import time
 from pynput.keyboard import Key
 
-KEYLIST = {"space": Key.space,
-           "alt": Key.alt,
-           "ctrl": Key.ctrl,
-           "shift": Key.shift,
-           "f1": Key.f1,
-           "f2": Key.f2,
-           "f3": Key.f3,
-           "f4": Key.f4,
-           "f5": Key.f5,
-           "f6": Key.f6,
-           "f7": Key.f7,
-           "f8": Key.f8,
-           "f9": Key.f9,
-           "f10": Key.f10,
-           "f11": Key.f11,
-           "f12": Key.f12,
-           "left": Key.left,
-           "right": Key.right,
-           "up": Key.up,
-           "down": Key.down,
-           "backspace": Key.backspace,
-           "cmd": Key.cmd,
-           "delete": Key.delete,
-           "end": Key.end,
-           "enter": Key.enter,
-           "esc": Key.esc,
-           "home": Key.home,
-           "insert": Key.insert,
-           "page_down": Key.page_down,
-           "page_up": Key.page_up,
-           "pause": Key.pause,
-           "print_screen": Key.print_screen,
-           "tab": Key.tab
-           }
+KEYLIST = {
+    "space": Key.space,
+    "alt": Key.alt,
+    "ctrl": Key.ctrl,
+    "shift": Key.shift,
+    "f1": Key.f1,
+    "f2": Key.f2,
+    "f3": Key.f3,
+    "f4": Key.f4,
+    "f5": Key.f5,
+    "f6": Key.f6,
+    "f7": Key.f7,
+    "f8": Key.f8,
+    "f9": Key.f9,
+    "f10": Key.f10,
+    "f11": Key.f11,
+    "f12": Key.f12,
+    "left": Key.left,
+    "right": Key.right,
+    "up": Key.up,
+    "down": Key.down,
+    "backspace": Key.backspace,
+    "cmd": Key.cmd,
+    "delete": Key.delete,
+    "end": Key.end,
+    "enter": Key.enter,
+    "esc": Key.esc,
+    "home": Key.home,
+    "insert": Key.insert,
+    "page_down": Key.page_down,
+    "page_up": Key.page_up,
+    "pause": Key.pause,
+    "print_screen": Key.print_screen,
+    "tab": Key.tab,
+}
 
 
 # ---------------------------
 #   hex_to_rgb
 # ---------------------------
 def hex_to_rgb(h):
-    h = h.lstrip('#')
+    h = h.lstrip("#")
     r = int(h[0:2], 16)
     g = int(h[2:4], 16)
     b = int(h[4:6], 16)
@@ -71,7 +83,7 @@ def hex_to_rgb(h):
 #   hex_to_hue
 # ---------------------------
 def hex_to_hue(h):
-    h = h.lstrip('#')
+    h = h.lstrip("#")
     r = int(h[0:2], 16)
     g = int(h[2:4], 16)
     b = int(h[4:6], 16)
@@ -125,9 +137,14 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
     ssdp_ip = "239.255.255.250"
     ssdp_port = 1900
     ssdp_mx = 10
-    req = ['M-SEARCH * HTTP/1.1', 'HOST: ' + ssdp_ip + ':' + str(ssdp_port), 'MAN: "ssdp:discover"',
-           'MX: ' + str(ssdp_mx), 'ST: ssdp:all']
-    req = '\r\n'.join(req).encode('utf-8')
+    req = [
+        "M-SEARCH * HTTP/1.1",
+        "HOST: " + ssdp_ip + ":" + str(ssdp_port),
+        'MAN: "ssdp:discover"',
+        "MX: " + str(ssdp_mx),
+        "ST: ssdp:all",
+    ]
+    req = "\r\n".join(req).encode("utf-8")
 
     #
     # Send broadcast
@@ -162,7 +179,7 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
         # Parse IP from location entry
         for line in response.lower().split("\n"):
             if "location:" in line:
-                ip = re_search(r'[0-9]+(?:\.[0-9]+){3}', line).group()
+                ip = re_search(r"[0-9]+(?:\.[0-9]+){3}", line).group()
                 if ip not in devices and is_valid_ip_address(ip):
                     devices.append(ip)
 
@@ -190,7 +207,7 @@ def is_valid_ipv4_address(address):
             inet_aton(address)
         except socket_error:
             return False
-        return address.count('.') == 3
+        return address.count(".") == 3
     except socket_error:  # not a valid address
         return False
     return True
@@ -227,26 +244,46 @@ def get_var_default(vartype):
 # ---------------------------
 def has_access_rights(json_data, access_list):
     if int(json_data["broadcaster"]) == 1:
-        if access_list not in \
-                ["sub", "subs", "subscriber", "subscribers",
-                 "vip", "vips",
-                 "mod", "mods", "moderator", "moderators",
-                 "broadcaster"]:
+        if access_list not in [
+            "sub",
+            "subs",
+            "subscriber",
+            "subscribers",
+            "vip",
+            "vips",
+            "mod",
+            "mods",
+            "moderator",
+            "moderators",
+            "broadcaster",
+        ]:
             return False
     elif int(json_data["moderator"]) == 1:
-        if access_list not in \
-                ["sub", "subs", "subscriber", "subscribers",
-                 "vip", "vips",
-                 "mod", "mods", "moderator", "moderators"]:
+        if access_list not in [
+            "sub",
+            "subs",
+            "subscriber",
+            "subscribers",
+            "vip",
+            "vips",
+            "mod",
+            "mods",
+            "moderator",
+            "moderators",
+        ]:
             return False
     elif int(json_data["vip"]) == 1:
-        if access_list not in \
-                ["sub", "subs", "subscriber", "subscribers",
-                 "vip", "vips"]:
+        if access_list not in [
+            "sub",
+            "subs",
+            "subscriber",
+            "subscribers",
+            "vip",
+            "vips",
+        ]:
             return False
     elif int(json_data["subscriber"]) == 1:
-        if access_list not in \
-                ["sub", "subs", "subscriber", "subscribers"]:
+        if access_list not in ["sub", "subs", "subscriber", "subscribers"]:
             return False
     else:
         return False

@@ -72,19 +72,26 @@ class Settings:
         self.mascotStyles = {}
 
         self.twitch_client_id = "zpm94cuvrntu030mauvxvz9cv2ldja"
-        self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot",
-                           "moobot"]
+        self.commonBots = [
+            "nightbot",
+            "streamlabs",
+            "streamelements",
+            "stay_hydrated_bot",
+            "botisimo",
+            "wizebot",
+            "moobot",
+        ]
         self.encoding = "utf-8-sig"
         # Detect OS
-        if platform.startswith('win'):
-            self.os = 'win'
-            self.slash = '\\'
-        elif platform.startswith('freebsd') or platform.startswith('linux'):
-            self.os = 'lx'
-            self.slash = '/'
-        elif platform.startswith('darwin'):
-            self.os = 'osx'
-            self.slash = '/'
+        if platform.startswith("win"):
+            self.os = "win"
+            self.slash = "\\"
+        elif platform.startswith("freebsd") or platform.startswith("linux"):
+            self.os = "lx"
+            self.slash = "/"
+        elif platform.startswith("darwin"):
+            self.os = "osx"
+            self.slash = "/"
         else:
             self.log("Failed to detect OS: {}".format(platform), error=True)
 
@@ -93,8 +100,11 @@ class Settings:
         self.configFile = self.pathRoot + "settings.json"
         if not path.isdir(self.pathRoot):
             self.log("Working directory not detected.", error=True)
-        if not path.isfile(self.pathRoot + "wooferbot.py") and not path.isfile(
-                self.pathRoot + "wooferbot_cli.exe") and not path.isfile(self.pathRoot + "wooferbot_cli"):
+        if (
+            not path.isfile(self.pathRoot + "wooferbot.py")
+            and not path.isfile(self.pathRoot + "wooferbot_cli.exe")
+            and not path.isfile(self.pathRoot + "wooferbot_cli")
+        ):
             self.log("Working directory incorrect.", error=True)
         if not path.isfile(self.configFile):
             self.log("Configuration file is missing, recreating with defaults.")
@@ -131,8 +141,16 @@ class Settings:
 
         # Load mascot config
         try:
-            with open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json",
-                      encoding=self.encoding, mode="r") as f:
+            with open(
+                self.pathRoot
+                + "mascots"
+                + self.slash
+                + self.CurrentMascot
+                + self.slash
+                + "mascot.json",
+                encoding=self.encoding,
+                mode="r",
+            ) as f:
                 data = json_load(f, encoding=self.encoding)
                 for key, value in data.items():
                     self.__dict__[key] = value
@@ -141,28 +159,40 @@ class Settings:
 
         # Check mascot images
         for action in self.mascotImages:
-            if 'Image' not in self.mascotImages[action]:
-                self.log("Mascot Image variable is missing for action: {}".format(action), error=True)
+            if "Image" not in self.mascotImages[action]:
+                self.log(
+                    "Mascot Image variable is missing for action: {}".format(action),
+                    error=True,
+                )
 
-            self.mascotImages[action]['Image'] = "{}mascots{}{}{}images{}{}".format(self.pathRoot,
-                                                                                    self.slash,
-                                                                                    self.CurrentMascot,
-                                                                                    self.slash,
-                                                                                    self.slash,
-                                                                                    self.mascotImages[action]['Image'])
+            self.mascotImages[action]["Image"] = "{}mascots{}{}{}images{}{}".format(
+                self.pathRoot,
+                self.slash,
+                self.CurrentMascot,
+                self.slash,
+                self.slash,
+                self.mascotImages[action]["Image"],
+            )
 
         # Check mascot audio
         for action in self.mascotAudio:
-            if not isinstance(self.mascotAudio[action]['Audio'], list):
-                self.log("Mascot audio is not a list for action: {}".format(action), error=True)
+            if not isinstance(self.mascotAudio[action]["Audio"], list):
+                self.log(
+                    "Mascot audio is not a list for action: {}".format(action),
+                    error=True,
+                )
 
-            for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-                self.mascotAudio[action]['Audio'][idx] = "{}mascots{}{}{}audio{}{}".format(self.pathRoot,
-                                                                                           self.slash,
-                                                                                           self.CurrentMascot,
-                                                                                           self.slash,
-                                                                                           self.slash,
-                                                                                           self.mascotAudio[action]['Audio'][idx])
+            for idx, val in enumerate(self.mascotAudio[action]["Audio"]):
+                self.mascotAudio[action]["Audio"][
+                    idx
+                ] = "{}mascots{}{}{}audio{}{}".format(
+                    self.pathRoot,
+                    self.slash,
+                    self.CurrentMascot,
+                    self.slash,
+                    self.slash,
+                    self.mascotAudio[action]["Audio"][idx],
+                )
 
         CheckSettingsDependencies(self)
 
@@ -213,13 +243,15 @@ class Settings:
             self.Bots.append(self.TwitchBotChannel)
         self.Bots = [x.lower() for x in self.Bots]
         for action in self.Commands:
-            self.Commands[action]['Hotkey'] = [key.lower() for key in self.Commands[action]['Hotkey']]
+            self.Commands[action]["Hotkey"] = [
+                key.lower() for key in self.Commands[action]["Hotkey"]
+            ]
 
         #
         # Reset time on all ScheduledMessages
         #
         for action in self.ScheduledMessages:
-            self.scheduleTable[action['Name']] = int(time())
+            self.scheduleTable[action["Name"]] = int(time())
 
         self.autofill_settings()
 
@@ -256,11 +288,16 @@ class Settings:
                 var_found = False
                 tmp = get_var_default(defaults_list[var])
 
-            if (type(defaults_list[var]) == str and type(tmp) != str) \
-                    or (type(defaults_list[var]) in [int, float] and type(tmp) not in [int, float]) \
-                    or (type(defaults_list[var]) == bool and type(tmp) != bool) \
-                    or (type(defaults_list[var]) == list and type(tmp) != list) \
-                    or not var_found:
+            if (
+                (type(defaults_list[var]) == str and type(tmp) != str)
+                or (
+                    type(defaults_list[var]) in [int, float]
+                    and type(tmp) not in [int, float]
+                )
+                or (type(defaults_list[var]) == bool and type(tmp) != bool)
+                or (type(defaults_list[var]) == list and type(tmp) != list)
+                or not var_found
+            ):
                 if type(cls) == dict:
                     cls[var] = defaults_list[var]
                 else:
@@ -288,18 +325,23 @@ class Settings:
             self.set_variables(action, defaults_customsubs)
 
         if "DEFAULT" not in self.PoseMapping:
-            self.PoseMapping['DEFAULT'] = {}
-            self.PoseMapping['DEFAULT']['Image'] = 'Wave'
-            self.PoseMapping['DEFAULT']['Audio'] = 'Wave'
+            self.PoseMapping["DEFAULT"] = {}
+            self.PoseMapping["DEFAULT"]["Image"] = "Wave"
+            self.PoseMapping["DEFAULT"]["Audio"] = "Wave"
 
         for action in self.PoseMapping:
-            if 'Hue' in self.PoseMapping[action]:
-                for light in self.PoseMapping[action]['Hue']:
-                    self.set_variables(self.PoseMapping[action]['Hue'][light], defaults_posemapping_hue)
+            if "Hue" in self.PoseMapping[action]:
+                for light in self.PoseMapping[action]["Hue"]:
+                    self.set_variables(
+                        self.PoseMapping[action]["Hue"][light], defaults_posemapping_hue
+                    )
 
-            if 'Yeelight' in self.PoseMapping[action]:
-                for light in self.PoseMapping[action]['Yeelight']:
-                    self.set_variables(self.PoseMapping[action]['Yeelight'][light], defaults_posemapping_yeelight)
+            if "Yeelight" in self.PoseMapping[action]:
+                for light in self.PoseMapping[action]["Yeelight"]:
+                    self.set_variables(
+                        self.PoseMapping[action]["Yeelight"][light],
+                        defaults_posemapping_yeelight,
+                    )
 
     # ---------------------------
     #   Save
@@ -323,7 +365,9 @@ class Settings:
 
         # Save config copy
         try:
-            with open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
+            with open(
+                self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+"
+            ) as f:
                 json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             self.log("Failed to save settings.bak", error=True)
@@ -339,18 +383,24 @@ class Settings:
             code = 1
 
         # Check OAUTH
-        if self.TwitchOAUTH.find('oauth:') != 0:
+        if self.TwitchOAUTH.find("oauth:") != 0:
             self.log("Twitch OAUTH is invalid")
             code = 1
 
         # Check chatbot
-        if self.UseChatbot and len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
+        if (
+            self.UseChatbot
+            and len(self.TwitchBotOAUTH) > 0
+            and self.TwitchBotOAUTH.find("oauth:") != 0
+        ):
             self.log("Twitch Bot OAUTH is invalid")
             code = 1
 
         # Check twitch client ID
         if len(self.twitch_client_id) < 1:
-            self.log("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
+            self.log(
+                "Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id"
+            )
             code = 1
 
         if code:
@@ -363,7 +413,7 @@ class Settings:
         #
         # CurrectMascot fix v1.1
         #
-        if hasattr(self, 'CurrectMascot'):
+        if hasattr(self, "CurrectMascot"):
             self.CurrentMascot = self.CurrectMascot
             del self.CurrectMascot
 
@@ -371,33 +421,48 @@ class Settings:
         # ScheduledMessages Messages and remove LastShown v1.2
         #
         for action in self.ScheduledMessages:
-            if 'LastShown' in action:
-                del action['LastShown']
-            if 'Message' in action:
-                if action['Name'] in self.Messages:
-                    self.log("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(action['Name']), error=True)
+            if "LastShown" in action:
+                del action["LastShown"]
+            if "Message" in action:
+                if action["Name"] in self.Messages:
+                    self.log(
+                        "Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(
+                            action["Name"]
+                        ),
+                        error=True,
+                    )
                 else:
-                    self.Messages[action['Name']] = action['Message']
-                    del action['Message']
+                    self.Messages[action["Name"]] = action["Message"]
+                    del action["Message"]
 
         #
         # Commands Messages v1.2
         #
         for action in self.Commands:
-            if 'Message' in self.Commands[action]:
+            if "Message" in self.Commands[action]:
                 if action in self.Messages:
-                    self.log("Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(action), error=True)
+                    self.log(
+                        "Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(
+                            action
+                        ),
+                        error=True,
+                    )
                 else:
-                    self.Messages[action] = self.Commands[action]['Message']
-                    del self.Commands[action]['Message']
+                    self.Messages[action] = self.Commands[action]["Message"]
+                    del self.Commands[action]["Message"]
 
         #
         # CustomGreets v1.2
         #
-        if hasattr(self, 'CustomGreets'):
+        if hasattr(self, "CustomGreets"):
             for action in self.CustomGreets:
                 if action in self.Messages:
-                    self.log("Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(action), error=True)
+                    self.log(
+                        "Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(
+                            action
+                        ),
+                        error=True,
+                    )
 
             for action in self.CustomGreets:
                 self.Messages["viewer_" + action] = self.CustomGreets[action]

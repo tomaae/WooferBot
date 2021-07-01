@@ -21,7 +21,6 @@ from requests import get as requests_get
 from .const import (
     TWITCH,
     CHATBOT,
-
     CONNECTING,
     CONNECTED,
     CONNECTION_FAILED,
@@ -35,9 +34,14 @@ from .const import (
 # ---------------------------
 def twitch_get_user(twitch_client_id, target_user):
     # Get user info from API
-    headers = {"Client-ID": twitch_client_id, "Accept": "application/vnd.twitchtv.v5+json"}
-    result = requests_get("https://api.twitch.tv/kraken/users?login={0}".format(target_user.lower()),
-                          headers=headers)
+    headers = {
+        "Client-ID": twitch_client_id,
+        "Accept": "application/vnd.twitchtv.v5+json",
+    }
+    result = requests_get(
+        "https://api.twitch.tv/kraken/users?login={0}".format(target_user.lower()),
+        headers=headers,
+    )
 
     # Check encoding
     if result.encoding is None:
@@ -63,8 +67,13 @@ def twitch_get_user(twitch_client_id, target_user):
 # ---------------------------
 def twitch_get_last_activity(twitch_client_id, user_id):
     # Get channel activity from API
-    headers = {"Client-ID": twitch_client_id, "Accept": "application/vnd.twitchtv.v5+json"}
-    result = requests_get("https://api.twitch.tv/kraken/channels/{}".format(user_id), headers=headers)
+    headers = {
+        "Client-ID": twitch_client_id,
+        "Accept": "application/vnd.twitchtv.v5+json",
+    }
+    result = requests_get(
+        "https://api.twitch.tv/kraken/channels/{}".format(user_id), headers=headers
+    )
 
     # Check encoding
     if result.encoding is None:
@@ -120,7 +129,7 @@ def fill_tags():
         "sender": "",
         "message": "",
         "custom-tag": "",
-        "custom-reward-id": ""
+        "custom-reward-id": "",
     }
     return result
 
@@ -199,7 +208,7 @@ def remove_emotes(msg, emotes):
             emote = emote.split(":")[1]
 
         emote = emote.split("-")
-        msg = msg[:int(emote[0])] + msg[int(emote[1]) + 1:]
+        msg = msg[: int(emote[0])] + msg[int(emote[1]) + 1 :]
 
     # print(msg)
     return msg
@@ -255,7 +264,11 @@ class Twitch:
             else:
                 self.gui.statusbar(TWITCH, CONNECTION_FAILED)
 
-            self.settings.log("Connection {} to Twitch not responding, reconnecting...".format(self.TwitchLogin))
+            self.settings.log(
+                "Connection {} to Twitch not responding, reconnecting...".format(
+                    self.TwitchLogin
+                )
+            )
             self.connected = False
             self.disconnect()
             return
@@ -282,7 +295,12 @@ class Twitch:
             return False
 
         # Send message to chat
-        self.con.send(bytes("PRIVMSG #{} :{}\r\n".format(self.settings.TwitchChannel, message), self.chrset))
+        self.con.send(
+            bytes(
+                "PRIVMSG #{} :{}\r\n".format(self.settings.TwitchChannel, message),
+                self.chrset,
+            )
+        )
         return True
 
     # ---------------------------
@@ -314,9 +332,13 @@ class Twitch:
             self.con.connect((self.host, self.port))
             self.con.send(bytes("PASS %s\r\n" % twitch_oauth, self.chrset))
             self.con.send(bytes("NICK %s\r\n" % twitch_login, self.chrset))
-            self.con.send(bytes("JOIN #%s\r\n" % self.settings.TwitchChannel, self.chrset))
+            self.con.send(
+                bytes("JOIN #%s\r\n" % self.settings.TwitchChannel, self.chrset)
+            )
             if not self.bot:
-                self.con.send(bytes("CAP REQ :twitch.tv/tags twitch.tv/commands\r\n", self.chrset))
+                self.con.send(
+                    bytes("CAP REQ :twitch.tv/tags twitch.tv/commands\r\n", self.chrset)
+                )
 
         except:
             self.settings.log("Unable to connect {} to Twitch...".format(twitch_login))
@@ -461,7 +483,12 @@ class Twitch:
                         self.woofer.process_json(json_data)
 
                     # SUB
-                    elif json_data["msg-id"] in ["sub", "resub", "subgift", "anonsubgift"]:
+                    elif json_data["msg-id"] in [
+                        "sub",
+                        "resub",
+                        "subgift",
+                        "anonsubgift",
+                    ]:
                         json_data["custom-tag"] = json_data["msg-id"]
 
                         if json_data["msg-param-sub-plan"] == "Prime":
@@ -475,9 +502,13 @@ class Twitch:
 
                         if json_data["msg-id"] in ["sub", "resub"]:
                             if json_data["msg-param-cumulative-months"]:
-                                json_data["months"] = json_data["msg-param-cumulative-months"]
+                                json_data["months"] = json_data[
+                                    "msg-param-cumulative-months"
+                                ]
                             if json_data["msg-param-streak-months"]:
-                                json_data["months_streak"] = json_data["msg-param-streak-months"]
+                                json_data["months_streak"] = json_data[
+                                    "msg-param-streak-months"
+                                ]
 
                         self.woofer.process_json(json_data)
 
@@ -488,7 +519,10 @@ class Twitch:
                         # self.woofer.ProcessJson(json_data)
 
                     # RITUAL NEW CHATTER
-                    elif json_data["msg-id"] == "ritual" and json_data["msg-param-ritual-name"] == "new_chatter":
+                    elif (
+                        json_data["msg-id"] == "ritual"
+                        and json_data["msg-param-ritual-name"] == "new_chatter"
+                    ):
                         json_data["sender"] = json_data["display-name"]
                         json_data["message"] = get_message(line)
                         json_data["custom-tag"] = "new_chatter"

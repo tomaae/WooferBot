@@ -50,124 +50,139 @@ class Cli:
             # Follow
             #
             elif cmd == "1":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "custom-tag": "follow"
-                })
+                self.woofer.woofer_alert(
+                    {"display-name": "testname", "custom-tag": "follow"}
+                )
 
             #
             # Greet
             #
             elif cmd == "2":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "custom-tag": "greet"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "custom-tag": "greet",
+                    }
+                )
 
             #
             # Shoutout
             #
             elif cmd == "3":
-                self.woofer.woofer_shoutout({
-                    "subscriber": "1",
-                    "vip": "1",
-                    "moderator": "1",
-                    "broadcaster": "1",
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "command_parameter": "testname",
-                    "custom-tag": "shoutout"
-                })
+                self.woofer.woofer_shoutout(
+                    {
+                        "subscriber": "1",
+                        "vip": "1",
+                        "moderator": "1",
+                        "broadcaster": "1",
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "command_parameter": "testname",
+                        "custom-tag": "shoutout",
+                    }
+                )
 
             #
             # Lurk
             #
             elif cmd == "4":
-                self.woofer.woofer_lurk({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "custom-tag": "lurk"
-                })
+                self.woofer.woofer_lurk(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "custom-tag": "lurk",
+                    }
+                )
 
             #
             # Bits
             #
             elif cmd == "5":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "bits": "1000",
-                    "custom-tag": "bits"
-                })
+                self.woofer.woofer_alert(
+                    {"display-name": "testname", "bits": "1000", "custom-tag": "bits"}
+                )
 
             #
             # New chatter
             #
             elif cmd == "6":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "custom-tag": "new_chatter"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "custom-tag": "new_chatter",
+                    }
+                )
 
             #
             # Raid
             #
             elif cmd == "7":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "viewers": "1",
-                    "custom-tag": "raid"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "viewers": "1",
+                        "custom-tag": "raid",
+                    }
+                )
 
             #
             # Host
             #
             elif cmd == "8":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "custom-tag": "host"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "custom-tag": "host",
+                    }
+                )
 
             #
             # Sub
             #
             elif cmd == "9":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "sub_tier": "Tier 2",
-                    "months": "4",
-                    "months_streak": "4",
-                    "custom-tag": "sub"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "sub_tier": "Tier 2",
+                        "months": "4",
+                        "months_streak": "4",
+                        "custom-tag": "sub",
+                    }
+                )
 
             #
             # Resub
             #
             elif cmd == "10":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "sub_tier": "Tier 3",
-                    "months": "4",
-                    "months_streak": "4",
-                    "custom-tag": "resub"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "sub_tier": "Tier 3",
+                        "months": "4",
+                        "months_streak": "4",
+                        "custom-tag": "resub",
+                    }
+                )
 
             #
             # Subgift
             #
             elif cmd == "11":
-                self.woofer.woofer_alert({
-                    "display-name": "testname",
-                    "sender": "testname",
-                    "sub_tier": "Tier 2",
-                    "msg-param-recipient-display-name": "testname2",
-                    "custom-tag": "subgift"
-                })
+                self.woofer.woofer_alert(
+                    {
+                        "display-name": "testname",
+                        "sender": "testname",
+                        "sub_tier": "Tier 2",
+                        "msg-param-recipient-display-name": "testname2",
+                        "custom-tag": "subgift",
+                    }
+                )
 
             #
             # Reconnect to twitch

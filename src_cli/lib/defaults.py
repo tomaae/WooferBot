@@ -72,12 +72,8 @@ defaults_styles = {
 }
 
 defaults_messages = {
-    "new_chatter": [
-        "Oh? {sender} is new here. Welcome~ ^..^"
-    ],
-    "follow": [
-        "Oh? We have a new friend! Welcome {sender} ^..^"
-    ],
+    "new_chatter": ["Oh? {sender} is new here. Welcome~ ^..^"],
+    "follow": ["Oh? We have a new friend! Welcome {sender} ^..^"],
     "sub": [
         "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for becoming our best friend ^..^"
     ],
@@ -87,73 +83,41 @@ defaults_messages = {
     "subgift": [
         "[Hello;Hi;Hey;Hewwo;Ello] {sender}, thank you for gifting a sub to {recipient} ^..^"
     ],
-    "bits": [
-        "Yay~! {sender} just gave me {bits} treats ^..^"
-    ],
-    "raid": [
-        "Oh? Is it a raid? {sender} raid?? Did they bring lots of treats??! ^..^"
-    ],
+    "bits": ["Yay~! {sender} just gave me {bits} treats ^..^"],
+    "raid": ["Oh? Is it a raid? {sender} raid?? Did they bring lots of treats??! ^..^"],
     "host": [
         "Oh? Do I spy a host from {sender}?? Come on over and don't forget to bring treats! ^..^"
     ],
     "greet": [
         "[Hello;Hi;Hey;Hewwo;Ello] {sender}, can I have some treats please?",
-        "[Hello;Hi;Hey;Hewwo;Ello] {sender}!? Are you here to pet me? Or to give me wet food? Either one is fine, just let me know! ^..^"
+        "[Hello;Hi;Hey;Hewwo;Ello] {sender}!? Are you here to pet me? Or to give me wet food? Either one is fine, just let me know! ^..^",
     ],
     "lurk": [
         "Sit back, get some snacks and enjoy you lurk {sender}. But please share some with me~ ^..^"
     ],
-    "unlurk": [
-        "Welcome back {sender}, can I have a treats now? Pretty please~ ^..^"
-    ],
-    "shoutout": [
-        "Please checkout {recipient}, they're a fantastic streamer"
-    ],
+    "unlurk": ["Welcome back {sender}, can I have a treats now? Pretty please~ ^..^"],
+    "shoutout": ["Please checkout {recipient}, they're a fantastic streamer"],
 }
 
 defaults_activities = {
-    "Game": [
-        " and they were last playing {activity}"
-    ],
-    "Art": [
-        " and they were last streaming Art"
-    ],
-    "Makers and Crafting": [
-        " and they were last streaming Makers and Crafting"
-    ],
-    "Food & Drink": [
-        " and they were last streaming Food & Drink"
-    ],
+    "Game": [" and they were last playing {activity}"],
+    "Art": [" and they were last streaming Art"],
+    "Makers and Crafting": [" and they were last streaming Makers and Crafting"],
+    "Food & Drink": [" and they were last streaming Food & Drink"],
     "Music & Performing Arts": [
         " and they were last streaming Music & Performing Arts"
     ],
-    "Beauty & Body Art": [
-        " and they were last streaming Beauty & Body Art"
-    ],
+    "Beauty & Body Art": [" and they were last streaming Beauty & Body Art"],
     "Science & Technology": [
         " and they were last streaming Science & Technology activities"
     ],
-    "Just Chatting": [
-        " and they were last chatting"
-    ],
-    "Travel & Outdoors": [
-        " and they were last streaming Travel & Outdoors activities"
-    ],
-    "Sports & Fitness": [
-        " and they were last streaming Sports & Fitness activities"
-    ],
-    "Tabletop RPGs": [
-        " and they were last playing IRL Tabletop RPG"
-    ],
-    "Special Events": [
-        " and they were last streaming a Special Event"
-    ],
-    "Talk Shows & Podcasts": [
-        " and they were last streaming a Talk Show or Podcast"
-    ],
-    "ASMR": [
-        " and they were last streaming ASMR"
-    ],
+    "Just Chatting": [" and they were last chatting"],
+    "Travel & Outdoors": [" and they were last streaming Travel & Outdoors activities"],
+    "Sports & Fitness": [" and they were last streaming Sports & Fitness activities"],
+    "Tabletop RPGs": [" and they were last playing IRL Tabletop RPG"],
+    "Special Events": [" and they were last streaming a Special Event"],
+    "Talk Shows & Podcasts": [" and they were last streaming a Talk Show or Podcast"],
+    "ASMR": [" and they were last streaming ASMR"],
 }
 
 defaults_scheduledmessages = {
