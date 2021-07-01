@@ -296,6 +296,8 @@ class Gui:
             self.settings.Styles["HighlightTextShadowColor"] = styles_highlighttextshadowcolor_var.get()
             self.settings.Styles["HighlightTextShadowOffset"] = styles_highlighttextshadowoffset_var.get()
             self.settings.save()
+            self.settings.reload_mascot()
+            self.overlay.reload()
 
         mascot_save = Button(tab4, text="Save", width=15, command=cmd_save_mascot)
         mascot_save.grid(row=1, column=1, sticky=E)
