@@ -268,148 +268,157 @@ class Gui:
         # ---------------------------
         # [Tab] Mascot
         # ---------------------------
-        frame_mascot = LabelFrame(tab4, text="Speech bubble styles", padx=5, pady=5)
-        frame_mascot.grid(row=0, column=0, padx=2, pady=2, sticky=["NSWE"])
-        tab2.grid_rowconfigure(0, weight=1)
-        tab2.grid_columnconfigure([0, 1], weight=1)
+        frame_mascot_style = LabelFrame(tab4, text="Speech bubble styles", padx=5, pady=5)
+        frame_mascot_style.grid(row=0, column=1, padx=2, pady=2, sticky=["NSWE"])
+        tab4.grid_rowconfigure(0, weight=1)
+        tab4.grid_columnconfigure([0, 1], weight=1)
 
+        # [Tab] Mascot - Style
         def cmd_colorpicker(var, field):
             color_code = colorchooser.askcolor(title="Choose color")[1]
-            var.set(color_code)
-            field.configure(bg=str(var.get()))
+            if color_code != None:
+                var.set(color_code)
+                field.configure(bg=str(var.get()))
 
-        Label(frame_mascot, text="Background Color").grid(row=0, column=0, sticky=E)
+        Label(frame_mascot_style, text="Background Color").grid(row=0, column=0, sticky=E)
         styles_backgroundcolor_var = tk.StringVar()
         styles_backgroundcolor_var.set(self.settings.Styles["BackgroundColor"])
-        styles_backgroundcolor = Entry(frame_mascot, textvariable=styles_backgroundcolor_var, width=30)
+        styles_backgroundcolor = Entry(frame_mascot_style, textvariable=styles_backgroundcolor_var, width=30)
         styles_backgroundcolor.grid(row=0, column=1)
         styles_backgroundcolor.configure(bg=str(styles_backgroundcolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(styles_backgroundcolor_var, styles_backgroundcolor)).grid(row=0,
                                                                                                          column=2,
                                                                                                          sticky=E)
 
-        Label(frame_mascot, text="Border Color").grid(row=1, column=0, sticky=E)
+        Label(frame_mascot_style, text="Border Color").grid(row=1, column=0, sticky=E)
         styles_bordercolor_var = tk.StringVar()
         styles_bordercolor_var.set(self.settings.Styles["BorderColor"])
-        styles_bordercolor = Entry(frame_mascot, textvariable=styles_bordercolor_var, width=30)
+        styles_bordercolor = Entry(frame_mascot_style, textvariable=styles_bordercolor_var, width=30)
         styles_bordercolor.grid(row=1, column=1)
         styles_bordercolor.configure(bg=str(styles_bordercolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(styles_bordercolor_var, styles_bordercolor)).grid(row=1,
                                                                                                  column=2,
                                                                                                  sticky=E)
 
-        Label(frame_mascot, text="Border Width").grid(row=2, column=0, sticky=E)
+        Label(frame_mascot_style, text="Border Width").grid(row=2, column=0, sticky=E)
         styles_borderwidth_var = IntVar()
         styles_borderwidth_var.set(self.settings.Styles["BorderWidth"])
-        styles_borderwidth = Spinbox(frame_mascot, textvariable=styles_borderwidth_var, width=28, from_=0, to=20)
+        styles_borderwidth = Spinbox(frame_mascot_style, textvariable=styles_borderwidth_var, width=28, from_=0, to=20)
         styles_borderwidth.grid(row=2, column=1)
 
-        Label(frame_mascot, text="Border Radius").grid(row=3, column=0, sticky=E)
+        Label(frame_mascot_style, text="Border Radius").grid(row=3, column=0, sticky=E)
         styles_borderradius_var = IntVar()
         styles_borderradius_var.set(self.settings.Styles["BorderRadius"])
-        styles_borderradius = Spinbox(frame_mascot, textvariable=styles_borderradius_var, width=28, from_=0, to=50)
+        styles_borderradius = Spinbox(frame_mascot_style, textvariable=styles_borderradius_var, width=28, from_=0, to=50)
         styles_borderradius.grid(row=3, column=1)
 
-        Label(frame_mascot, text="Border Stroke Color").grid(row=4, column=0, sticky=E)
+        Label(frame_mascot_style, text="Border Stroke Color").grid(row=4, column=0, sticky=E)
         styles_borderstrokecolor_var = tk.StringVar()
         styles_borderstrokecolor_var.set(self.settings.Styles["BorderStrokeColor"])
-        styles_borderstrokecolor = Entry(frame_mascot, textvariable=styles_borderstrokecolor_var, width=30)
+        styles_borderstrokecolor = Entry(frame_mascot_style, textvariable=styles_borderstrokecolor_var, width=30)
         styles_borderstrokecolor.grid(row=4, column=1)
         styles_borderstrokecolor.configure(bg=str(styles_borderstrokecolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(styles_borderstrokecolor_var, styles_borderstrokecolor)).grid(row=4,
                                                                                                              column=2,
                                                                                                              sticky=E)
 
-        Label(frame_mascot, text="Text Font Family").grid(row=5, column=0, sticky=E)
+        Label(frame_mascot_style, text="Text Font Family").grid(row=5, column=0, sticky=E)
         font_list = []
-        i_n = -1
+        font_list_textfontfamily = None
         for i in font.families():
-            i_n = i_n + 1
+            if i.startswith("@"):
+                continue
+
             font_list.append(i)
-            if i == self.settings.Styles["TextFontFamily"]:
-                font_list_textfontfamily = i_n
 
-        styles_textfontfamily = ttk.Combobox(frame_mascot, values=font_list, width=26)
+        font_list.sort()
+
+        for index, value in enumerate(font_list):
+            if value == self.settings.Styles["TextFontFamily"]:
+                font_list_textfontfamily = index
+
+        styles_textfontfamily = ttk.Combobox(frame_mascot_style, values=font_list, width=26)
         styles_textfontfamily.grid(row=5, column=1, sticky=W)
-        styles_textfontfamily.current(font_list_textfontfamily)
+        if font_list_textfontfamily:
+            styles_textfontfamily.current(font_list_textfontfamily)
 
-        Label(frame_mascot, text="Text Size").grid(row=6, column=0, sticky=E)
+        Label(frame_mascot_style, text="Text Size").grid(row=6, column=0, sticky=E)
         styles_textsize_var = IntVar()
         styles_textsize_var.set(self.settings.Styles["TextSize"])
-        styles_textsize = Spinbox(frame_mascot, textvariable=styles_textsize_var, width=28, from_=8, to=60)
+        styles_textsize = Spinbox(frame_mascot_style, textvariable=styles_textsize_var, width=28, from_=8, to=60)
         styles_textsize.grid(row=6, column=1)
 
-        Label(frame_mascot, text="Text Weight").grid(row=7, column=0, sticky=E)
+        Label(frame_mascot_style, text="Text Weight").grid(row=7, column=0, sticky=E)
         styles_textweight_var = IntVar()
         styles_textweight_var.set(self.settings.Styles["TextWeight"])
-        styles_textweight = Spinbox(frame_mascot, textvariable=styles_textweight_var, width=28, from_=1, to=1000)
+        styles_textweight = Spinbox(frame_mascot_style, textvariable=styles_textweight_var, width=28, from_=1, to=1000)
         styles_textweight.grid(row=7, column=1)
 
-        Label(frame_mascot, text="Text Color").grid(row=8, column=0, sticky=E)
+        Label(frame_mascot_style, text="Text Color").grid(row=8, column=0, sticky=E)
         styles_textcolor_var = tk.StringVar()
         styles_textcolor_var.set(self.settings.Styles["TextColor"])
-        styles_textcolor = Entry(frame_mascot, textvariable=styles_textcolor_var, width=30)
+        styles_textcolor = Entry(frame_mascot_style, textvariable=styles_textcolor_var, width=30)
         styles_textcolor.grid(row=8, column=1)
         styles_textcolor.configure(bg=str(styles_textcolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(styles_textcolor_var, styles_textcolor)).grid(row=8,
                                                                                              column=2,
                                                                                              sticky=E)
 
-        Label(frame_mascot, text="Highlight Text Size").grid(row=9, column=0, sticky=E)
+        Label(frame_mascot_style, text="Highlight Text Size").grid(row=9, column=0, sticky=E)
         styles_highlighttextsize_var = IntVar()
         styles_highlighttextsize_var.set(self.settings.Styles["HighlightTextSize"])
-        styles_highlighttextsize = Spinbox(frame_mascot, textvariable=styles_highlighttextsize_var, width=28, from_=8,
+        styles_highlighttextsize = Spinbox(frame_mascot_style, textvariable=styles_highlighttextsize_var, width=28, from_=8,
                                            to=60)
         styles_highlighttextsize.grid(row=9, column=1)
 
-        Label(frame_mascot, text="Highlight Text Spacing").grid(row=10, column=0, sticky=E)
+        Label(frame_mascot_style, text="Highlight Text Spacing").grid(row=10, column=0, sticky=E)
         styles_highlighttextspacing_var = IntVar()
         styles_highlighttextspacing_var.set(self.settings.Styles["HighlightTextSpacing"])
-        styles_highlighttextspacing = Spinbox(frame_mascot, textvariable=styles_highlighttextspacing_var, width=28,
+        styles_highlighttextspacing = Spinbox(frame_mascot_style, textvariable=styles_highlighttextspacing_var, width=28,
                                               from_=0, to=10)
         styles_highlighttextspacing.grid(row=10, column=1)
 
-        Label(frame_mascot, text="Highlight Text Color").grid(row=11, column=0, sticky=E)
+        Label(frame_mascot_style, text="Highlight Text Color").grid(row=11, column=0, sticky=E)
         highlighttextcolor_var = tk.StringVar()
         highlighttextcolor_var.set(self.settings.Styles["HighlightTextColor"])
-        highlighttextcolor = Entry(frame_mascot, textvariable=highlighttextcolor_var, width=30)
+        highlighttextcolor = Entry(frame_mascot_style, textvariable=highlighttextcolor_var, width=30)
         highlighttextcolor.grid(row=11, column=1)
         highlighttextcolor.configure(bg=str(highlighttextcolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(highlighttextcolor_var, highlighttextcolor)).grid(row=11,
                                                                                                  column=2,
                                                                                                  sticky=E)
 
-        Label(frame_mascot, text="Highlight Text Stroke Color").grid(row=12, column=0, sticky=E)
+        Label(frame_mascot_style, text="Highlight Text Stroke Color").grid(row=12, column=0, sticky=E)
         highlighttextstrokecolor_var = tk.StringVar()
         highlighttextstrokecolor_var.set(self.settings.Styles["HighlightTextStrokeColor"])
-        highlighttextstrokecolor = Entry(frame_mascot, textvariable=highlighttextstrokecolor_var, width=30)
+        highlighttextstrokecolor = Entry(frame_mascot_style, textvariable=highlighttextstrokecolor_var, width=30)
         highlighttextstrokecolor.grid(row=12, column=1)
         highlighttextstrokecolor.configure(bg=str(highlighttextstrokecolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(highlighttextstrokecolor_var, highlighttextstrokecolor)).grid(row=12,
                                                                                                              column=2,
                                                                                                              sticky=E)
 
-        Label(frame_mascot, text="Highlight Text Shadow Color").grid(row=13, column=0, sticky=E)
+        Label(frame_mascot_style, text="Highlight Text Shadow Color").grid(row=13, column=0, sticky=E)
         highlighttextshadowcolor_var = tk.StringVar()
         highlighttextshadowcolor_var.set(self.settings.Styles["HighlightTextShadowColor"])
-        highlighttextshadowcolor = Entry(frame_mascot, textvariable=highlighttextshadowcolor_var, width=30)
+        highlighttextshadowcolor = Entry(frame_mascot_style, textvariable=highlighttextshadowcolor_var, width=30)
         highlighttextshadowcolor.grid(row=13, column=1)
         highlighttextshadowcolor.configure(bg=str(highlighttextshadowcolor_var.get()))
-        Button(frame_mascot, text="Pick",
+        Button(frame_mascot_style, text="Pick",
                command=lambda: cmd_colorpicker(highlighttextshadowcolor_var, highlighttextshadowcolor)).grid(row=13,
                                                                                                              column=2,
                                                                                                              sticky=E)
 
-        Label(frame_mascot, text="Highlight Text Shadow Offset").grid(row=14, column=0, sticky=E)
+        Label(frame_mascot_style, text="Highlight Text Shadow Offset").grid(row=14, column=0, sticky=E)
         styles_highlighttextshadowoffset_var = IntVar()
         styles_highlighttextshadowoffset_var.set(self.settings.Styles["HighlightTextShadowOffset"])
-        styles_highlighttextshadowoffset = Spinbox(frame_mascot, textvariable=styles_highlighttextshadowoffset_var, width=28, from_=0, to=20)
+        styles_highlighttextshadowoffset = Spinbox(frame_mascot_style, textvariable=styles_highlighttextshadowoffset_var, width=28, from_=0, to=20)
         styles_highlighttextshadowoffset.grid(row=14, column=1)
 
     # ---------------------------
