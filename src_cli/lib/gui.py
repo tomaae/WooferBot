@@ -337,7 +337,7 @@ class Gui:
         # [Tab] Mascot - Style
         def cmd_colorpicker(var, field):
             color_code = colorchooser.askcolor(title="Choose color")[1]
-            if not color_code:
+            if color_code is not None:
                 var.set(color_code)
                 field.configure(bg=str(var.get()))
 
