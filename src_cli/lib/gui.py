@@ -19,6 +19,7 @@ from tkinter import messagebox
 from tkinter import colorchooser
 from tkinter import font
 from os import listdir, path
+import re
 import webbrowser
 from idlelib.tooltip import Hovertip
 from .const import (
@@ -335,16 +336,27 @@ class Gui:
             mascot_align.current(mascot_align_list_value)
 
         # [Tab] Mascot - Style
+        def is_hex_color(input_string):
+            regexp = re.compile(r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')
+            if regexp.search(input_string):
+                return True
+            return False
+
+        def cmd_colorchanged(var, field):
+            if is_hex_color(str(var.get())):
+                field.configure(bg=str(var.get()))
+
         def cmd_colorpicker(var, field):
             color_code = colorchooser.askcolor(title="Choose color")[1]
             if color_code is not None:
                 var.set(color_code)
-                field.configure(bg=str(var.get()))
 
         Label(frame_mascot_style, text="Background Color").grid(row=0, column=0, sticky=E)
         styles_backgroundcolor_var = tk.StringVar()
         styles_backgroundcolor_var.set(self.settings.Styles["BackgroundColor"])
         styles_backgroundcolor = Entry(frame_mascot_style, textvariable=styles_backgroundcolor_var, width=30)
+        styles_backgroundcolor_var.trace_add("write", lambda nm, idx, mode, var=styles_backgroundcolor_var,
+                                                         field=styles_backgroundcolor: cmd_colorchanged(var, field))
         styles_backgroundcolor.grid(row=0, column=1)
         styles_backgroundcolor.configure(bg=str(styles_backgroundcolor_var.get()))
         Button(frame_mascot_style, text="Pick",
@@ -356,6 +368,8 @@ class Gui:
         styles_bordercolor_var = tk.StringVar()
         styles_bordercolor_var.set(self.settings.Styles["BorderColor"])
         styles_bordercolor = Entry(frame_mascot_style, textvariable=styles_bordercolor_var, width=30)
+        styles_bordercolor_var.trace_add("write", lambda nm, idx, mode, var=styles_bordercolor_var,
+                                         field=styles_bordercolor: cmd_colorchanged(var, field))
         styles_bordercolor.grid(row=1, column=1)
         styles_bordercolor.configure(bg=str(styles_bordercolor_var.get()))
         Button(frame_mascot_style, text="Pick",
@@ -379,6 +393,8 @@ class Gui:
         styles_borderstrokecolor_var = tk.StringVar()
         styles_borderstrokecolor_var.set(self.settings.Styles["BorderStrokeColor"])
         styles_borderstrokecolor = Entry(frame_mascot_style, textvariable=styles_borderstrokecolor_var, width=30)
+        styles_borderstrokecolor_var.trace_add("write", lambda nm, idx, mode, var=styles_borderstrokecolor_var,
+                                                         field=styles_borderstrokecolor: cmd_colorchanged(var, field))
         styles_borderstrokecolor.grid(row=4, column=1)
         styles_borderstrokecolor.configure(bg=str(styles_borderstrokecolor_var.get()))
         Button(frame_mascot_style, text="Pick",
@@ -422,6 +438,8 @@ class Gui:
         styles_textcolor_var = tk.StringVar()
         styles_textcolor_var.set(self.settings.Styles["TextColor"])
         styles_textcolor = Entry(frame_mascot_style, textvariable=styles_textcolor_var, width=30)
+        styles_textcolor_var.trace_add("write", lambda nm, idx, mode, var=styles_textcolor_var,
+                                                         field=styles_textcolor: cmd_colorchanged(var, field))
         styles_textcolor.grid(row=8, column=1)
         styles_textcolor.configure(bg=str(styles_textcolor_var.get()))
         Button(frame_mascot_style, text="Pick",
@@ -447,6 +465,8 @@ class Gui:
         styles_highlighttextcolor_var = tk.StringVar()
         styles_highlighttextcolor_var.set(self.settings.Styles["HighlightTextColor"])
         styles_highlighttextcolor = Entry(frame_mascot_style, textvariable=styles_highlighttextcolor_var, width=30)
+        styles_highlighttextcolor_var.trace_add("write", lambda nm, idx, mode, var=styles_highlighttextcolor_var,
+                                                         field=styles_highlighttextcolor: cmd_colorchanged(var, field))
         styles_highlighttextcolor.grid(row=11, column=1)
         styles_highlighttextcolor.configure(bg=str(styles_highlighttextcolor_var.get()))
         Button(frame_mascot_style, text="Pick",
@@ -458,6 +478,8 @@ class Gui:
         styles_highlighttextstrokecolor_var = tk.StringVar()
         styles_highlighttextstrokecolor_var.set(self.settings.Styles["HighlightTextStrokeColor"])
         styles_highlighttextstrokecolor = Entry(frame_mascot_style, textvariable=styles_highlighttextstrokecolor_var, width=30)
+        styles_highlighttextstrokecolor_var.trace_add("write", lambda nm, idx, mode, var=styles_highlighttextstrokecolor_var,
+                                                         field=styles_highlighttextstrokecolor: cmd_colorchanged(var, field))
         styles_highlighttextstrokecolor.grid(row=12, column=1)
         styles_highlighttextstrokecolor.configure(bg=str(styles_highlighttextstrokecolor_var.get()))
         Button(frame_mascot_style, text="Pick",
@@ -469,6 +491,8 @@ class Gui:
         styles_highlighttextshadowcolor_var = tk.StringVar()
         styles_highlighttextshadowcolor_var.set(self.settings.Styles["HighlightTextShadowColor"])
         styles_highlighttextshadowcolor = Entry(frame_mascot_style, textvariable=styles_highlighttextshadowcolor_var, width=30)
+        styles_highlighttextshadowcolor_var.trace_add("write", lambda nm, idx, mode, var=styles_highlighttextshadowcolor_var,
+                                                         field=styles_highlighttextshadowcolor: cmd_colorchanged(var, field))
         styles_highlighttextshadowcolor.grid(row=13, column=1)
         styles_highlighttextshadowcolor.configure(bg=str(styles_highlighttextshadowcolor_var.get()))
         Button(frame_mascot_style, text="Pick",
