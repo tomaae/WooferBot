@@ -18,6 +18,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import colorchooser
 from tkinter import font
+from os import listdir, path
 import webbrowser
 from idlelib.tooltip import Hovertip
 from .const import (
@@ -268,15 +269,72 @@ class Gui:
         # ---------------------------
         # [Tab] Mascot
         # ---------------------------
+        frame_mascot_general = LabelFrame(tab4, text="General", padx=5, pady=5)
+        frame_mascot_general.grid(row=0, column=0, padx=2, pady=2, sticky=["NSWE"])
         frame_mascot_style = LabelFrame(tab4, text="Speech bubble styles", padx=5, pady=5)
         frame_mascot_style.grid(row=0, column=1, padx=2, pady=2, sticky=["NSWE"])
         tab4.grid_rowconfigure(0, weight=1)
         tab4.grid_columnconfigure([0, 1], weight=1)
 
+        def cmd_save_mascot():
+            self.settings.CurrentMascot = mascot_mascot.get()
+            self.settings.AlignMascot = mascot_align.get()
+            self.settings.Styles["BackgroundColor"] = styles_backgroundcolor_var.get()
+            self.settings.Styles["BorderColor"] = styles_bordercolor_var.get()
+            self.settings.Styles["BorderWidth"] = styles_borderwidth_var.get()
+            self.settings.Styles["BorderRadius"] = styles_borderradius_var.get()
+            self.settings.Styles["BorderStrokeColor"] = styles_borderstrokecolor_var.get()
+            self.settings.Styles["TextFontFamily"] = styles_textfontfamily.get()
+            self.settings.Styles["TextSize"] = styles_textsize_var.get()
+            self.settings.Styles["TextWeight"] = styles_textweight_var.get()
+            self.settings.Styles["TextColor"] = styles_textcolor_var.get()
+            self.settings.Styles["HighlightTextSize"] = styles_highlighttextsize_var.get()
+            self.settings.Styles["HighlightTextSpacing"] = styles_highlighttextspacing_var.get()
+            self.settings.Styles["HighlightTextColor"] = styles_highlighttextcolor_var.get()
+            self.settings.Styles["HighlightTextStrokeColor"] = styles_highlighttextstrokecolor_var.get()
+            self.settings.Styles["HighlightTextShadowColor"] = styles_highlighttextshadowcolor_var.get()
+            self.settings.Styles["HighlightTextShadowOffset"] = styles_highlighttextshadowoffset_var.get()
+            self.settings.save()
+
+        mascot_save = Button(tab4, text="Save", width=15, command=cmd_save_mascot)
+        mascot_save.grid(row=1, column=1, sticky=E)
+
+        # [Tab] Mascot - General
+        mascot_list = []
+        mascot_list_value = None
+        mascot_dir = self.settings.pathRoot + "mascots" + self.settings.slash
+        for idir in listdir(mascot_dir):
+            if not path.isdir(path.join(mascot_dir, idir)):
+                continue
+            mascot_list.append(idir)
+
+        mascot_list.sort()
+        for index, value in enumerate(mascot_list):
+            if value == self.settings.CurrentMascot:
+                mascot_list_value = index
+
+        Label(frame_mascot_general, text="Current Mascot").grid(row=0, column=0, sticky=E)
+        mascot_mascot = ttk.Combobox(frame_mascot_general, values=mascot_list, width=26)
+        mascot_mascot.grid(row=0, column=1, sticky=W)
+        if mascot_list_value is not None:
+            mascot_mascot.current(mascot_list_value)
+
+        mascot_align_list = ["left", "right"]
+        mascot_align_list_value = None
+        for index, value in enumerate(mascot_align_list):
+            if value == self.settings.AlignMascot:
+                mascot_align_list_value = index
+
+        Label(frame_mascot_general, text="Mascot Alignment").grid(row=1, column=0, sticky=E)
+        mascot_align = ttk.Combobox(frame_mascot_general, values=mascot_align_list, width=26)
+        mascot_align.grid(row=1, column=1, sticky=W)
+        if mascot_align_list_value is not None:
+            mascot_align.current(mascot_align_list_value)
+
         # [Tab] Mascot - Style
         def cmd_colorpicker(var, field):
             color_code = colorchooser.askcolor(title="Choose color")[1]
-            if color_code != None:
+            if not color_code:
                 var.set(color_code)
                 field.configure(bg=str(var.get()))
 
@@ -342,7 +400,7 @@ class Gui:
 
         styles_textfontfamily = ttk.Combobox(frame_mascot_style, values=font_list, width=26)
         styles_textfontfamily.grid(row=5, column=1, sticky=W)
-        if font_list_textfontfamily:
+        if font_list_textfontfamily is not None:
             styles_textfontfamily.current(font_list_textfontfamily)
 
         Label(frame_mascot_style, text="Text Size").grid(row=6, column=0, sticky=E)
@@ -383,35 +441,35 @@ class Gui:
         styles_highlighttextspacing.grid(row=10, column=1)
 
         Label(frame_mascot_style, text="Highlight Text Color").grid(row=11, column=0, sticky=E)
-        highlighttextcolor_var = tk.StringVar()
-        highlighttextcolor_var.set(self.settings.Styles["HighlightTextColor"])
-        highlighttextcolor = Entry(frame_mascot_style, textvariable=highlighttextcolor_var, width=30)
-        highlighttextcolor.grid(row=11, column=1)
-        highlighttextcolor.configure(bg=str(highlighttextcolor_var.get()))
+        styles_highlighttextcolor_var = tk.StringVar()
+        styles_highlighttextcolor_var.set(self.settings.Styles["HighlightTextColor"])
+        styles_highlighttextcolor = Entry(frame_mascot_style, textvariable=styles_highlighttextcolor_var, width=30)
+        styles_highlighttextcolor.grid(row=11, column=1)
+        styles_highlighttextcolor.configure(bg=str(styles_highlighttextcolor_var.get()))
         Button(frame_mascot_style, text="Pick",
-               command=lambda: cmd_colorpicker(highlighttextcolor_var, highlighttextcolor)).grid(row=11,
+               command=lambda: cmd_colorpicker(styles_highlighttextcolor_var, styles_highlighttextcolor)).grid(row=11,
                                                                                                  column=2,
                                                                                                  sticky=E)
 
         Label(frame_mascot_style, text="Highlight Text Stroke Color").grid(row=12, column=0, sticky=E)
-        highlighttextstrokecolor_var = tk.StringVar()
-        highlighttextstrokecolor_var.set(self.settings.Styles["HighlightTextStrokeColor"])
-        highlighttextstrokecolor = Entry(frame_mascot_style, textvariable=highlighttextstrokecolor_var, width=30)
-        highlighttextstrokecolor.grid(row=12, column=1)
-        highlighttextstrokecolor.configure(bg=str(highlighttextstrokecolor_var.get()))
+        styles_highlighttextstrokecolor_var = tk.StringVar()
+        styles_highlighttextstrokecolor_var.set(self.settings.Styles["HighlightTextStrokeColor"])
+        styles_highlighttextstrokecolor = Entry(frame_mascot_style, textvariable=styles_highlighttextstrokecolor_var, width=30)
+        styles_highlighttextstrokecolor.grid(row=12, column=1)
+        styles_highlighttextstrokecolor.configure(bg=str(styles_highlighttextstrokecolor_var.get()))
         Button(frame_mascot_style, text="Pick",
-               command=lambda: cmd_colorpicker(highlighttextstrokecolor_var, highlighttextstrokecolor)).grid(row=12,
+               command=lambda: cmd_colorpicker(styles_highlighttextstrokecolor_var, styles_highlighttextstrokecolor)).grid(row=12,
                                                                                                              column=2,
                                                                                                              sticky=E)
 
         Label(frame_mascot_style, text="Highlight Text Shadow Color").grid(row=13, column=0, sticky=E)
-        highlighttextshadowcolor_var = tk.StringVar()
-        highlighttextshadowcolor_var.set(self.settings.Styles["HighlightTextShadowColor"])
-        highlighttextshadowcolor = Entry(frame_mascot_style, textvariable=highlighttextshadowcolor_var, width=30)
-        highlighttextshadowcolor.grid(row=13, column=1)
-        highlighttextshadowcolor.configure(bg=str(highlighttextshadowcolor_var.get()))
+        styles_highlighttextshadowcolor_var = tk.StringVar()
+        styles_highlighttextshadowcolor_var.set(self.settings.Styles["HighlightTextShadowColor"])
+        styles_highlighttextshadowcolor = Entry(frame_mascot_style, textvariable=styles_highlighttextshadowcolor_var, width=30)
+        styles_highlighttextshadowcolor.grid(row=13, column=1)
+        styles_highlighttextshadowcolor.configure(bg=str(styles_highlighttextshadowcolor_var.get()))
         Button(frame_mascot_style, text="Pick",
-               command=lambda: cmd_colorpicker(highlighttextshadowcolor_var, highlighttextshadowcolor)).grid(row=13,
+               command=lambda: cmd_colorpicker(styles_highlighttextshadowcolor_var, styles_highlighttextshadowcolor)).grid(row=13,
                                                                                                              column=2,
                                                                                                              sticky=E)
 
