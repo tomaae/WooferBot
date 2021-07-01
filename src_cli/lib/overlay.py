@@ -113,6 +113,59 @@ class Overlay:
         return 0
 
     # ---------------------------
+    #   reload
+    # ---------------------------
+    def reload(self):
+        # Get default mascot image
+        mascot_idle_image = self.settings.mascotImages['Idle']['Image']
+        if not path.isfile(mascot_idle_image):
+            mascot_idle_image = ""
+
+        # Load Idle pose mapping if available
+        if 'Idle' in self.settings.PoseMapping:
+            # Reset Image to Idle
+            if 'Image' in self.settings.PoseMapping['Idle'] and \
+                    self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
+                tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
+                if path.isfile(tmp):
+                    mascot_idle_image = tmp
+
+            # Reset Nanoleaf to Idle
+            if 'Nanoleaf' in self.settings.PoseMapping['Idle']:
+                self.nanoleaf.scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
+
+            # Reset Hue to Idle
+            if 'Hue' in self.settings.PoseMapping['Idle']:
+                for device in self.settings.PoseMapping['Idle']['Hue']:
+                    pose_light = self.settings.PoseMapping['Idle']['Hue'][device]
+                    if 'Brightness' in pose_light and \
+                            pose_light['Brightness'] >= 1 and \
+                            'Color' in pose_light and 6 <= len(pose_light['Color']) <= 7:
+                        self.hue.state(device=device,
+                                       bri=pose_light['Brightness'],
+                                       col=pose_light['Color'])
+
+            # Reset Yeelight to Idle
+            if 'Yeelight' in self.settings.PoseMapping['Idle']:
+                for device in self.settings.PoseMapping['Idle']['Yeelight']:
+                    pose_light = self.settings.PoseMapping['Idle']['Yeelight'][device]
+                    if 'Brightness' in pose_light and \
+                            pose_light['Brightness'] >= 1 and 'Color' in \
+                            pose_light and 6 <= len(pose_light['Color']) <= 7 and \
+                            isinstance(pose_light['TransitionTime'], int):
+                        self.yeelight.state(device=device,
+                                            brightness=pose_light['Brightness'],
+                                            color=pose_light['Color'],
+                                            transition=pose_light['Transition'],
+                                            transitionTime=pose_light['TransitionTime'])
+
+        # Send Idle payload
+        json_data = {
+            "mascot": mascot_idle_image
+        }
+        self.send(event="EVENT_WOOFERBOT", json_data=json_data, init=1)
+
+    # ---------------------------
     #   Connection
     # ---------------------------
     async def connection(self, websocket, _):
@@ -124,54 +177,7 @@ class Overlay:
         # Reset overlay to Idle on initialization
         #
         if not self.sendQueue:
-            # Get default mascot image
-            mascot_idle_image = self.settings.mascotImages['Idle']['Image']
-            if not path.isfile(mascot_idle_image):
-                mascot_idle_image = ""
-
-            # Load Idle pose mapping if available
-            if 'Idle' in self.settings.PoseMapping:
-                # Reset Image to Idle
-                if 'Image' in self.settings.PoseMapping['Idle'] and \
-                        self.settings.PoseMapping['Idle']['Image'] in self.settings.mascotImages:
-                    tmp = self.settings.mascotImages[self.settings.PoseMapping['Idle']['Image']]['Image']
-                    if path.isfile(tmp):
-                        mascot_idle_image = tmp
-
-                # Reset Nanoleaf to Idle
-                if 'Nanoleaf' in self.settings.PoseMapping['Idle']:
-                    self.nanoleaf.scene(self.settings.PoseMapping['Idle']['Nanoleaf'])
-
-                # Reset Hue to Idle
-                if 'Hue' in self.settings.PoseMapping['Idle']:
-                    for device in self.settings.PoseMapping['Idle']['Hue']:
-                        pose_light = self.settings.PoseMapping['Idle']['Hue'][device]
-                        if 'Brightness' in pose_light and \
-                                pose_light['Brightness'] >= 1 and \
-                                'Color' in pose_light and 6 <= len(pose_light['Color']) <= 7:
-                            self.hue.state(device=device,
-                                           bri=pose_light['Brightness'],
-                                           col=pose_light['Color'])
-
-                # Reset Yeelight to Idle
-                if 'Yeelight' in self.settings.PoseMapping['Idle']:
-                    for device in self.settings.PoseMapping['Idle']['Yeelight']:
-                        pose_light = self.settings.PoseMapping['Idle']['Yeelight'][device]
-                        if 'Brightness' in pose_light and \
-                                pose_light['Brightness'] >= 1 and 'Color' in \
-                                pose_light and 6 <= len(pose_light['Color']) <= 7 and \
-                                isinstance(pose_light['TransitionTime'], int):
-                            self.yeelight.state(device=device,
-                                                brightness=pose_light['Brightness'],
-                                                color=pose_light['Color'],
-                                                transition=pose_light['Transition'],
-                                                transitionTime=pose_light['TransitionTime'])
-
-            # Send Idle payload
-            json_data = {
-                "mascot": mascot_idle_image
-            }
-            self.send(event="EVENT_WOOFERBOT", json_data=json_data, init=1)
+            self.reload()
 
         #
         # Overlay loop
