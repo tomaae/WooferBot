@@ -44,6 +44,7 @@ class Gui:
         self.woofer = None
         self.twitch = None
         self.chatbot = None
+        self.overlay = None
 
         # Root
         self.app = Tk()
@@ -512,6 +513,15 @@ class Gui:
             return
 
         self.twitch = twitch
+
+    # ---------------------------
+    #   attach_overlay
+    # ---------------------------
+    def attach_overlay(self, overlay) -> None:
+        if not self.settings or not self.settings.GUIEnabled:
+            return
+
+        self.overlay = overlay
 
     # ---------------------------
     #   statusbar

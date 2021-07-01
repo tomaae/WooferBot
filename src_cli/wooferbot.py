@@ -78,6 +78,7 @@ if settings.UseChatbot and len(settings.TwitchBotChannel) > 0 and settings.Twitc
 
 # Initialize overlay
 overlay = Overlay(settings=settings, nanoleaf=nanoleaf, hue=hue, yeelight=yeelight, chatbot=chatbot, gui=gui)
+gui.attach_overlay(overlay=overlay)
 overlay.start()
 
 # Initialize woofer
