@@ -151,7 +151,7 @@ class Settings:
                 encoding=self.encoding,
                 mode="r",
             ) as f:
-                data = json_load(f, encoding=self.encoding)
+                data = json_load(f)
                 for key, value in data.items():
                     self.__dict__[key] = value
         except:
@@ -221,10 +221,11 @@ class Settings:
         #
         # Load config
         #
+        print(self.configFile)
         if path.isfile(self.configFile):
             try:
                 with open(self.configFile, encoding=self.encoding, mode="r") as f:
-                    data = json_load(f, encoding=self.encoding)
+                    data = json_load(f)
                     for key, value in data.items():
                         self.__dict__[key] = value
 
