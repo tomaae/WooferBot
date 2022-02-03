@@ -208,16 +208,16 @@ class Gui:
         # Tabs
         # ---------------------------
         tab2 = Frame(self.tab_control)
-        tab3 = Frame(self.tab_control)
+        #tab3 = Frame(self.tab_control)
         tab4 = Frame(self.tab_control)
-        tab5 = Frame(self.tab_control)
+        #tab5 = Frame(self.tab_control)
 
         self.tab_control.add(tab2, text="Login")
-        self.tab_control.add(tab3, text="General")
+        #self.tab_control.add(tab3, text="General")
         self.tab_control.add(tab4, text="Mascot")
-        self.tab_control.add(tab5, text="Hardware")
+        #self.tab_control.add(tab5, text="Hardware")
         self.tab_control.select(
-            3
+            0
         )  ###################################################################################################
 
         # ---------------------------
@@ -232,32 +232,20 @@ class Gui:
                 self.chatbot.disconnect()
 
         def cmd_save_broadcaster():
-            tmp_name = broadcaster_name_var.get()
-            if len(tmp_name) < 1:
-                messagebox.showerror(title="Error", message="Name empty")
-                return 1
-
             tmp_oauth = broadcaster_oauth_var.get()
             if tmp_oauth.find("oauth:") != 0:
                 messagebox.showerror(title="Error", message="OAUTH is invalid")
                 return 1
 
-            self.settings.TwitchChannel = tmp_name
             self.settings.TwitchOAUTH = tmp_oauth
             self.settings.save()
 
         def cmd_save_chatbot():
-            tmp_name = broadcaster_name_var.get()
-            if len(tmp_name) < 1:
-                messagebox.showerror(title="Error", message="Name empty")
-                return 1
-
-            tmp_oauth = broadcaster_oauth.get()
+            tmp_oauth = chatbot_oauth_var.get()
             if tmp_oauth.find("oauth:") != 0:
                 messagebox.showerror(title="Error", message="OAUTH is invalid")
                 return 1
 
-            self.settings.TwitchBotChannel = tmp_name
             self.settings.TwitchBotOAUTH = tmp_oauth
             self.settings.save()
 
@@ -270,22 +258,14 @@ class Gui:
         tab2.grid_rowconfigure(0, weight=1)
         tab2.grid_columnconfigure([0, 1], weight=1)
 
-        Label(frame_twitch, text="Channel name").grid(row=0, column=0, sticky=E)
-        Label(frame_twitch, text="OAUTH").grid(row=1, column=0, sticky=E)
-
-        broadcaster_name_var = tk.StringVar()
-        broadcaster_name_var.set(self.settings.TwitchChannel)
-        broadcaster_name = Entry(
-            frame_twitch, textvariable=broadcaster_name_var, width=30
-        )
-        broadcaster_name.grid(row=0, column=1)
+        Label(frame_twitch, text="OAUTH").grid(row=0, column=0, sticky=E)
 
         broadcaster_oauth_var = tk.StringVar()
         broadcaster_oauth_var.set(self.settings.TwitchOAUTH)
         broadcaster_oauth = Entry(
             frame_twitch, textvariable=broadcaster_oauth_var, show="*", width=30
         )
-        broadcaster_oauth.grid(row=1, column=1)
+        broadcaster_oauth.grid(row=0, column=1)
 
         broadcaster_oauth_link = Label(
             frame_twitch, text="Obtain a Twitch OAUTH", fg="blue", cursor="hand2"
@@ -293,12 +273,12 @@ class Gui:
         broadcaster_oauth_link.bind(
             "<Button-1>", lambda e: callback_url("https://www.twitchapps.com/tmi/")
         )
-        broadcaster_oauth_link.grid(row=2, column=1, sticky=E)
+        broadcaster_oauth_link.grid(row=1, column=1, sticky=E)
 
         broadcaster_save = Button(
             frame_twitch, text="Save", width=15, command=cmd_save_broadcaster
         )
-        broadcaster_save.grid(row=3, column=1, sticky=E)
+        broadcaster_save.grid(row=2, column=1, sticky=E)
 
         broadcaster_reconnect = Button(
             frame_twitch,
@@ -315,20 +295,14 @@ class Gui:
         frame_chatbotbot = LabelFrame(tab2, text="Chatbot account", padx=5, pady=5)
         frame_chatbotbot.grid(row=0, column=1, padx=2, pady=2, sticky=["NSWE"])
 
-        Label(frame_chatbotbot, text="Chatbot name").grid(row=0, column=0, sticky=E)
-        Label(frame_chatbotbot, text="OAUTH").grid(row=1, column=0, sticky=E)
-
-        chatbot_name_var = tk.StringVar()
-        chatbot_name_var.set(self.settings.TwitchBotChannel)
-        chatbot_name = Entry(frame_chatbotbot, textvariable=chatbot_name_var, width=30)
-        chatbot_name.grid(row=0, column=1)
+        Label(frame_chatbotbot, text="OAUTH").grid(row=0, column=0, sticky=E)
 
         chatbot_oauth_var = tk.StringVar()
         chatbot_oauth_var.set(self.settings.TwitchBotOAUTH)
         chatbot_oauth = Entry(
             frame_chatbotbot, textvariable=chatbot_oauth_var, show="*", width=30
         )
-        chatbot_oauth.grid(row=1, column=1)
+        chatbot_oauth.grid(row=0, column=1)
 
         chatbot_oauth_link = Label(
             frame_chatbotbot, text="Obtain a Twitch OAUTH", fg="blue", cursor="hand2"
@@ -336,12 +310,12 @@ class Gui:
         chatbot_oauth_link.bind(
             "<Button-1>", lambda e: callback_url("https://www.twitchapps.com/tmi/")
         )
-        chatbot_oauth_link.grid(row=2, column=1, sticky=E)
+        chatbot_oauth_link.grid(row=1, column=1, sticky=E)
 
         chatbot_save = Button(
             frame_chatbotbot, text="Save", width=15, command=cmd_save_chatbot
         )
-        chatbot_save.grid(row=3, column=1, sticky=E)
+        chatbot_save.grid(row=2, column=1, sticky=E)
 
         chatbot_reconnect = Button(
             frame_chatbotbot,
