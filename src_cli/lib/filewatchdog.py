@@ -28,10 +28,10 @@ class _WatchdogCustomHandler(FileSystemEventHandler):
         self.watchdog_name = watchdog_name
 
         for action in self.settings.Watchdog:
-            if action['Name'] != self.watchdog_name:
+            if action["Name"] != self.watchdog_name:
                 continue
 
-            self.filename = action['Filename']
+            self.filename = action["Filename"]
 
     # ---------------------------
     #   on_created
@@ -51,24 +51,28 @@ class _WatchdogCustomHandler(FileSystemEventHandler):
     def _check_modification(self, filename):
         if self.filename == filename:
             for action in self.settings.Watchdog:
-                if action['Name'] == self.watchdog_name:
+                if action["Name"] == self.watchdog_name:
                     f = open(self.filename, "r")
 
-                    if 'Command' in action and action['Command'] != "":
-                        self.woofer.woofer_commands({
-                            "command": action['Command'],
-                            "broadcaster": 1,
-                            "sender": action['Name'],
-                            "display-name": action['Name'],
-                            "custom-tag": 'watchdog'
-                        })
+                    if "Command" in action and action["Command"] != "":
+                        self.woofer.woofer_commands(
+                            {
+                                "command": action["Command"],
+                                "broadcaster": 1,
+                                "sender": action["Name"],
+                                "display-name": action["Name"],
+                                "custom-tag": "watchdog",
+                            }
+                        )
                     else:
-                        self.woofer.woofer_addtoqueue({
-                            "image": action['Image'],
-                            "message": action['Message'] + f.read(),
-                            "sender": action['Name'],
-                            "id": "watchdog"
-                        })
+                        self.woofer.woofer_addtoqueue(
+                            {
+                                "image": action["Image"],
+                                "message": action["Message"] + f.read(),
+                                "sender": action["Name"],
+                                "id": "watchdog",
+                            }
+                        )
 
 
 # ---------------------------
@@ -81,14 +85,17 @@ class Watchdog:
         self.watchdogs = {}
 
         for action in self.settings.Watchdog:
-            if not action['Enabled']:
+            if not action["Enabled"]:
                 continue
 
-            filepath, filename = path.split(action['Filename'])
-            self.watchdogs[action['Name']] = Observer()
-            self.watchdogs[action['Name']].schedule(_WatchdogCustomHandler(settings, woofer, action['Name']), filepath,
-                                                    recursive=False)
-            self.watchdogs[action['Name']].start()
+            filepath, filename = path.split(action["Filename"])
+            self.watchdogs[action["Name"]] = Observer()
+            self.watchdogs[action["Name"]].schedule(
+                _WatchdogCustomHandler(settings, woofer, action["Name"]),
+                filepath,
+                recursive=False,
+            )
+            self.watchdogs[action["Name"]].start()
 
     # ---------------------------
     #   stop

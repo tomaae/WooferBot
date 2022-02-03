@@ -9,3 +9,5 @@
 /src_cli/__pycache__/
 /build
 /dist
+/.idea
+.idea

@@ -26,10 +26,10 @@ from lib.defaults import *
 #   Settings Handling
 # ---------------------------
 class Settings:
-    def __init__(self, path_root=None):
-        self.TwitchChannel = ""
+    def __init__(self, gui, path_root=None):
+        self.gui = gui
+
         self.TwitchOAUTH = ""
-        self.TwitchBotChannel = ""
         self.TwitchBotOAUTH = ""
         self.UseChatbot = False
         self.CurrentMascot = ""
@@ -49,6 +49,7 @@ class Settings:
         self.HueIP = ""
         self.HueToken = ""
         self.YeelightEnabled = False
+        self.GUIEnabled = True
 
         self.Styles = {}
         self.Activities = {}
@@ -68,86 +69,129 @@ class Settings:
         self.mascotAudio = {}
         self.mascotStyles = {}
 
-        self.twitch_client_id = "zpm94cuvrntu030mauvxvz9cv2ldja"
-        self.commonBots = ["nightbot", "streamlabs", "streamelements", "stay_hydrated_bot", "botisimo", "wizebot",
-                           "moobot"]
+        self.twitch_client_id = ""
+        self.twitchoauth = ""
+        self.commonBots = [
+            "nightbot",
+            "streamlabs",
+            "streamelements",
+            "stay_hydrated_bot",
+            "botisimo",
+            "wizebot",
+            "moobot",
+        ]
         self.encoding = "utf-8-sig"
         # Detect OS
-        if platform.startswith('win'):
-            self.os = 'win'
-            self.slash = '\\'
-        elif platform.startswith('freebsd') or platform.startswith('linux'):
-            self.os = 'lx'
-            self.slash = '/'
-        elif platform.startswith('darwin'):
-            self.os = 'osx'
-            self.slash = '/'
+        if platform.startswith("win"):
+            self.os = "win"
+            self.slash = "\\"
+        elif platform.startswith("freebsd") or platform.startswith("linux"):
+            self.os = "lx"
+            self.slash = "/"
+        elif platform.startswith("darwin"):
+            self.os = "osx"
+            self.slash = "/"
         else:
-            print("Failed to detect OS: {}".format(platform))
-            exit(1)
+            self.log("Failed to detect OS: {}".format(platform), error=True)
 
         # Check paths
         self.pathRoot = path_root + self.slash
         self.configFile = self.pathRoot + "settings.json"
         if not path.isdir(self.pathRoot):
-            print("Working directory not detected.")
-            exit(1)
-        if not path.isfile(self.pathRoot + "wooferbot.py") and not path.isfile(
-                self.pathRoot + "wooferbot_cli.exe") and not path.isfile(self.pathRoot + "wooferbot_cli"):
-            print("Working directory incorrect.")
-            exit(1)
+            self.log("Working directory not detected.", error=True)
+        if (
+            not path.isfile(self.pathRoot + "wooferbot.py")
+            and not path.isfile(self.pathRoot + "wooferbot_cli.exe")
+            and not path.isfile(self.pathRoot + "wooferbot_cli")
+        ):
+            self.log("Working directory incorrect.", error=True)
         if not path.isfile(self.configFile):
-            print("Configuration file is missing, recreating with defaults.")
+            self.log("Configuration file is missing, recreating with defaults.")
 
         self.reload()
         self.reload_mascot()
 
     # ---------------------------
+    #   log
+    # ---------------------------
+    def log(self, message: str, error=False):
+        print(message)
+
+        self.gui.messagelog_add(message)
+
+        self.gui.app.update_idletasks()
+        self.gui.app.update()
+
+        if error:
+            print("WooferBot initialization failed.")
+            self.gui.messagelog_add("WooferBot initialization failed.")
+            self.gui.frame_control.grid_forget()
+            self.gui.start()
+            exit(1)
+
+    # ---------------------------
     #   reload_mascot
     # ---------------------------
     def reload_mascot(self):
-        print("Loading mascot settings...")
+        self.log("Loading mascot settings...")
         self.mascotImages = {}
         self.mascotAudio = {}
         self.mascotStyles = {}
 
         # Load mascot config
         try:
-            with open(self.pathRoot + "mascots" + self.slash + self.CurrentMascot + self.slash + "mascot.json",
-                      encoding=self.encoding, mode="r") as f:
-                data = json_load(f, encoding=self.encoding)
+            with open(
+                self.pathRoot
+                + "mascots"
+                + self.slash
+                + self.CurrentMascot
+                + self.slash
+                + "mascot.json",
+                encoding=self.encoding,
+                mode="r",
+            ) as f:
+                data = json_load(f)
                 for key, value in data.items():
                     self.__dict__[key] = value
         except:
-            print("Unable to load mascot.json")
-            exit(1)
+            self.log("Unable to load mascot.json", error=True)
 
         # Check mascot images
         for action in self.mascotImages:
-            if 'Image' not in self.mascotImages[action]:
-                print("Mascot Image variable is missing for action: {}".format(action))
-                exit(1)
+            if "Image" not in self.mascotImages[action]:
+                self.log(
+                    "Mascot Image variable is missing for action: {}".format(action),
+                    error=True,
+                )
 
-            self.mascotImages[action]['Image'] = "{}mascots{}{}{}images{}{}".format(self.pathRoot,
-                                                                                    self.slash,
-                                                                                    self.CurrentMascot,
-                                                                                    self.slash,
-                                                                                    self.slash,
-                                                                                    self.mascotImages[action]['Image'])
+            self.mascotImages[action]["Image"] = "{}mascots{}{}{}images{}{}".format(
+                self.pathRoot,
+                self.slash,
+                self.CurrentMascot,
+                self.slash,
+                self.slash,
+                self.mascotImages[action]["Image"],
+            )
 
         # Check mascot audio
         for action in self.mascotAudio:
-            if not isinstance(self.mascotAudio[action]['Audio'], list):
-                print("Mascot audio is not a list for action: {}".format(action))
-                exit(1)
+            if not isinstance(self.mascotAudio[action]["Audio"], list):
+                self.log(
+                    "Mascot audio is not a list for action: {}".format(action),
+                    error=True,
+                )
 
-            for idx, val in enumerate(self.mascotAudio[action]['Audio']):
-                self.mascotAudio[action]['Audio'][idx] = "{}mascots{}{}{}audio{}{}".format(self.pathRoot,
-                                                                                           self.slash,
-                                                                                           self.CurrentMascot,
-                                                                                           self.slash,
-                                                                                           self.slash,
-                                                                                           self.mascotAudio[action]['Audio'][idx])
+            for idx, val in enumerate(self.mascotAudio[action]["Audio"]):
+                self.mascotAudio[action]["Audio"][
+                    idx
+                ] = "{}mascots{}{}{}audio{}{}".format(
+                    self.pathRoot,
+                    self.slash,
+                    self.CurrentMascot,
+                    self.slash,
+                    self.slash,
+                    self.mascotAudio[action]["Audio"][idx],
+                )
 
         CheckSettingsDependencies(self)
 
@@ -155,7 +199,7 @@ class Settings:
     #   Reload
     # ---------------------------
     def reload(self):
-        print("Loading settings...")
+        self.log("Loading settings...")
         self.set_variables_defaults(self, defaults_root)
 
         self.Styles = {}
@@ -176,43 +220,42 @@ class Settings:
         #
         # Load config
         #
+        print(self.configFile)
         if path.isfile(self.configFile):
             try:
                 with open(self.configFile, encoding=self.encoding, mode="r") as f:
-                    data = json_load(f, encoding=self.encoding)
+                    data = json_load(f)
                     for key, value in data.items():
                         self.__dict__[key] = value
 
             except:
-                print("Unable to load settings.json")
-                exit(1)
+                self.log("Unable to load settings.json", error=True)
 
             self.upgrade_settings_file()
 
         #
         # CONVERT
         #
-        self.TwitchChannel = self.TwitchChannel.lower()
-        self.TwitchBotChannel = self.TwitchBotChannel.lower()
         self.CurrentMascot = self.CurrentMascot.lower()
-        if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
-            self.Bots.append(self.TwitchBotChannel)
+        #if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
+        #    self.Bots.append(self.TwitchBotChannel)
         self.Bots = [x.lower() for x in self.Bots]
         for action in self.Commands:
-            self.Commands[action]['Hotkey'] = [key.lower() for key in self.Commands[action]['Hotkey']]
+            self.Commands[action]["Hotkey"] = [
+                key.lower() for key in self.Commands[action]["Hotkey"]
+            ]
 
         #
         # Reset time on all ScheduledMessages
         #
         for action in self.ScheduledMessages:
-            self.scheduleTable[action['Name']] = int(time())
+            self.scheduleTable[action["Name"]] = int(time())
 
         self.autofill_settings()
 
         if not path.isfile(self.configFile):
             self.save()
-            print("Default configuration file has been created.")
-            exit(0)
+            self.log("Default configuration file has been created.")
 
         self.verify_login_information()
 
@@ -243,11 +286,16 @@ class Settings:
                 var_found = False
                 tmp = get_var_default(defaults_list[var])
 
-            if (type(defaults_list[var]) == str and type(tmp) != str) \
-                    or (type(defaults_list[var]) in [int, float] and type(tmp) not in [int, float]) \
-                    or (type(defaults_list[var]) == bool and type(tmp) != bool) \
-                    or (type(defaults_list[var]) == list and type(tmp) != list) \
-                    or not var_found:
+            if (
+                (type(defaults_list[var]) == str and type(tmp) != str)
+                or (
+                    type(defaults_list[var]) in [int, float]
+                    and type(tmp) not in [int, float]
+                )
+                or (type(defaults_list[var]) == bool and type(tmp) != bool)
+                or (type(defaults_list[var]) == list and type(tmp) != list)
+                or not var_found
+            ):
                 if type(cls) == dict:
                     cls[var] = defaults_list[var]
                 else:
@@ -275,18 +323,23 @@ class Settings:
             self.set_variables(action, defaults_customsubs)
 
         if "DEFAULT" not in self.PoseMapping:
-            self.PoseMapping['DEFAULT'] = {}
-            self.PoseMapping['DEFAULT']['Image'] = 'Wave'
-            self.PoseMapping['DEFAULT']['Audio'] = 'Wave'
+            self.PoseMapping["DEFAULT"] = {}
+            self.PoseMapping["DEFAULT"]["Image"] = "Wave"
+            self.PoseMapping["DEFAULT"]["Audio"] = "Wave"
 
         for action in self.PoseMapping:
-            if 'Hue' in self.PoseMapping[action]:
-                for light in self.PoseMapping[action]['Hue']:
-                    self.set_variables(self.PoseMapping[action]['Hue'][light], defaults_posemapping_hue)
+            if "Hue" in self.PoseMapping[action]:
+                for light in self.PoseMapping[action]["Hue"]:
+                    self.set_variables(
+                        self.PoseMapping[action]["Hue"][light], defaults_posemapping_hue
+                    )
 
-            if 'Yeelight' in self.PoseMapping[action]:
-                for light in self.PoseMapping[action]['Yeelight']:
-                    self.set_variables(self.PoseMapping[action]['Yeelight'][light], defaults_posemapping_yeelight)
+            if "Yeelight" in self.PoseMapping[action]:
+                for light in self.PoseMapping[action]["Yeelight"]:
+                    self.set_variables(
+                        self.PoseMapping[action]["Yeelight"][light],
+                        defaults_posemapping_yeelight,
+                    )
 
     # ---------------------------
     #   Save
@@ -299,48 +352,41 @@ class Settings:
                 if key[:1].isupper():
                     tmp[key] = self.__dict__[key]
         except:
-            print("Failed to export configuration")
-            exit(1)
+            self.log("Failed to export configuration", error=True)
 
         # Save config
         try:
             with open(self.configFile, encoding=self.encoding, mode="w+") as f:
                 json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
-            print("Failed to save settings.json")
-            exit(1)
+            self.log("Failed to save settings.json", error=True)
 
         # Save config copy
         try:
-            with open(self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+") as f:
+            with open(
+                self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+"
+            ) as f:
                 json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
-            print("Failed to save settings.bak")
-            exit(1)
+            self.log("Failed to save settings.bak", error=True)
 
     # ---------------------------
     #   VerifyLoginInformation
     # ---------------------------
     def verify_login_information(self):
         code = 0
-        # Check user name
-        if len(self.TwitchChannel) < 1:
-            print("Twitch channel not specified")
-            code = 1
-
         # Check OAUTH
-        if self.TwitchOAUTH.find('oauth:') != 0:
-            print("Twitch OAUTH is invalid")
+        if self.TwitchOAUTH.find("oauth:") != 0:
+            self.log("Twitch OAUTH is invalid")
             code = 1
 
         # Check chatbot
-        if self.UseChatbot and len(self.TwitchBotOAUTH) > 0 and self.TwitchBotOAUTH.find('oauth:') != 0:
-            print("Twitch Bot OAUTH is invalid")
-            code = 1
-
-        # Check twitch client ID
-        if len(self.twitch_client_id) < 1:
-            print("Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id")
+        if (
+            self.UseChatbot
+            and len(self.TwitchBotOAUTH) > 0
+            and self.TwitchBotOAUTH.find("oauth:") != 0
+        ):
+            self.log("Twitch Bot OAUTH is invalid")
             code = 1
 
         if code:
@@ -353,7 +399,7 @@ class Settings:
         #
         # CurrectMascot fix v1.1
         #
-        if hasattr(self, 'CurrectMascot'):
+        if hasattr(self, "CurrectMascot"):
             self.CurrentMascot = self.CurrectMascot
             del self.CurrectMascot
 
@@ -361,36 +407,48 @@ class Settings:
         # ScheduledMessages Messages and remove LastShown v1.2
         #
         for action in self.ScheduledMessages:
-            if 'LastShown' in action:
-                del action['LastShown']
-            if 'Message' in action:
-                if action['Name'] in self.Messages:
-                    print("Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(action['Name']))
-                    exit(1)
+            if "LastShown" in action:
+                del action["LastShown"]
+            if "Message" in action:
+                if action["Name"] in self.Messages:
+                    self.log(
+                        "Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(
+                            action["Name"]
+                        ),
+                        error=True,
+                    )
                 else:
-                    self.Messages[action['Name']] = action['Message']
-                    del action['Message']
+                    self.Messages[action["Name"]] = action["Message"]
+                    del action["Message"]
 
         #
         # Commands Messages v1.2
         #
         for action in self.Commands:
-            if 'Message' in self.Commands[action]:
+            if "Message" in self.Commands[action]:
                 if action in self.Messages:
-                    print("Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(action))
-                    exit(1)
+                    self.log(
+                        "Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(
+                            action
+                        ),
+                        error=True,
+                    )
                 else:
-                    self.Messages[action] = self.Commands[action]['Message']
-                    del self.Commands[action]['Message']
+                    self.Messages[action] = self.Commands[action]["Message"]
+                    del self.Commands[action]["Message"]
 
         #
         # CustomGreets v1.2
         #
-        if hasattr(self, 'CustomGreets'):
+        if hasattr(self, "CustomGreets"):
             for action in self.CustomGreets:
                 if action in self.Messages:
-                    print("Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(action))
-                    exit(1)
+                    self.log(
+                        "Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(
+                            action
+                        ),
+                        error=True,
+                    )
 
             for action in self.CustomGreets:
                 self.Messages["viewer_" + action] = self.CustomGreets[action]

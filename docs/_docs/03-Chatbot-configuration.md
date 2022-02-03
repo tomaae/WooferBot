@@ -13,12 +13,10 @@ If you want to have WooferBot messages to appear in your chat, you have to enabl
 
 ```
 {
-    "TwitchBotChannel": "",
     "TwitchBotOAUTH": "",
     "UseChatbot": false,
 }
 ```
-* <span class="icon settings">TwitchBotChannel</span> Bot twitch login.
 * <span class="icon settings">TwitchBotOAUTH</span> How to obtain a Twitch OAUTH: <a class="icon twitch" href="https://www.twitchapps.com/tmi/" target="_blank">www.twitchapps.com/tmi/</a>
 * <span class="icon settings">UseChatbot</span> (true/false) Enable chatbot.
 
