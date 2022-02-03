@@ -976,24 +976,28 @@ class Woofer:
         #
         # Get user info
         #
-        json_result = twitch_get_user(
-            self.settings.twitch_client_id, json_data["command_parameter"]
+        so_id, so_name, so_pfp, result = twitch_get_user(
+            self.settings.twitchoauth, self.settings.client_id, json_data["command_parameter"]
         )
-        if not json_result:
+        if result != 200:
             return
 
         s = set(self.shoutoutUsers)
-        if json_result["display_name"] in s:
+        if so_name in s:
             return
 
-        self.shoutoutUsers.append(json_result["display_name"])
+        self.shoutoutUsers.append(so_name)
 
         #
         # Get channel last game
         #
-        activity = twitch_get_last_activity(
-            self.settings.twitch_client_id, json_result["_id"]
+        activity, result = twitch_get_last_activity(
+            self.settings.twitchoauth, self.settings.client_id, so_id
         )
+
+        if result != 200:
+            return
+
         activity_text = ""
         if activity:
             if activity in self.settings.Activities:
@@ -1008,9 +1012,9 @@ class Woofer:
                 "message": SystemRandom().choice(self.settings.Messages["shoutout"])
                 + activity_text,
                 "sender": json_data["display-name"],
-                "recipient": json_result["display_name"],
+                "recipient": so_name,
                 "activity": activity,
-                "image": json_result["logo"],
+                "image": so_pfp,
                 "id": "shoutout",
             }
         )

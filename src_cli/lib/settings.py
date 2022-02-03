@@ -29,9 +29,7 @@ class Settings:
     def __init__(self, gui, path_root=None):
         self.gui = gui
 
-        self.TwitchChannel = ""
         self.TwitchOAUTH = ""
-        self.TwitchBotChannel = ""
         self.TwitchBotOAUTH = ""
         self.UseChatbot = False
         self.CurrentMascot = ""
@@ -71,7 +69,8 @@ class Settings:
         self.mascotAudio = {}
         self.mascotStyles = {}
 
-        self.twitch_client_id = "zpm94cuvrntu030mauvxvz9cv2ldja"
+        self.twitch_client_id = ""
+        self.twitchoauth = ""
         self.commonBots = [
             "nightbot",
             "streamlabs",
@@ -237,11 +236,9 @@ class Settings:
         #
         # CONVERT
         #
-        self.TwitchChannel = self.TwitchChannel.lower()
-        self.TwitchBotChannel = self.TwitchBotChannel.lower()
         self.CurrentMascot = self.CurrentMascot.lower()
-        if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
-            self.Bots.append(self.TwitchBotChannel)
+        #if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
+        #    self.Bots.append(self.TwitchBotChannel)
         self.Bots = [x.lower() for x in self.Bots]
         for action in self.Commands:
             self.Commands[action]["Hotkey"] = [
@@ -378,11 +375,6 @@ class Settings:
     # ---------------------------
     def verify_login_information(self):
         code = 0
-        # Check user name
-        if len(self.TwitchChannel) < 1:
-            self.log("Twitch channel not specified")
-            code = 1
-
         # Check OAUTH
         if self.TwitchOAUTH.find("oauth:") != 0:
             self.log("Twitch OAUTH is invalid")
@@ -395,13 +387,6 @@ class Settings:
             and self.TwitchBotOAUTH.find("oauth:") != 0
         ):
             self.log("Twitch Bot OAUTH is invalid")
-            code = 1
-
-        # Check twitch client ID
-        if len(self.twitch_client_id) < 1:
-            self.log(
-                "Twitch ClientID not specified. See https://dev.twitch.tv/docs/v5/#getting-a-client-id"
-            )
             code = 1
 
         if code:
