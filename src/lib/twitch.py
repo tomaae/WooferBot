@@ -30,7 +30,7 @@ from .const import (
 
 
 # ---------------------------
-#   twitchGetUser
+#   twitch_validate_user
 # ---------------------------
 def twitch_validate_user(oauth: str):
     # Get user info from API
@@ -60,7 +60,7 @@ def twitch_validate_user(oauth: str):
     return json_result["client_id"], json_result["login"], result.status_code
 
 # ---------------------------
-#   twitchGetUser
+#   twitch_get_user
 # ---------------------------
 def twitch_get_user(oauth:str, twitch_client_id:str, target_user:str):
     # Get user info from API
@@ -92,7 +92,7 @@ def twitch_get_user(oauth:str, twitch_client_id:str, target_user:str):
 
 
 # ---------------------------
-#   twitchGetLastActivity
+#   twitch_get_last_activity
 # ---------------------------
 def twitch_get_last_activity(oauth:str, twitch_client_id:str, user_id:int):
     # Get channel activity from API
@@ -327,7 +327,7 @@ class Twitch:
         # Send message to chat
         self.con.send(
             bytes(
-                "PRIVMSG #{} :{}\r\n".format(self.settings.TwitchChannel, message),
+                "PRIVMSG #{} :{}\r\n".format(self.settings.twitchchannel, message),
                 self.chrset,
             )
         )
@@ -350,6 +350,7 @@ class Twitch:
                 self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 return 1
 
+            self.settings.twitchbotlogin = self.TwitchLogin
             self.gui.statusbar(CHATBOT, CONNECTING)
         else:
             self.TwitchOAUTH = self.settings.TwitchOAUTH
@@ -364,6 +365,14 @@ class Twitch:
                 return 1
 
             self.settings.twitchoauth = self.TwitchOAUTH
+            self.settings.twitchchannel = self.TwitchLogin
+            if self.TwitchLogin not in self.woofer.greetedUsers:
+                self.woofer.greetedUsers.append(self.TwitchLogin)
+                self.woofer.greetedUsers.append(self.TwitchLogin + "bot")
+
+            if self.settings.twitchbotlogin and self.settings.twitchbotlogin not in self.woofer.greetedUsers:
+                self.woofer.greetedUsers.append(self.settings.twitchbotlogin)
+
             self.gui.statusbar(TWITCH, CONNECTING)
 
         self.settings.log("Connecting {} to Twitch...".format(self.TwitchLogin))
@@ -377,7 +386,7 @@ class Twitch:
             self.con.send(bytes("PASS oauth:%s\r\n" % self.TwitchOAUTH, self.chrset))
             self.con.send(bytes("NICK %s\r\n" % self.TwitchLogin, self.chrset))
             self.con.send(
-                bytes("JOIN #%s\r\n" % self.settings.TwitchChannel, self.chrset)
+                bytes("JOIN #%s\r\n" % self.settings.twitchchannel, self.chrset)
             )
             if not self.bot:
                 self.con.send(

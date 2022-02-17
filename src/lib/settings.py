@@ -32,11 +32,11 @@ class Settings:
         self.TwitchOAUTH = ""
         self.TwitchBotOAUTH = ""
         self.UseChatbot = False
-        self.CurrentMascot = ""
-        self.AlignMascot = ""
-        self.HostMessage = ""
-        self.AutohostMessage = ""
-        self.FollowMessage = ""
+        self.CurrentMascot = "malamute"
+        self.AlignMascot = "left"
+        self.HostMessage = "is now hosting you."
+        self.AutohostMessage = "is auto hosting you"
+        self.FollowMessage = "Thank you for the follow!"
         self.MinBits = 0
         self.AutoShoutout = False
         self.AutoShoutoutTime = 10
@@ -70,6 +70,8 @@ class Settings:
         self.mascotStyles = {}
 
         self.twitch_client_id = ""
+        self.twitchchannel = ""
+        self.twitchbotlogin = ""
         self.twitchoauth = ""
         self.commonBots = [
             "nightbot",
@@ -200,7 +202,7 @@ class Settings:
     # ---------------------------
     def reload(self):
         self.log("Loading settings...")
-        self.set_variables_defaults(self, defaults_root)
+        #self.set_variables_defaults(self, defaults_root)
 
         self.Styles = {}
         self.Activities = {}
@@ -305,7 +307,7 @@ class Settings:
     #   AutofillSettings
     # ---------------------------
     def autofill_settings(self):
-        self.set_variables(self, defaults_root)
+        #self.set_variables(self, defaults_root)
         self.set_variables(self.Enabled, defaults_enabled)
         self.set_variables(self.Styles, defaults_styles)
         self.set_variables(self.Messages, defaults_messages)
@@ -378,7 +380,6 @@ class Settings:
         # Check OAUTH
         if self.TwitchOAUTH.find("oauth:") != 0:
             self.log("Twitch OAUTH is invalid")
-            code = 1
 
         # Check chatbot
         if (
@@ -387,10 +388,6 @@ class Settings:
             and self.TwitchBotOAUTH.find("oauth:") != 0
         ):
             self.log("Twitch Bot OAUTH is invalid")
-            code = 1
-
-        if code:
-            exit(code)
 
     # ---------------------------
     #   UpgradeSettingsFile

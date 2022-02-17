@@ -40,8 +40,6 @@ class Woofer:
         self.queue = []
         self.queuePaused = False
         self.greetedUsers = []
-        self.greetedUsers.append(self.settings.TwitchChannel)
-        self.greetedUsers.append(self.settings.TwitchChannel + "bot")
 
         self.lurkingUsers = []
         self.unlurkingUsers = []

@@ -13,9 +13,7 @@
 ##########################################################################
 
 defaults_root = {
-    "TwitchChannel": "",
     "TwitchOAUTH": "",
-    "TwitchBotChannel": "",
     "TwitchBotOAUTH": "",
     "UseChatbot": False,
     "CurrentMascot": "malamute",
