@@ -1,0 +1,25 @@
+{
+	"mascotImages": {
+		"Idle": {
+			"Image": "idle.png"
+		},
+		"Wave": {
+			"Image": "wave.png",
+			"MouthHeight": 90,
+			"Time": 5000
+		},
+		"Happy": {
+			"Image": "happy.png",
+			"MouthHeight": 90,
+			"Time": 7000
+		},
+		"Snack": {
+			"Image": "snack.png",
+			"MouthHeight": 90,
+			"Time": 7000
+		}
+	},
+	"mascotStyles": {
+		"MascotMaxWidth": 160
+	}
+}

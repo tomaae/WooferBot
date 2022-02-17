@@ -4,8 +4,8 @@ import sys
 block_cipher = None
 
 
-a = Analysis(['src_cli/wooferbot.py'],
-             pathex=['src_cli/lib'],
+a = Analysis(['src/wooferbot.py'],
+             pathex=['src/lib'],
              binaries=[],
              datas=[],
              hiddenimports=['pywintypes'] if sys.platform == 'win32' else [],

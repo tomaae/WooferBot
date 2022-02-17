@@ -1,0 +1,39 @@
+{
+	"mascotImages": {
+		"Idle": {
+			"Image": "idle.png"
+		},
+		"Wave": {
+			"Image": "wave.png",
+			"MouthHeight": 120,
+			"Time": 5000
+		},
+		"Happy": {
+			"Image": "happy.png",
+			"MouthHeight": 140,
+			"Time": 7000
+		},
+		"Snack": {
+			"Image": "snack.png",
+			"MouthHeight": 120,
+			"Time": 7000
+		}
+	},
+	"mascotAudio": {
+		"Wave": {
+			"Audio": ["wave.mp3"],
+			"Volume": 0.2
+		},
+		"Happy": {
+			"Audio": ["happy.mp3"],
+			"Volume": 0.2
+		},
+		"Snack": {
+			"Audio": ["happy.mp3"],
+			"Volume": 0.2
+		}
+	},
+	"mascotStyles": {
+		"MascotMaxWidth": 240
+	}
+}
