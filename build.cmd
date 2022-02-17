@@ -1,5 +1,5 @@
 @ECHO OFF
-SET VERSION=1.6
+SET VERSION=1.5
 
 if exist build rmdir /s /q build
 if exist dist rmdir /s /q dist
