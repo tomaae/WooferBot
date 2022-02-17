@@ -13,7 +13,7 @@
 ##########################################################################
 
 from sys import exit
-from os import path
+from os import path, getcwd
 from signal import signal, SIGINT, SIGTERM, SIGBREAK
 from lib.settings import Settings
 from lib.overlay import Overlay
@@ -39,7 +39,7 @@ def exit_gracefully(signum=None, frame=None):
 # ---------------------------
 #  Main
 # ---------------------------
-wooferbotVersion = "v1.4"
+wooferbotVersion = "v1.5"
 print("WooferBot " + wooferbotVersion + "  Copyright (C) 2020  Tomaae")
 print("This program comes with ABSOLUTELY NO WARRANTY.")
 print("This is free software, and you are welcome to redistribute it")
@@ -55,7 +55,7 @@ signal(SIGBREAK, exit_gracefully)
 gui = Gui()
 
 # Initialize settings
-path_root = path.dirname(path.realpath(__file__))
+path_root = getcwd()
 settings = Settings(gui=gui, path_root=path_root)
 gui.attach_settings(settings=settings)
 
@@ -74,7 +74,7 @@ settings.save()
 chatbot = Twitch(settings=settings, woofer=None, gui=gui, bot=True)
 if (
     settings.UseChatbot
-    and len(settings.TwitchBotChannel) > 0
+    #and len(settings.TwitchBotChannel) > 0
     and settings.TwitchBotOAUTH.find("oauth:") == 0
 ):
     chatbot.connect()
@@ -110,7 +110,7 @@ gui.attach_twitch(twitch=twitch)
 twitch.connect()
 if (
     settings.UseChatbot
-    and len(settings.TwitchBotChannel) < 1
+    #and len(settings.TwitchBotChannel) < 1
     and settings.TwitchBotOAUTH.find("oauth:") != 0
 ):
     chatbot.link_account(twitch)

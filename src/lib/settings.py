@@ -103,9 +103,10 @@ class Settings:
             self.log("Working directory not detected.", error=True)
         if (
             not path.isfile(self.pathRoot + "wooferbot.py")
-            and not path.isfile(self.pathRoot + "wooferbot_cli.exe")
-            and not path.isfile(self.pathRoot + "wooferbot_cli")
+            and not path.isfile(self.pathRoot + "wooferbot.exe")
+            and not path.isfile(self.pathRoot + "wooferbot")
         ):
+            print(self.pathRoot + "wooferbot.exe")
             self.log("Working directory incorrect.", error=True)
         if not path.isfile(self.configFile):
             self.log("Configuration file is missing, recreating with defaults.")
