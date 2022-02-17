@@ -59,10 +59,11 @@ def twitch_validate_user(oauth: str):
 
     return json_result["client_id"], json_result["login"], result.status_code
 
+
 # ---------------------------
 #   twitch_get_user
 # ---------------------------
-def twitch_get_user(oauth:str, twitch_client_id:str, target_user:str):
+def twitch_get_user(oauth: str, twitch_client_id: str, target_user: str):
     # Get user info from API
     headers = {
         "Client-Id": twitch_client_id,
@@ -81,27 +82,33 @@ def twitch_get_user(oauth:str, twitch_client_id:str, target_user:str):
 
     # Check exit code
     if result.status_code != 200:
-        return "","", result.status_code
+        return "", "", result.status_code
 
     # User defined in result json
     if "data" not in json_result and not json_result["data"]:
         print("Unknown Twitch Username")
-        return "","", result.status_code
+        return "", "", result.status_code
 
-    return json_result["data"][0]["id"],json_result["data"][0]["display_name"],json_result["data"][0]["profile_image_url"], result.status_code
+    return (
+        json_result["data"][0]["id"],
+        json_result["data"][0]["display_name"],
+        json_result["data"][0]["profile_image_url"],
+        result.status_code,
+    )
 
 
 # ---------------------------
 #   twitch_get_last_activity
 # ---------------------------
-def twitch_get_last_activity(oauth:str, twitch_client_id:str, user_id:int):
+def twitch_get_last_activity(oauth: str, twitch_client_id: str, user_id: int):
     # Get channel activity from API
     headers = {
         "Client-Id": twitch_client_id,
         "Authorization": f"Bearer {oauth}",
     }
     result = requests_get(
-        "https://api.twitch.tv/helix/channels?broadcaster_id={}".format(user_id), headers=headers
+        "https://api.twitch.tv/helix/channels?broadcaster_id={}".format(user_id),
+        headers=headers,
     )
 
     # Check encoding
@@ -114,7 +121,7 @@ def twitch_get_last_activity(oauth:str, twitch_client_id:str, user_id:int):
     if result.status_code != 200:
         return "", result.status_code
 
-    return json_result['data'][0]["game_name"], result.status_code
+    return json_result["data"][0]["game_name"], result.status_code
 
 
 # ---------------------------
@@ -343,9 +350,13 @@ class Twitch:
             if self.TwitchOAUTH.startswith("oauth:"):
                 self.TwitchOAUTH = self.TwitchOAUTH[6:]
 
-            self.settings.client_id, self.TwitchLogin, result = twitch_validate_user(self.TwitchOAUTH)
+            self.settings.client_id, self.TwitchLogin, result = twitch_validate_user(
+                self.TwitchOAUTH
+            )
             if result != 200:
-                self.settings.log("Unable to connect bot {} to Twitch...".format(self.TwitchLogin))
+                self.settings.log(
+                    "Unable to connect bot {} to Twitch...".format(self.TwitchLogin)
+                )
                 self.connected = False
                 self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 return 1
@@ -357,9 +368,13 @@ class Twitch:
             if self.TwitchOAUTH.startswith("oauth:"):
                 self.TwitchOAUTH = self.TwitchOAUTH[6:]
 
-            self.settings.client_id, self.TwitchLogin, result = twitch_validate_user(self.TwitchOAUTH)
+            self.settings.client_id, self.TwitchLogin, result = twitch_validate_user(
+                self.TwitchOAUTH
+            )
             if result != 200:
-                self.settings.log("Unable to connect {} to Twitch...".format(self.TwitchLogin))
+                self.settings.log(
+                    "Unable to connect {} to Twitch...".format(self.TwitchLogin)
+                )
                 self.connected = False
                 self.gui.statusbar(TWITCH, CONNECTION_FAILED)
                 return 1
@@ -370,7 +385,10 @@ class Twitch:
                 self.woofer.greetedUsers.append(self.TwitchLogin)
                 self.woofer.greetedUsers.append(self.TwitchLogin + "bot")
 
-            if self.settings.twitchbotlogin and self.settings.twitchbotlogin not in self.woofer.greetedUsers:
+            if (
+                self.settings.twitchbotlogin
+                and self.settings.twitchbotlogin not in self.woofer.greetedUsers
+            ):
                 self.woofer.greetedUsers.append(self.settings.twitchbotlogin)
 
             self.gui.statusbar(TWITCH, CONNECTING)
@@ -394,7 +412,9 @@ class Twitch:
                 )
 
         except:
-            self.settings.log("Unable to connect {} to Twitch...".format(self.TwitchLogin))
+            self.settings.log(
+                "Unable to connect {} to Twitch...".format(self.TwitchLogin)
+            )
             self.connected = False
             if self.bot:
                 self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
@@ -454,7 +474,7 @@ class Twitch:
     def process_data(self, data):
         for line in data:
             line = line.strip()
-            #print(self.TwitchLogin + "!" + line)
+            # print(self.TwitchLogin + "!" + line)
 
             if line.find("Login authentication failed") > 0:
                 self.settings.log("Twitch login authentication failed")

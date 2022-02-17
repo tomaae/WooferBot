@@ -208,14 +208,14 @@ class Gui:
         # Tabs
         # ---------------------------
         tab2 = Frame(self.tab_control)
-        #tab3 = Frame(self.tab_control)
+        # tab3 = Frame(self.tab_control)
         tab4 = Frame(self.tab_control)
-        #tab5 = Frame(self.tab_control)
+        # tab5 = Frame(self.tab_control)
 
         self.tab_control.add(tab2, text="Login")
-        #self.tab_control.add(tab3, text="General")
+        # self.tab_control.add(tab3, text="General")
         self.tab_control.add(tab4, text="Mascot")
-        #self.tab_control.add(tab5, text="Hardware")
+        # self.tab_control.add(tab5, text="Hardware")
         self.tab_control.select(
             0
         )  ###################################################################################################

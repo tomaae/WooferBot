@@ -203,7 +203,7 @@ class Settings:
     # ---------------------------
     def reload(self):
         self.log("Loading settings...")
-        #self.set_variables_defaults(self, defaults_root)
+        # self.set_variables_defaults(self, defaults_root)
 
         self.Styles = {}
         self.Activities = {}
@@ -240,7 +240,7 @@ class Settings:
         # CONVERT
         #
         self.CurrentMascot = self.CurrentMascot.lower()
-        #if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
+        # if self.TwitchBotChannel and self.TwitchBotChannel not in self.Bots:
         #    self.Bots.append(self.TwitchBotChannel)
         self.Bots = [x.lower() for x in self.Bots]
         for action in self.Commands:
@@ -308,7 +308,7 @@ class Settings:
     #   AutofillSettings
     # ---------------------------
     def autofill_settings(self):
-        #self.set_variables(self, defaults_root)
+        # self.set_variables(self, defaults_root)
         self.set_variables(self.Enabled, defaults_enabled)
         self.set_variables(self.Styles, defaults_styles)
         self.set_variables(self.Messages, defaults_messages)

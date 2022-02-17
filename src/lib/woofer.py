@@ -975,7 +975,9 @@ class Woofer:
         # Get user info
         #
         so_id, so_name, so_pfp, result = twitch_get_user(
-            self.settings.twitchoauth, self.settings.client_id, json_data["command_parameter"]
+            self.settings.twitchoauth,
+            self.settings.client_id,
+            json_data["command_parameter"],
         )
         if result != 200:
             return

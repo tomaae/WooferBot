@@ -74,7 +74,7 @@ settings.save()
 chatbot = Twitch(settings=settings, woofer=None, gui=gui, bot=True)
 if (
     settings.UseChatbot
-    #and len(settings.TwitchBotChannel) > 0
+    # and len(settings.TwitchBotChannel) > 0
     and settings.TwitchBotOAUTH.find("oauth:") == 0
 ):
     chatbot.connect()
@@ -110,7 +110,7 @@ gui.attach_twitch(twitch=twitch)
 twitch.connect()
 if (
     settings.UseChatbot
-    #and len(settings.TwitchBotChannel) < 1
+    # and len(settings.TwitchBotChannel) < 1
     and settings.TwitchBotOAUTH.find("oauth:") != 0
 ):
     chatbot.link_account(twitch)
