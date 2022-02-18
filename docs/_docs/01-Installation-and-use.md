@@ -17,10 +17,10 @@ This section explains installation process, broadcasting software setup and firs
 
 ### Download and prepare files on windows
 1. Download and extract <a class="icon download" href="{{ site.github.url }}/changelog">latest WooferBot release</a>.
-2. Start WooferBot using <span class="icon file">wooferbot_cli.exe</span> to create a default configuration file.
+2. Start WooferBot using <span class="icon file">wooferbot.exe</span> to create a default configuration file.
 
 ### Download and prepare files on linux
-WooferBot is developed using Python 3.8. It was confirmed to work on Python 3.5.
+WooferBot is developed using Python 3.9. It was confirmed to work on Python 3.5.
 1. Install `python3, python3-pip`
 2. Install pipenv `python3 -m pip install pipenv`
 3. Download and extract <a class="icon download" href="{{ site.github.url }}/changelog">latest WooferBot release</a>.
@@ -57,6 +57,6 @@ Add <span class="icon file">overlay.html</span> as <a class="icon website" href=
 <span class="icon idea">Note: This approach will prevent using multiple browser sources, which would require more system resources and cause possible conflicts or missed notifications.</span>
 
 ### Starting WooferBot
-To start WooferBot execute <span class="icon file">wooferbot_cli.exe</span>.
+To start WooferBot execute <span class="icon file">wooferbot.exe</span>.
 
 To customize WooferBot, adjust "settings.json" as needed (see <a class="icon doc" href="{{ site.github.url }}/documentation#basic-configuration">Basic configuration</a> section).
