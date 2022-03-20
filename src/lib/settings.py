@@ -94,19 +94,19 @@ class Settings:
             self.os = "osx"
             self.slash = "/"
         else:
-            self.log("Failed to detect OS: {}".format(platform), error=True)
+            self.log(f"Failed to detect OS: {platform}", error=True)
 
         # Check paths
         self.pathRoot = path_root + self.slash
-        self.configFile = self.pathRoot + "settings.json"
+        self.configFile = f'{self.pathRoot}settings.json'
         if not path.isdir(self.pathRoot):
             self.log("Working directory not detected.", error=True)
         if (
-            not path.isfile(self.pathRoot + "wooferbot.py")
-            and not path.isfile(self.pathRoot + "wooferbot.exe")
-            and not path.isfile(self.pathRoot + "wooferbot")
+            not path.isfile(f'{self.pathRoot}wooferbot.py')
+            and not path.isfile(f'{self.pathRoot}wooferbot.exe')
+            and not path.isfile(f'{self.pathRoot}wooferbot')
         ):
-            print(self.pathRoot + "wooferbot.exe")
+            print(f'{self.pathRoot}wooferbot.exe')
             self.log("Working directory incorrect.", error=True)
         if not path.isfile(self.configFile):
             self.log("Configuration file is missing, recreating with defaults.")
@@ -162,39 +162,23 @@ class Settings:
         # Check mascot images
         for action in self.mascotImages:
             if "Image" not in self.mascotImages[action]:
-                self.log(
-                    "Mascot Image variable is missing for action: {}".format(action),
-                    error=True,
-                )
+                self.log(f"Mascot Image variable is missing for action: {action}", error=True)
 
-            self.mascotImages[action]["Image"] = "{}mascots{}{}{}images{}{}".format(
-                self.pathRoot,
-                self.slash,
-                self.CurrentMascot,
-                self.slash,
-                self.slash,
-                self.mascotImages[action]["Image"],
-            )
+            self.mascotImages[action][
+                "Image"
+            ] = f'{self.pathRoot}mascots{self.slash}{self.CurrentMascot}{self.slash}images{self.slash}{self.mascotImages[action]["Image"]}'
+
 
         # Check mascot audio
         for action in self.mascotAudio:
             if not isinstance(self.mascotAudio[action]["Audio"], list):
-                self.log(
-                    "Mascot audio is not a list for action: {}".format(action),
-                    error=True,
-                )
+                self.log(f"Mascot audio is not a list for action: {action}", error=True)
 
             for idx, val in enumerate(self.mascotAudio[action]["Audio"]):
                 self.mascotAudio[action]["Audio"][
                     idx
-                ] = "{}mascots{}{}{}audio{}{}".format(
-                    self.pathRoot,
-                    self.slash,
-                    self.CurrentMascot,
-                    self.slash,
-                    self.slash,
-                    self.mascotAudio[action]["Audio"][idx],
-                )
+                ] = f'{self.pathRoot}mascots{self.slash}{self.CurrentMascot}{self.slash}audio{self.slash}{self.mascotAudio[action]["Audio"][idx]}'
+
 
         CheckSettingsDependencies(self)
 
@@ -281,10 +265,7 @@ class Settings:
         for var in defaults_list:
             var_found = True
             try:
-                if type(cls) == dict:
-                    tmp = cls[var]
-                else:
-                    tmp = getattr(cls, var)
+                tmp = cls[var] if type(cls) == dict else getattr(cls, var)
             except:
                 var_found = False
                 tmp = get_var_default(defaults_list[var])
@@ -326,10 +307,7 @@ class Settings:
             self.set_variables(action, defaults_customsubs)
 
         if "DEFAULT" not in self.PoseMapping:
-            self.PoseMapping["DEFAULT"] = {}
-            self.PoseMapping["DEFAULT"]["Image"] = "Wave"
-            self.PoseMapping["DEFAULT"]["Audio"] = "Wave"
-
+            self.PoseMapping["DEFAULT"] = {"Image": "Wave", "Audio": "Wave"}
         for action in self.PoseMapping:
             if "Hue" in self.PoseMapping[action]:
                 for light in self.PoseMapping[action]["Hue"]:
@@ -366,9 +344,7 @@ class Settings:
 
         # Save config copy
         try:
-            with open(
-                self.pathRoot + "settings.bak", encoding=self.encoding, mode="w+"
-            ) as f:
+            with open(f'{self.pathRoot}settings.bak', encoding=self.encoding, mode="w+") as f:
                 json_dump(tmp, f, indent=4, ensure_ascii=False)
         except:
             self.log("Failed to save settings.bak", error=True)
@@ -410,11 +386,10 @@ class Settings:
             if "Message" in action:
                 if action["Name"] in self.Messages:
                     self.log(
-                        "Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {} already exists in Messages.".format(
-                            action["Name"]
-                        ),
+                        f'Upgrade: Cannot migrate message values from ScheduledMessages to Messages. {action["Name"]} already exists in Messages.',
                         error=True,
                     )
+
                 else:
                     self.Messages[action["Name"]] = action["Message"]
                     del action["Message"]
@@ -426,11 +401,10 @@ class Settings:
             if "Message" in self.Commands[action]:
                 if action in self.Messages:
                     self.log(
-                        "Upgrade: Cannot migrate message values from Commands to Messages. {} already exists in Messages.".format(
-                            action
-                        ),
+                        f"Upgrade: Cannot migrate message values from Commands to Messages. {action} already exists in Messages.",
                         error=True,
                     )
+
                 else:
                     self.Messages[action] = self.Commands[action]["Message"]
                     del self.Commands[action]["Message"]
@@ -442,13 +416,12 @@ class Settings:
             for action in self.CustomGreets:
                 if action in self.Messages:
                     self.log(
-                        "Upgrade: Cannot migrate CustomGreets to Messages. {} already exists in Messages.".format(
-                            action
-                        ),
+                        f"Upgrade: Cannot migrate CustomGreets to Messages. {action} already exists in Messages.",
                         error=True,
                     )
 
+
             for action in self.CustomGreets:
-                self.Messages["viewer_" + action] = self.CustomGreets[action]
+                self.Messages[f"viewer_{action}"] = self.CustomGreets[action]
 
             del self.CustomGreets

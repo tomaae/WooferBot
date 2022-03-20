@@ -35,11 +35,11 @@ class Nanoleaf:
         if not self.enabled:
             return
 
-        if self.settings.os == "win":
-            from msvcrt import getch
-        elif self.settings.os == "lx":
+        if self.settings.os == "lx":
             from getch import getch
 
+        elif self.settings.os == "win":
+            from msvcrt import getch
         self.settings.log("Initializing nanoleaf...")
         #
         # IP Not set
@@ -47,7 +47,7 @@ class Nanoleaf:
         if not self.ip or not portup(self.ip, 16021):
             ip_list = []
             discovery_time = 5
-            while len(ip_list) == 0:
+            while not ip_list:
                 self.settings.log("Starting Nanoleaf discovery.")
                 ip_list = ssdp_discovery(
                     searchstr="nanoleaf", discovery_time=discovery_time
@@ -111,7 +111,7 @@ class Nanoleaf:
     #   put_request
     # ---------------------------
     def put_request(self, endpoint, data: dict):
-        url = "http://{}:16021/api/v1/{}/{}".format(self.ip, self.token, endpoint)
+        url = f"http://{self.ip}:16021/api/v1/{self.token}/{endpoint}"
         try:
             result = requests_put(url, data=json_dumps(data), timeout=1)
         except requests_exceptions.RequestException as e:
@@ -136,7 +136,7 @@ class Nanoleaf:
     def auth(self):
         self.settings.log("Auth with nanoleaf...")
         # Send API request
-        url = "http://{}:16021/api/v1/new".format(self.ip)
+        url = f"http://{self.ip}:16021/api/v1/new"
         result = requests_post(url)
 
         # Authorization successful

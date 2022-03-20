@@ -72,7 +72,7 @@ KEYLIST = {
 # ---------------------------
 def hex_to_rgb(h):
     h = h.lstrip("#")
-    r = int(h[0:2], 16)
+    r = int(h[:2], 16)
     g = int(h[2:4], 16)
     b = int(h[4:6], 16)
 
@@ -84,13 +84,9 @@ def hex_to_rgb(h):
 # ---------------------------
 def hex_to_hue(h):
     h = h.lstrip("#")
-    r = int(h[0:2], 16)
-    g = int(h[2:4], 16)
-    b = int(h[4:6], 16)
-
-    r = r / 255
-    g = g / 255
-    b = b / 255
+    r = int(h[:2], 16) / 255
+    g = int(h[2:4], 16) / 255
+    b = int(h[4:6], 16) / 255
     high = max(r, g, b)
     low = min(r, g, b)
     h, s, x = ((high + low) / 2,) * 3
@@ -139,11 +135,12 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
     ssdp_mx = 10
     req = [
         "M-SEARCH * HTTP/1.1",
-        "HOST: " + ssdp_ip + ":" + str(ssdp_port),
+        f"HOST: {ssdp_ip}:{ssdp_port}",
         'MAN: "ssdp:discover"',
-        "MX: " + str(ssdp_mx),
+        f"MX: {ssdp_mx}",
         "ST: ssdp:all",
     ]
+
     req = "\r\n".join(req).encode("utf-8")
 
     #
@@ -191,9 +188,7 @@ def ssdp_discovery(searchstr="", discovery_time: float = 5):
 #   is_valid_ip_address
 # ---------------------------
 def is_valid_ip_address(ip):
-    if is_valid_ipv4_address(ip) or is_valid_ipv6_address(ip):
-        return True
-    return False
+    return bool(is_valid_ipv4_address(ip) or is_valid_ipv6_address(ip))
 
 
 # ---------------------------
@@ -229,7 +224,7 @@ def is_valid_ipv6_address(address):
 # ---------------------------
 def get_var_default(vartype):
     tmp = ""
-    if type(vartype) == int or type(vartype) == float:
+    if type(vartype) in [int, float]:
         tmp = 0
     elif type(vartype) == bool:
         tmp = False

@@ -40,7 +40,7 @@ def exit_gracefully(signum=None, frame=None):
 #  Main
 # ---------------------------
 wooferbotVersion = "v1.5"
-print("WooferBot " + wooferbotVersion + "  Copyright (C) 2020  Tomaae")
+print(f"WooferBot {wooferbotVersion}  Copyright (C) 2020  Tomaae")
 print("This program comes with ABSOLUTELY NO WARRANTY.")
 print("This is free software, and you are welcome to redistribute it")
 print("under certain conditions.")

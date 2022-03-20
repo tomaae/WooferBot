@@ -95,9 +95,8 @@ class Overlay:
         if "image" in json_data:
             if path.isfile(json_data["image"]):
                 json_data["image"] = f"file:///{json_data['image']}"
-            else:
-                if json_data["image"].find("https://") != 0:
-                    json_data["image"] = ""
+            elif json_data["image"].find("https://") != 0:
+                json_data["image"] = ""
 
         json_data_raw = {"event": event, "data": json_data}
 
@@ -256,21 +255,19 @@ class Overlay:
                 else:
                     ping_send = 0
                     self.sendQueue = None
-            # Queue empty, send keepalive
-            else:
-                if ping_send >= 40:
-                    json_data_raw = json_dumps({"event": "EVENT_PING", "data": ""})
-                    try:
-                        await websocket.send(json_data_raw)
-                    except websockets_exceptions.ConnectionClosed:
-                        # Connection failed
-                        self.active = self.active - 1
-                        if self.active == 0:
-                            self.gui.statusbar(OVERLAY, CONNECTION_FAILED)
-                            self.settings.log("Connection closed by overlay...")
-                        break
-                    else:
-                        ping_send = 0
+            elif ping_send >= 40:
+                json_data_raw = json_dumps({"event": "EVENT_PING", "data": ""})
+                try:
+                    await websocket.send(json_data_raw)
+                except websockets_exceptions.ConnectionClosed:
+                    # Connection failed
+                    self.active = self.active - 1
+                    if self.active == 0:
+                        self.gui.statusbar(OVERLAY, CONNECTION_FAILED)
+                        self.settings.log("Connection closed by overlay...")
+                    break
+                else:
+                    ping_send = 0
 
             await asyncio_sleep(0.5)
 
@@ -278,12 +275,13 @@ class Overlay:
     #   get_styles
     # ---------------------------
     def get_styles(self):
-        css = {}
-
         if not self.settings.mascotStyles["MascotMaxWidth"]:
             self.settings.mascotStyles["MascotMaxWidth"] = 150
 
-        css[".mascot|width"] = str(self.settings.mascotStyles["MascotMaxWidth"]) + "px"
+        css = {
+            ".mascot|width": str(self.settings.mascotStyles["MascotMaxWidth"])
+            + "px"
+        }
 
         if self.settings.AlignMascot == "right":
             css[".mascot|left"] = "auto"
@@ -332,8 +330,8 @@ class Overlay:
                 css[".image|border-width"] = val / 2
 
             if style == "BorderRadius":
-                css[".message|border-radius"] = str(val) + "px"
-                css[".image|border-radius"] = str(int(val) * 2) + "px"
+                css[".message|border-radius"] = f'{str(val)}px'
+                css[".image|border-radius"] = f'{str(int(val) * 2)}px'
 
             if style == "BorderStrokeColor":
                 if val == "":
@@ -362,7 +360,7 @@ class Overlay:
                 css[".message|font-family"] = val
 
             if style == "TextSize":
-                css[".message|font-size"] = str(val) + "px"
+                css[".message|font-size"] = f'{str(val)}px'
 
             if style == "TextWeight":
                 css[".message|font-weight"] = val
@@ -371,7 +369,7 @@ class Overlay:
                 css[".message|color"] = val
 
             if style == "HighlightTextSize":
-                css[".user|font-size"] = str(val) + "px"
+                css[".user|font-size"] = f'{str(val)}px'
 
             if style == "HighlightTextSpacing":
                 css[".user|letter-spacing"] = val
@@ -379,14 +377,14 @@ class Overlay:
             if style == "HighlightTextColor":
                 css[".user|color"] = val
 
-            if style == "HighlightTextStrokeColor":
-                highlight_text_stroke_color = val
-
             if style == "HighlightTextShadowColor":
                 highlight_text_shadow_color = val
 
-            if style == "HighlightTextShadowOffset":
+            elif style == "HighlightTextShadowOffset":
                 highlight_text_shadow_offset = val
+
+            elif style == "HighlightTextStrokeColor":
+                highlight_text_stroke_color = val
 
             if (
                 highlight_text_stroke_color != ""
@@ -395,7 +393,7 @@ class Overlay:
             ):
                 highlight_text_shadow_offset = str(highlight_text_shadow_offset)
                 if highlight_text_shadow_offset != "0":
-                    highlight_text_shadow_offset = highlight_text_shadow_offset + "px"
+                    highlight_text_shadow_offset += "px"
                 css[".user|text-shadow"] = (
                     "-1px -1px 0 "
                     + highlight_text_stroke_color

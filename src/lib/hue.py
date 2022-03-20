@@ -32,11 +32,11 @@ class Hue:
         if not self.enabled:
             return
 
-        if self.settings.os == "win":
-            from msvcrt import getch
-        elif self.settings.os == "lx":
+        if self.settings.os == "lx":
             from getch import getch
 
+        elif self.settings.os == "win":
+            from msvcrt import getch
         self.settings.log("Initializing Philips HUE...")
         #
         # IP Not set
@@ -48,7 +48,7 @@ class Hue:
         #
         # Token not set
         #
-        url = "http://{}:80/api/{}".format(self.ip, self.token)
+        url = f"http://{self.ip}:80/api/{self.token}"
         result = requests_get(
             url, data=json_dumps({"devicetype": "wooferbot"}), timeout=5
         )
@@ -61,11 +61,8 @@ class Hue:
             isinstance(output_json, list)
             and "error" in output_json[0]
             and "description" in output_json[0]["error"]
-            and (
-                output_json[0]["error"]["description"] == "unauthorized user"
-                or output_json[0]["error"]["description"]
-                == "method, GET, not available for resource, /"
-            )
+            and output_json[0]["error"]["description"]
+            in ["unauthorized user", "method, GET, not available for resource, /"]
         ):
             while not self.auth():
                 self.settings.log("Press C to cancel or any key to try again")
@@ -79,7 +76,7 @@ class Hue:
 
             settings.HueToken = self.token
 
-        url = "http://{}:80/api/{}".format(self.ip, self.token)
+        url = f"http://{self.ip}:80/api/{self.token}"
         result = requests_get(
             url, data=json_dumps({"devicetype": "wooferbot"}), timeout=5
         )
@@ -107,9 +104,7 @@ class Hue:
                 for light in self.settings.PoseMapping[action]["Hue"]:
                     if light not in self.lights:
                         self.settings.log(
-                            'Error: Hue light "{}" defined in PoseMapping "{}" has not been detected.'.format(
-                                light, action
-                            )
+                            f'Error: Hue light "{light}" defined in PoseMapping "{action}" has not been detected.'
                         )
 
     # ---------------------------
@@ -122,9 +117,7 @@ class Hue:
 
         # Check if light has been detected on startup
         if device not in self.lights:
-            self.settings.log(
-                'Philips HUE Device "{}" does not detected'.format(device)
-            )
+            self.settings.log(f'Philips HUE Device "{device}" does not detected')
             return
 
         data = {}
@@ -142,16 +135,15 @@ class Hue:
             data["bri"] = round(bri * 2.54)
 
         # Send API request to Hue Bridge
-        url = "http://{}:80/api/{}/lights/{}/state".format(
-            self.ip, self.token, str(self.lights[device])
-        )
+        url = f"http://{self.ip}:80/api/{self.token}/lights/{str(self.lights[device])}/state"
+
         requests_put(url, data=json_dumps(data), timeout=5)
 
     # ---------------------------
     #   detect_lights
     # ---------------------------
     def detect_lights(self):
-        url = "http://{}:80/api/{}/lights".format(self.ip, self.token)
+        url = f"http://{self.ip}:80/api/{self.token}/lights"
         result = requests_get(url, timeout=5)
 
         if result.status_code == 200:
@@ -177,7 +169,7 @@ class Hue:
         self.settings.log("Registering HueBridge...")
         # Send API request
         data = {"devicetype": "wooferbot"}
-        url = "http://{}:80/api".format(self.ip)
+        url = f"http://{self.ip}:80/api"
         result = requests_post(url, data=json_dumps(data), timeout=5)
 
         if result.status_code == 200:
@@ -206,14 +198,14 @@ class Hue:
     #   detect_hue
     # ---------------------------
     def detect_hue(self):
-        if self.settings.os == "win":
-            from msvcrt import getch
-        elif self.settings.os == "lx":
+        if self.settings.os == "lx":
             from getch import getch
 
+        elif self.settings.os == "win":
+            from msvcrt import getch
         ip_list = []
         discovery_time = 5
-        while len(ip_list) == 0:
+        while not ip_list:
             self.settings.log("Starting Hue Bridge discovery.")
             ip_list = ssdp_discovery(
                 searchstr="ipbridge", discovery_time=discovery_time

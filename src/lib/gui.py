@@ -789,13 +789,13 @@ class Gui:
             tooltip = "disabled"
 
         if key == TWITCH:
-            self.statusbar_twitch.tooltip.text = "Twitch " + tooltip
+            self.statusbar_twitch.tooltip.text = f"Twitch {tooltip}"
             self.statusbar_twitch.config(fg=color)
         elif key == CHATBOT:
-            self.statusbar_chatbot.tooltip.text = "Web overlay " + tooltip
+            self.statusbar_chatbot.tooltip.text = f"Web overlay {tooltip}"
             self.statusbar_chatbot.config(fg=color)
         elif key == OVERLAY:
-            self.statusbar_overlay.tooltip.text = "Web overlay " + tooltip
+            self.statusbar_overlay.tooltip.text = f"Web overlay {tooltip}"
             self.statusbar_overlay.config(fg=color)
 
     # ---------------------------

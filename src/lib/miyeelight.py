@@ -20,7 +20,7 @@ from lib.helper import hex_to_rgb
 #   set_light_name
 # ---------------------------
 def set_light_name(ip, light_model, light_id):
-    print("Name not defined for Yeelight {}, ID: {}".format(light_model, light_id))
+    print(f"Name not defined for Yeelight {light_model}, ID: {light_id}")
 
     # Identify light for user
     try:
@@ -34,11 +34,7 @@ def set_light_name(ip, light_model, light_id):
         bulb.duration = 10000
         bulb.set_rgb(255, 0, 0)
     except:
-        print(
-            "Communication failed with Yeelight {}, ID: {}".format(
-                light_model, light_id
-            )
-        )
+        print(f"Communication failed with Yeelight {light_model}, ID: {light_id}")
         return ""
 
     # Get user input for light name
@@ -49,11 +45,7 @@ def set_light_name(ip, light_model, light_id):
         try:
             bulb.turn_off()
         except:
-            print(
-                "Communication failed with Yeelight {}, ID: {}".format(
-                    light_model, light_id
-                )
-            )
+            print(f"Communication failed with Yeelight {light_model}, ID: {light_id}")
             return ""
         return ""
 
@@ -62,11 +54,7 @@ def set_light_name(ip, light_model, light_id):
     try:
         bulb.set_name(device_name)
     except:
-        print(
-            "Communication failed with Yeelight {}, ID: {}".format(
-                light_model, light_id
-            )
-        )
+        print(f"Communication failed with Yeelight {light_model}, ID: {light_id}")
         return ""
 
     return device_name
@@ -85,15 +73,15 @@ class Yeelight:
         if not self.enabled:
             return
 
-        if self.settings.os == "win":
-            from msvcrt import getch
-        elif self.settings.os == "lx":
+        if self.settings.os == "lx":
             from getch import getch
 
+        elif self.settings.os == "win":
+            from msvcrt import getch
         self.settings.log("Initializing Yeelight...")
-        while len(self.lights) == 0:
+        while not self.lights:
             self.detect_lights()
-            if len(self.lights) == 0:
+            if not self.lights:
                 self.settings.log("Yeelight not found")
                 self.settings.log("Press C to cancel or any key to scan again")
                 if self.settings.os == "win":
@@ -122,9 +110,7 @@ class Yeelight:
                 for light in self.settings.PoseMapping[action]["Yeelight"]:
                     if light not in self.lights:
                         self.settings.log(
-                            'Error: Yeelight "{}" defined in PoseMapping "{}" has not been detected.'.format(
-                                light, action
-                            )
+                            f'Error: Yeelight "{light}" defined in PoseMapping "{action}" has not been detected.'
                         )
 
     # ---------------------------
@@ -139,7 +125,7 @@ class Yeelight:
 
         # Check if light has been detected on startup
         if device not in self.lights:
-            self.settings.log('Yeelight Device "{}" does not detected'.format(device))
+            self.settings.log(f'Yeelight Device "{device}" does not detected')
             return
 
         # Set light transition transition
@@ -152,8 +138,9 @@ class Yeelight:
 
         except:
             self.settings.log(
-                "Communication failed with Yeelight {}, light disabled".format(device)
+                f"Communication failed with Yeelight {device}, light disabled"
             )
+
             del self.lights[device]
             return
 
@@ -163,40 +150,26 @@ class Yeelight:
                 self.lights[device].turn_off()
             except:
                 self.settings.log(
-                    "Communication failed with Yeelight {}, light disabled".format(
-                        device
-                    )
+                    f"Communication failed with Yeelight {device}, light disabled"
                 )
+
                 del self.lights[device]
                 return
             return
 
-        if color:
             # Turn light on
-            try:
-                self.lights[device].turn_on()
-                tmp = hex_to_rgb(color)
-                self.lights[device].set_brightness(brightness)
-                self.lights[device].set_rgb(tmp[0], tmp[1], tmp[2])
-            except:
-                self.settings.log(
-                    "Communication failed with Yeelight {}, light disabled".format(
-                        device
-                    )
-                )
-                del self.lights[device]
-                return
-        else:
-            try:
-                self.lights[device].set_brightness(brightness)
-            except:
-                self.settings.log(
-                    "Communication failed with Yeelight {}, light disabled".format(
-                        device
-                    )
-                )
-                del self.lights[device]
-                return
+        try:
+            self.lights[device].turn_on()
+            tmp = hex_to_rgb(color)
+            self.lights[device].set_brightness(brightness)
+            self.lights[device].set_rgb(tmp[0], tmp[1], tmp[2])
+        except:
+            self.settings.log(
+                f"Communication failed with Yeelight {device}, light disabled"
+            )
+
+            del self.lights[device]
+            return
 
     # ---------------------------
     #   detect_lights
@@ -228,8 +201,8 @@ class Yeelight:
                     light["capabilities"]["model"],
                     light["capabilities"]["id"],
                 )
-                if device_name == "":
-                    continue
+            if device_name == "":
+                continue
 
             # Add usable light to list
             self.lights[device_name] = Bulb(light["ip"])
@@ -239,9 +212,8 @@ class Yeelight:
                 self.lights[device_name].turn_off()
             except:
                 self.settings.log(
-                    "Communication failed with Yeelight {}, light disabled".format(
-                        device_name
-                    )
+                    f"Communication failed with Yeelight {device_name}, light disabled"
                 )
+
                 del self.lights[device_name]
                 continue

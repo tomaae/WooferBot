@@ -92,9 +92,6 @@ class Woofer:
                         json_data["command"] = action
                         self.woofer_commands(json_data)
 
-        #
-        # Messages
-        #
         elif json_data["custom-tag"] == "message":
             common_bots = set(self.settings.commonBots)
             custom_bots = set(self.settings.Bots)
@@ -113,38 +110,8 @@ class Woofer:
 
                 return
 
-            # Greeting
-            if (
-                json_data["sender"] not in common_bots
-                and json_data["sender"] not in custom_bots
-            ):
-                self.woofer_greet(json_data)
+            self.woofer_greet(json_data)
 
-            # Channel points default
-            elif json_data["msg-id"] == "highlighted-message":
-                self.settings.log(
-                    "Channel points, claimed reward: Redeemed Highlight My Message"
-                )
-
-            # Channel points custom w/message
-            elif json_data["custom-reward-id"]:
-                self.settings.log(
-                    "Channel points, claimed custom reward: {}".format(
-                        json_data["custom-reward-id"]
-                    )
-                )
-
-            # Bits
-            elif (
-                int(json_data["bits"]) > 0
-                and int(json_data["bits"]) >= self.settings.MinBits
-            ):
-                json_data["custom-tag"] = "bits"
-                self.woofer_alert(json_data)
-
-        #
-        # Standard alerts
-        #
         elif json_data["custom-tag"] in [
             "new_chatter",
             "raid",
@@ -208,7 +175,7 @@ class Woofer:
         # Execute custom scripts
         #
         if "script" in json_data and json_data["script"] != "":
-            system('"{}"'.format(json_data["script"]))
+            system(f'"{json_data["script"]}"')
 
         #
         # Execute hotkey
@@ -219,16 +186,12 @@ class Woofer:
                     try:
                         self.keyboard.press(KEYLIST[key])
                     except:
-                        self.settings.log(
-                            "Invalid hotkey in {}".format(json_data["id"])
-                        )
+                        self.settings.log(f'Invalid hotkey in {json_data["id"]}')
                 else:
                     try:
                         self.keyboard.press(key)
                     except:
-                        self.settings.log(
-                            "Invalid hotkey in {}".format(json_data["id"])
-                        )
+                        self.settings.log(f'Invalid hotkey in {json_data["id"]}')
 
             sleep(0.05)
 
@@ -237,16 +200,12 @@ class Woofer:
                     try:
                         self.keyboard.release(KEYLIST[key])
                     except:
-                        self.settings.log(
-                            "Invalid hotkey in {}".format(json_data["id"])
-                        )
+                        self.settings.log(f'Invalid hotkey in {json_data["id"]}')
                 else:
                     try:
                         self.keyboard.release(key)
                     except:
-                        self.settings.log(
-                            "Invalid hotkey in {}".format(json_data["id"])
-                        )
+                        self.settings.log(f'Invalid hotkey in {json_data["id"]}')
 
         #
         # Turn on Nanoleaf
@@ -523,7 +482,7 @@ class Woofer:
     #   woofer_addtoqueue
     # ---------------------------
     def woofer_addtoqueue(self, json_response):
-        self.settings.log("{}: {}".format(json_response["id"], json_response["sender"]))
+        self.settings.log(f'{json_response["id"]}: {json_response["sender"]}')
 
         if "message" not in json_response or json_response["message"] == "":
             if json_response["id"] in self.settings.Messages:
@@ -634,7 +593,7 @@ class Woofer:
             if custom_id == "host":
                 json_feed["sender"] = json_data["sender"]
 
-            if custom_id == "raid":
+            elif custom_id == "raid":
                 json_feed["viewers"] = json_data["viewers"]
 
         #
@@ -699,19 +658,14 @@ class Woofer:
                                 "message": SystemRandom().choice(
                                     self.settings.Messages[action["Name"]]
                                 ),
-                                "image": "{}{}images{}{}".format(
-                                    self.settings.pathRoot,
-                                    self.settings.slash,
-                                    self.settings.slash,
-                                    action["Image"],
-                                ),
+                                "image": f'{self.settings.pathRoot}{self.settings.slash}images{self.settings.slash}{action["Image"]}',
                                 "sender": "",
                                 "customtag": "ScheduledMessage",
                                 "id": action["Name"],
                             }
                         )
 
-                # Check if timer with MinLines limits is executable
+
                 elif action["MinLines"] > 0:
                     if self.settings.scheduleLines < action["MinLines"]:
                         continue
@@ -747,17 +701,13 @@ class Woofer:
                             "message": SystemRandom().choice(
                                 self.settings.Messages[action["Name"]]
                             ),
-                            "image": "{}{}images{}{}".format(
-                                self.settings.pathRoot,
-                                self.settings.slash,
-                                self.settings.slash,
-                                action["Image"],
-                            ),
+                            "image": f'{self.settings.pathRoot}{self.settings.slash}images{self.settings.slash}{action["Image"]}',
                             "sender": "",
                             "customtag": "ScheduledMessage",
                             "id": action["Name"],
                         }
                     )
+
 
         # Reset to default after X seconds
         timer = Timer(30, self.woofer_timers)
@@ -845,12 +795,8 @@ class Woofer:
         #
         image = ""
         if self.settings.Commands[json_data["command"]]["Image"] != "":
-            image = "{}{}images{}{}".format(
-                self.settings.pathRoot,
-                self.settings.slash,
-                self.settings.slash,
-                self.settings.Commands[json_data["command"]]["Image"],
-            )
+            image = f'{self.settings.pathRoot}{self.settings.slash}images{self.settings.slash}{self.settings.Commands[json_data["command"]]["Image"]}'
+
             if not path.isfile(image):
                 image = ""
 
@@ -859,12 +805,8 @@ class Woofer:
         #
         script = ""
         if self.settings.Commands[json_data["command"]]["Script"] != "":
-            script = "{}{}scripts{}{}".format(
-                self.settings.pathRoot,
-                self.settings.slash,
-                self.settings.slash,
-                self.settings.Commands[json_data["command"]]["Script"],
-            )
+            script = f'{self.settings.pathRoot}{self.settings.slash}scripts{self.settings.slash}{self.settings.Commands[json_data["command"]]["Script"]}'
+
             if not path.isfile(script):
                 script = ""
 

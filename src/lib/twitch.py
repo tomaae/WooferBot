@@ -107,9 +107,10 @@ def twitch_get_last_activity(oauth: str, twitch_client_id: str, user_id: int):
         "Authorization": f"Bearer {oauth}",
     }
     result = requests_get(
-        "https://api.twitch.tv/helix/channels?broadcaster_id={}".format(user_id),
+        f"https://api.twitch.tv/helix/channels?broadcaster_id={user_id}",
         headers=headers,
     )
+
 
     # Check encoding
     if result.encoding is None:
@@ -128,7 +129,7 @@ def twitch_get_last_activity(oauth: str, twitch_client_id: str, user_id: int):
 #   fill_tags
 # ---------------------------
 def fill_tags():
-    result = {
+    return {
         "vip": "0",
         "moderator": "0",
         "subscriber": "0",
@@ -167,7 +168,6 @@ def fill_tags():
         "custom-tag": "",
         "custom-reward-id": "",
     }
-    return result
 
 
 # ---------------------------
@@ -189,9 +189,8 @@ def parse_tags(json_data, msg):
 
                 if badge[0] == "bits":
                     json_data["bits_total"] = badge[1]
-        else:
-            if tag[0] in json_data:
-                json_data[tag[0]] = tag[1]
+        elif tag[0] in json_data:
+            json_data[tag[0]] = tag[1]
 
     if json_data["broadcaster"] == 1:
         json_data["moderator"] = "1"
@@ -218,13 +217,8 @@ def get_sender(msg):
 #   get_message
 # ---------------------------
 def get_message(msg):
-    result = ""
-    i = 4
     length = len(msg)
-    while i < length:
-        result += msg[i] + " "
-        i += 1
-
+    result = "".join(f'{msg[i]} ' for i in range(4, length))
     result = result.lstrip(":")
     result = result.strip()
     return result
@@ -302,10 +296,9 @@ class Twitch:
                 self.gui.statusbar(TWITCH, CONNECTION_FAILED)
 
             self.settings.log(
-                "Connection {} to Twitch not responding, reconnecting...".format(
-                    self.TwitchLogin
-                )
+                f"Connection {self.TwitchLogin} to Twitch not responding, reconnecting..."
             )
+
             self.connected = False
             self.disconnect()
             return
@@ -354,9 +347,7 @@ class Twitch:
                 self.TwitchOAUTH
             )
             if result != 200:
-                self.settings.log(
-                    "Unable to connect bot {} to Twitch...".format(self.TwitchLogin)
-                )
+                self.settings.log(f"Unable to connect bot {self.TwitchLogin} to Twitch...")
                 self.connected = False
                 self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 return 1
@@ -372,9 +363,7 @@ class Twitch:
                 self.TwitchOAUTH
             )
             if result != 200:
-                self.settings.log(
-                    "Unable to connect {} to Twitch...".format(self.TwitchLogin)
-                )
+                self.settings.log(f"Unable to connect {self.TwitchLogin} to Twitch...")
                 self.connected = False
                 self.gui.statusbar(TWITCH, CONNECTION_FAILED)
                 return 1
@@ -383,7 +372,7 @@ class Twitch:
             self.settings.twitchchannel = self.TwitchLogin
             if self.TwitchLogin not in self.woofer.greetedUsers:
                 self.woofer.greetedUsers.append(self.TwitchLogin)
-                self.woofer.greetedUsers.append(self.TwitchLogin + "bot")
+                self.woofer.greetedUsers.append(f'{self.TwitchLogin}bot')
 
             if (
                 self.settings.twitchbotlogin
@@ -393,7 +382,7 @@ class Twitch:
 
             self.gui.statusbar(TWITCH, CONNECTING)
 
-        self.settings.log("Connecting {} to Twitch...".format(self.TwitchLogin))
+        self.settings.log(f"Connecting {self.TwitchLogin} to Twitch...")
 
         #
         # Log in
@@ -412,9 +401,7 @@ class Twitch:
                 )
 
         except:
-            self.settings.log(
-                "Unable to connect {} to Twitch...".format(self.TwitchLogin)
-            )
+            self.settings.log(f"Unable to connect {self.TwitchLogin} to Twitch...")
             self.connected = False
             if self.bot:
                 self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
@@ -428,7 +415,7 @@ class Twitch:
         else:
             self.gui.statusbar(TWITCH, CONNECTED)
 
-        self.settings.log("Connected {} to Twitch...".format(self.TwitchLogin))
+        self.settings.log(f"Connected {self.TwitchLogin} to Twitch...")
         self.connected = True
         self.lastPing = int(time())
         if self.conCheckTimer.is_alive():
@@ -452,7 +439,7 @@ class Twitch:
                     self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 else:
                     self.gui.statusbar(TWITCH, CONNECTION_FAILED)
-                self.settings.log("Twitch {} socket error".format(self.TwitchLogin))
+                self.settings.log(f"Twitch {self.TwitchLogin} socket error")
                 self.connected = False
                 self.connect()
                 break
@@ -461,7 +448,7 @@ class Twitch:
                     self.gui.statusbar(CHATBOT, CONNECTION_FAILED)
                 else:
                     self.gui.statusbar(TWITCH, CONNECTION_FAILED)
-                self.settings.log("Twitch {} socket timeout".format(self.TwitchLogin))
+                self.settings.log(f"Twitch {self.TwitchLogin} socket timeout")
                 self.connected = False
                 self.connect()
                 break
@@ -518,9 +505,6 @@ class Twitch:
                         json_data["custom-tag"] = "autohost"
                         self.woofer.process_json(json_data)
 
-                #
-                # CHAT
-                #
                 elif len(line) >= 3 and line[2] == "PRIVMSG":
                     json_data = parse_tags(json_data, line[0])
                     json_data["sender"] = get_sender(line[1])
@@ -534,15 +518,10 @@ class Twitch:
                         if len(val) >= 2:
                             json_data["command_parameter"] = val[1]
                         json_data["custom-tag"] = "command"
-                        self.woofer.process_json(json_data)
                     else:
                         # NORMAL MESSAGE
                         json_data["custom-tag"] = "message"
-                        self.woofer.process_json(json_data)
-
-                #
-                # USERNOTICE
-                #
+                    self.woofer.process_json(json_data)
                 elif len(line) >= 3 and line[2] == "USERNOTICE":
                     if line[0].find("@") == 0:
                         json_data = parse_tags(json_data, line[0])
